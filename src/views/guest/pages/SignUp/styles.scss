@@ -1,0 +1,72 @@
+.password-field-wrapper {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.input-container {
+    flex: 1;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-requirements-tooltip {
+    position: absolute;
+    left: calc(100% + 10px);
+    width: 200px;
+    padding: 12px;
+    background: rgb(255, 255, 255);
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.548);
+    margin-top: 20px;
+    /* Alinha com o campo */
+    animation: fadeIn 0.3s ease;
+}
+
+.password-requirements-tooltip p {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.password-requirements-tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.password-requirements-tooltip li {
+    margin-bottom: 6px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.password-requirements-tooltip li:before {
+    content: "•";
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.password-requirements-tooltip .valid {
+    color: #10b981;
+}
+
+.password-requirements-tooltip .invalid {
+    color: #6b7280;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

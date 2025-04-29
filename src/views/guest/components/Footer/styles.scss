@@ -1,0 +1,118 @@
+.footer {
+    display: flex;
+    justify-content: center;
+    background: #202751;
+    background: linear-gradient(180deg, #212B4F 0%, #09042e 100%);
+    padding: 35px 35px;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+        max-width: 1400px;
+        width: 100%;
+
+        &-line {
+            border: 2px outset #ffffff23;
+            margin: 5px 0;
+        }
+
+        &-above {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        
+            & p {
+                color: #fff;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            &-midias {
+                display: flex;
+                gap: 10px;
+
+                & svg  {
+                    color: #fff;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            
+        }
+
+        &-main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+
+            &-box {
+                display: flex;
+                flex-direction: column;
+                max-width: 280px;
+                gap: 15px;
+
+                & > img {
+                    width: 80%;
+                }
+
+                & > img:nth-child(2),
+                & > img:nth-child(3) {
+                    width: 50%;
+                }
+
+                &--h4 {
+                    color: #fff;
+                }
+
+                &--line {
+                    border: 2px outset rgba(219, 192, 255, 0.651);
+                    max-width: 50px;
+                    margin: 0 0 10px 0;
+                }
+
+                &--link {
+                    color: #c0c0c0;
+                }
+
+                &--link:hover {
+                    color: #fff;
+                    transition: .2s;
+                }
+
+                &-div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    &--contact {
+                        display: flex;
+                        gap: 20px;
+
+                        & p {
+                            color: #fff;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        &-below > p {
+            color: #fff;
+            text-align: center;
+        }
+
+    }
+
+}
+
+// @media (max-width: 768px) {
+// }
+
+@media (max-width: 480px) {
+    .footer__content-above {
+        flex-direction: column;
+    }
+}

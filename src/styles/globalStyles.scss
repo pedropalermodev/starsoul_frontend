@@ -1,0 +1,39 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Outfit", sans-serif;
+    font-size: 14px;
+    zoom: 0.98;
+}
+
+body {
+    height: 100vh;
+}
+
+.toast-container-custom {
+    top: 20px;
+    right: 20px;
+    width: auto;
+    z-index: 9999;
+
+    .Toastify__toast {
+        background-color: rgb(228, 115, 115);
+        color: white;
+        font-family: 'Outfit';
+        border-radius: 10px;
+    }
+
+    .Toastify__toast-body {
+        font-size: 1rem;
+    }
+
+    .Toastify__progress-bar {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .Toastify__toast--success {
+        background-color: #77b67a !important;
+        color: white !important;
+    }
+}

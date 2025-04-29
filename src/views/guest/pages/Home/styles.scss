@@ -1,0 +1,16 @@
+.home__container:first-child {
+    display: flex;
+    justify-content: center;
+    background: url('../../../../assets/background/home-hero-background.svg') center center / cover no-repeat;
+    height: 700px;
+    margin-top: 80px;
+}
+
+.home__container {
+
+    .home__content {
+        &-hero {
+
+        }
+    }
+}

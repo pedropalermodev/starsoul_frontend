@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 35px;
+    width: 100%;
+}
+
+@media (max-width:768px) {
+
+    .container {
+        transition: all 0.5s;
+    }
+    
+}
