@@ -1,0 +1,15 @@
+.adminlayout__container {
+    display: flex;
+    gap: 25px;
+    background-color: #c1c1c17c;
+    min-height: 108.4vh;
+
+
+    .adminlayout__content {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 20px;
+        gap: 20px;
+        width: 100vw;
+    }
+}

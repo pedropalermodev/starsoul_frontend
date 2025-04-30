@@ -1,0 +1,128 @@
+.aside__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 0;
+    align-items: center;
+    width: 450px;
+    min-height: 100%;
+    background-color: #F0F0F0 ;
+
+}
+
+.aside__navbar {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+
+    &-logo {
+        width: 220px;
+
+
+        & > img {
+            width: 100%;
+        }
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &-ul {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 220px;
+
+            &-li {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+                padding: 15px;
+                border-radius: 25px;
+                list-style: none;
+                text-decoration: none;
+                color: #414141;
+                width: 200px;
+
+                &:hover {
+                    background-color: #6671A2 ;
+                    transition: .2s ;
+                    color: #fff !important;
+
+
+                    & > a,
+                    & > i {
+                        transition: color .2s ;
+                        color: #fff !important;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+.aside__profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+
+    &-widget {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 250px;
+        word-break: break-all;
+    
+        & > img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+    
+        &-account {
+            &--name {
+                font-size: 20px;
+            }
+        }
+    }
+
+    &-logout {
+        display: flex;
+        background-color: #5c0505;
+        border: none;
+        color: #fff;
+        gap: 15px;
+        width: min-content;
+        padding: 8px 20px;
+        text-decoration: none;
+        border-radius: 25px;
+    }
+
+    &-logout:hover {
+        background-color: #d10000;
+        transition: .2s ;
+
+    }
+}
+
+
+.aside__navbar-content-ul-li.active {
+    background-color: #6d73962d;
+    -webkit-box-shadow: -2px 6px 19px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px 6px 19px -7px rgba(0,0,0,0.75);
+    box-shadow: -2px 6px 19px -7px rgba(0,0,0,0.75);
+
+    &:hover {
+        color: #414141 !important;
+
+        & > i {
+            transition: color .2s ;
+            color: #414141 !important;
+        }
+    }
+}

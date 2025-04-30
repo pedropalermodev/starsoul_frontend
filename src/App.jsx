@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './shared/contexts/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import './styles/globalStyles.scss'
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import GuestApp from './views/guest/GuestApp';
 import UserApp from './views/user/UserApp';

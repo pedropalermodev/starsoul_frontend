@@ -1,0 +1,57 @@
+.headeradmin__container {
+    display: flex;
+    padding: 0px 20px;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+    border-radius: 20px;
+    -webkit-box-shadow: -4px 10px 29px -15px rgba(0,0,0,0.75);
+    -moz-box-shadow: -4px 10px 29px -15px rgba(0,0,0,0.75);
+    box-shadow: -4px 10px 29px -15px rgba(0,0,0,0.75);
+}
+
+.headeradmin__profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    & > img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+    }
+
+    & > p {
+        font-size: 18px;
+        
+        & > span {
+            font-size: 20px;
+            font-weight: 700;
+        }
+    }
+}
+
+.p1 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+
+    -webkit-box-shadow: -7px 13px 27px -12px rgba(0,0,0,0.75);
+    -moz-box-shadow: -7px 13px 27px -12px rgba(0,0,0,0.75);
+    box-shadow: -7px 13px 27px -12px rgba(0,0,0,0.75);
+
+    & > i {
+        font-size: 20px;
+    }
+}

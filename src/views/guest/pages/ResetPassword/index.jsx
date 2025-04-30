@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import SubmitButton from '../../components/SubmitButton';
 
 function ResetPassword() {
     const navigate = useNavigate();
@@ -16,7 +17,10 @@ function ResetPassword() {
     const [token, setToken] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newConfirmPassword, setNewConfirmPassword] = useState('');
-    const [step, setStep] = useState(2);
+    const [step, setStep] = useState(1);
+    const isFormValidStep1 = email.trim() !== '' ;
+    const isFormValidStep2 = token.trim() !== '' && newPassword.trim() !== '' && newConfirmPassword.trim() !== '';
+    const [loading, setLoading] = useState(false);
 
     const [passwordRequirements, setPasswordRequirements] = useState({
         length: false,
@@ -31,6 +35,8 @@ function ResetPassword() {
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         try {
             await solicitarResetSenha(email);
             toast.success('Um email com instruções foi enviado!');
@@ -38,11 +44,14 @@ function ResetPassword() {
         } catch (err) {
             console.error(err);
             toast.error('Erro ao enviar o email. Tente novamente mais tarde!');
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleResetSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         if (newPassword !== newConfirmPassword) {
             toast.error('As senhas não correspondem.');
@@ -61,7 +70,8 @@ function ResetPassword() {
         } catch (err) {
             console.error(err);
             toast.error('Erro ao redefinir senha.');
-
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -104,7 +114,9 @@ function ResetPassword() {
                                 required
                             />
                         </div>
-                        <button type="submit" className='sign__form-button-submit' >Enviar</button>
+                        <SubmitButton isValid={isFormValidStep1} loading={loading}>
+                            Enviar
+                        </SubmitButton>
                     </form>
                     <div className='sign__link'>
                         <div className='divider'><span className='line' /> Lembrou da senha? <span className='line' /></div>
@@ -196,7 +208,9 @@ function ResetPassword() {
                                 </button>
                             </div>
                         </div>
-                        <button type="submit" className='sign__form-button-submit'>Redefinir Senha</button>
+                        <SubmitButton isValid={isFormValidStep2} loading={loading}>
+                            Redefinir Senha
+                        </SubmitButton>
                     </form>
                     <div className='sign__link'>
                         <div className='divider'><span className='line' /> Deseja voltar por algum motivo?  <span className='line' /></div>

@@ -9,6 +9,7 @@ import './styles.scss'
 // Images
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
+import SubmitButton from '../../components/SubmitButton';
 
 
 function SignIn() {
@@ -18,6 +19,7 @@ function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const isFormValid = email.trim() !== '' && password.trim() !== '';
     const [showPassword, setShowPassword] = useState(false);
 
 
@@ -28,7 +30,7 @@ function SignIn() {
             await login(email, password);
             toast.success('Login realizado com sucesso!');
         } catch (err) {
-            toast.error('Email ou senha inválidos');
+            // toast.error('Email ou senha inválidos');
             // console.error('Erro de login:', err);
         } finally {
             setLoading(false);
@@ -78,7 +80,9 @@ function SignIn() {
                         <Link to='/reset-password' className='sign__form-reset-password'>Esqueceu sua senha?</Link>
                     </div>
 
-                    <button type="submit" className='sign__form-button-submit' disabled={loading}>{loading ? '...' : 'Entrar'}</button>
+                    <SubmitButton isValid={isFormValid} loading={loading}>
+                        Entrar
+                    </SubmitButton>
                 </form>
                 <div className='sign__link'>
                     <div className='divider'><span className='line' />Novo na nossa comunidade <span className='line' /></div>

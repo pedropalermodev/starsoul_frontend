@@ -8,6 +8,7 @@ import './styles.scss'
 // Images
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
+import SubmitButton from '../../components/SubmitButton';
 
 function SignUp() {
     const [formData, setFormData] = useState({
@@ -28,6 +29,8 @@ function SignUp() {
 
     const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const isFormValid = formData.name.trim() !== '' && formData.email.trim() !== '' && formData.password.trim() !== '' && formData.confirmPassword.trim() !== '';
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -82,6 +85,8 @@ function SignUp() {
 
 
         try {
+            setLoading(true);
+
             await usuarioCadastrar({
                 nome: formData.name,
                 email: formData.email,
@@ -100,6 +105,8 @@ function SignUp() {
             } else {
                 toast.error('Erro ao se cadastrar. Por favor, tente novamente.')
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -193,7 +200,9 @@ function SignUp() {
                             </button>
                         </div>
                     </div>
-                    <button type="submit" className='sign__form-button-submit' >Cadastrar</button>
+                    <SubmitButton isValid={isFormValid} loading={loading}>
+                        Cadastrar
+                    </SubmitButton>
                 </form>
                 <div className='sign__link'>
                     <div className='divider'><span className='line' /> Já possui uma conta StarSoul? <span className='line' /></div>

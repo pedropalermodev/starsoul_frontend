@@ -69,20 +69,6 @@
             }
         }
 
-        &-button-submit {
-            padding: 10px;
-            border-radius: 20px;
-            outline: none;
-            border: none;
-            background-color: #9e9e9e;
-            color: #fff;
-
-            &:hover {
-                background-color: #161D34;
-                transition: .2s;
-            }
-        }
-
         &-reset-password {
             text-decoration: none;
         }

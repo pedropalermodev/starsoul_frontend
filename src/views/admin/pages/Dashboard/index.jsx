@@ -16,7 +16,6 @@ if (!userData) {
 
     return(
         <main>
-            <p>Página Dashboard do administrador {userData.nome}</p>
         </main>
     )
 }

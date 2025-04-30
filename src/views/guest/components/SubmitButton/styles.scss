@@ -1,0 +1,30 @@
+@use 'sass:color';
+
+.sign__form-button-submit {
+    padding: 10px;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    background-color: #9e9e9e;
+    color: #fff;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #161D34;
+    }
+
+    &.active {
+        background-color: #161D34;
+
+        &:hover {
+            // background-color: darken(#161D34, 10%);
+            background-color: color.adjust(#161D34, $lightness: -10%);
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: #9e9e9e;
+    }
+}
