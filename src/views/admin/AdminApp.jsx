@@ -7,6 +7,9 @@ import AdminLayout from "./layout/AdminLayout";
 import Dashboard from "./pages/Dashboard";
 import AccessManagement from "./pages/AccessManagement"
 import ContentManagement from "./pages/ContentManagement"
+import CategoryManagement from "./pages/CategoryManagement";
+import TagManagement from "./pages/TagManagement";
+import FeedbackManagement from "./pages/FeedbackManagement";
 
 
 function AdminApp() {
@@ -17,6 +20,10 @@ function AdminApp() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="access-management" element={<AccessManagement />} />
                 <Route path="content-management" element={<ContentManagement />} />
+                <Route path="category-management" element={<CategoryManagement />} />
+                <Route path="tag-management" element={<TagManagement />} />
+                <Route path="feedback-management" element={<FeedbackManagement />} />
+
             </Route>
         </Routes>
     )

@@ -1,0 +1,36 @@
+.badge-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.badge {
+    padding: 4px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.badge-modelo {
+    background-color: #e0f2fe;
+    /* azul bem clarinho */
+    color: #0369a1;
+    /* azul médio */
+    border: 1px solid #bae6fd;
+}
+
+
+.badge-categoria {
+    background-color: #ddc1fc;
+    color: #6b21a8;
+    border: 1px solid #e9d5ff;
+}
+
+.badge-tag {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}

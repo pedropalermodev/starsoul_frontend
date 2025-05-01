@@ -39,7 +39,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                 setFilteredData([]);
                 return;
             }
-            
+
             if (!searchTerm) {
                 setFilteredData(data);
                 return;
@@ -122,24 +122,26 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                 </tr>
                             </thead>
                             <tbody className='gerenic__tbody'>
-                                {Array.isArray(filteredData) && filteredData.map(item => (
-                                    <tr
-                                        key={item.id}
-                                        className={`generic__tbody-tr ${item.id === itemToDeleteHighlightId ? 'highlight-delete' : ''}`}
-                                    >
-                                        {columns.map(column => (
-                                            <td
-                                                key={column.key}
-                                                className='generic__tbody-tr--td'
-                                                style={column.cellStyle}
-                                            >
-                                                {column.render ? column.render(item, onEdit, showDeleteConfirmationModal) : item[column.key]}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                                {Array.isArray(data) && data.length === 0 && ( // Adicionando a verificação Array.isArray(data)
-                                    <tr>
+                                {console.log('filteredData:', filteredData)}
+                                {Array.isArray(filteredData) && filteredData.length > 0 ? ( // Verifique se filteredData tem itens
+                                    filteredData.map(item => (
+                                        <tr
+                                            key={item.id}
+                                            className={`generic__tbody-tr ${item.id === itemToDeleteHighlightId ? 'highlight-delete' : ''}`}
+                                        >
+                                            {columns.map(column => (
+                                                <td
+                                                    key={column.key}
+                                                    className='generic__tbody-tr--td'
+                                                    style={column.cellStyle}
+                                                >
+                                                    {column.render ? column.render(item, onEdit, showDeleteConfirmationModal) : item[column.key]}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                ) : ( 
+                                    <tr key="no-data-row">
                                         <td colSpan={columns.length} style={{ textAlign: 'center', padding: '16px' }}>
                                             Nenhum dado encontrado.
                                         </td>

@@ -40,11 +40,7 @@ const accessColumns = [
             <GenericActionButtons
                 item={user}
                 onEdit={() => onEdit(user)}
-                onDelete={() => {
-                    if (window.confirm(`Tem certeza que deseja deletar o item de ID ${user.id}?`)) {
-                        onDelete(user.id);
-                    }
-                }}
+                onDelete={() => {onDelete(user.id);}}
             />
         ),
     }
