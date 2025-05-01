@@ -1,0 +1,195 @@
+.generic-form__container {
+    width: 100%;
+    padding: 40px 20px;
+
+    &-button--back {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 50px;
+    }
+}
+
+.generic-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+
+    &__content {}
+
+    &__label {
+        font-size: 1em;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    &__input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        box-sizing: border-box;
+        width: 100%;
+
+        &:focus {
+            outline: none;
+            border-color: #011f3f;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    }
+
+    &__section {
+        &-label {
+            display: flex;
+            gap: 5px;
+            font-size: 17px;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: end;
+        padding: 15px 0;
+        gap: 10px;
+
+        &-button {
+            display: flex;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: none;
+            color: #5345d3;
+            border: 1px solid #5345d3;
+            opacity: 0.8;
+            cursor: pointer;
+
+            &:last-child {
+                background-color: #15008af3;
+                color: #fff;
+            }
+
+            &:hover {
+                opacity: 1;
+                -webkit-box-shadow: -4px 10px 29px -15px rgba(0, 0, 0, 0.75);
+                -moz-box-shadow: -4px 10px 29px -15px rgba(0, 0, 0, 0.75);
+                box-shadow: -4px 10px 29px -15px rgba(0, 0, 0, 0.75);
+            }
+        }
+    }
+
+    &__toggle {
+        display: flex;
+
+        &-button {
+            padding: 8px 15px;
+            border-radius: 10px 10px 0 0;
+            border: 1px solid #c0c0c0;
+            color: #011f3f;
+        }
+    }
+
+}
+
+.active-option {
+    background-color: #fff;
+    border: none;
+}
+
+.custom-multi-select {
+    position: relative;
+    width: 100%;
+
+    .select-button {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 8px 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+
+        span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .arrow {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    }
+
+    .dropdown-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        z-index: 10;
+        display: none;
+        /* Inicialmente escondido */
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        &.open {
+            display: block;
+        }
+
+        label {
+            display: block;
+            padding: 5px 0;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+
+            input[type="checkbox"] {
+                margin-right: 8px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.generic-form__field {
+    // Se já tiver outros estilos, mantenha-os
+
+    .generic-form__input[multiple] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        appearance: none;
+        /* Remove a aparência padrão do select */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: none !important;
+        /* Remove a seta padrão */
+        min-height: 40px;
+        /* Ajuste a altura conforme necessário */
+        overflow-y: auto;
+        /* Adiciona scroll se muitas opções forem selecionadas */
+
+        /* Estilos para as opções selecionadas (chips) */
+        option:checked {
+            background-color: #007bff;
+            /* Cor de fundo do chip */
+            color: white;
+            /* Cor do texto do chip */
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        /* Esconde a opção padrão "Selecione uma opção" após a primeira seleção */
+        option[value=""]:not(:first-child) {
+            display: none;
+        }
+    }
+}

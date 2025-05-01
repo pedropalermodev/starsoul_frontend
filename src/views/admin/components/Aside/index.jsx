@@ -22,6 +22,15 @@ function Aside() {
         return <p>Dados do usuário não encontrados.</p>; // Caso não tenha dados do usuário
     }
 
+    const nomes = userData.nome.split(' ');
+    const primeiroNome = nomes[0];
+    const segundoNome = nomes[1];
+
+    let nomeSequente = primeiroNome;
+    if (segundoNome) {
+        nomeSequente = `${primeiroNome} ${segundoNome}`;
+    }
+
     const links = [
         { to: '/console/dashboard', icon: 'bi-box-fill', label: 'Dashboard' },
         { to: '/console/access-management', icon: 'bi-person-lines-fill', label: 'Acessos' },
@@ -53,18 +62,19 @@ function Aside() {
                 </nav>
             </div>
 
-            <div className='aside__profile'>
+            {/* <div className='aside__profile'>
                 <div className='aside__profile-widget'>
                     <img src={profilePicture} />
                     <div className='aside__profile-widget-account'>
-                        <h3 className='aside__profile-widget-account--name'>{userData.nome}</h3>
+                        <h3 className='aside__profile-widget-account--name'>{nomeSequente}</h3>
                         <p className='aside__profile-widget-account--email'>{userData.email}</p>
                     </div>
                 </div>
                 <button onClick={logout} className='aside__profile-logout'>
                     Logout
                 </button>
-            </div>
+            </div> */}
+
         </div>
     )
 }

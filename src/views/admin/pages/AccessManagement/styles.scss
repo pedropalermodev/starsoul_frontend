@@ -1,0 +1,45 @@
+.badge-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.badge {
+    padding: 4px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.profile-admin {
+    background-color: #a49fe1;
+    color: #4840bf;
+    border: 1px solid #7f81b3;
+}
+
+.profile-user {
+    background-color: #e0f7fa;
+    color: #0288d1;
+    border: 1px solid #b2ebf2; 
+}
+
+.status-ativo {
+    background-color: #d1fae5; /* Verde claro */
+    color: #065f46; /* Verde escuro */
+    border: 1px solid #10b981; /* Verde mÃŠdio */
+}
+
+.status-suspenso {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #94720c;
+}
+
+.status-inativo {
+    background-color: #a9a9a9;
+    color: #525252;
+    border: 1px solid #615d5c;
+}

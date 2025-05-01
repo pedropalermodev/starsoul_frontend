@@ -3,10 +3,14 @@ import axios from "axios";
 const API_BASE_URL = 'http://localhost:8080/api'
 
 // POST
-export const cadastrarUsuario = async (newUser) => {
+export const cadastrarUsuario = async (newUser, token) => {
     try {
         // console.log('Dados para cadastrar usuário: ', newUser);
-        const response = await axios.post(`${API_BASE_URL}/usuarios`, newUser);
+            const response = await axios.post(`${API_BASE_URL}/usuarios/criar/cadastro`, newUser, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Inclua o token no cabeçalho
+                },
+            });
         // console.log('Usuário cadastrado com sucesso: ', response.data);
         return response.data;
     } catch (error) {
@@ -34,6 +38,7 @@ export const atualizarUsuario = async (userId, updatedUserData, token) => {
 
 // FindAll
 export const listarTodosUsuarios = async (token) => {
+    console.log("Token recebido por listarTodosUsuarios:", token);
     try {
         // console.log('Tentando buscar usuários...');
         const response = await axios.get(`${API_BASE_URL}/usuarios/findAll`, {
@@ -42,6 +47,7 @@ export const listarTodosUsuarios = async (token) => {
             },
         });
         // console.log('Lista de Usuários: ', response.data);
+        console.log("Resposta da API (listarTodosUsuarios):", response);
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar usuários: ', error);

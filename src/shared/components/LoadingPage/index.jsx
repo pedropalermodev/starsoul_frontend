@@ -1,8 +1,11 @@
-import './styles.scss'
+import './styles.scss';
 
 function LoadingPage() {
     return (
-        <p>Carregando...</p>
+        <div className="loading-container">
+            <div className="spinner"></div>
+            <p>Carregando...</p>
+        </div>
     );
 }
 

@@ -1,0 +1,99 @@
+.styled-multi-select {
+    position: relative;
+    width: 100%;
+
+    &__input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 40px;
+    }
+
+    &__arrow {
+        font-size: 0.8em;
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+
+        button {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            font-size: 1em;
+
+            &:hover {
+                background-color: #eee;
+            }
+        }
+    }
+
+    &__search {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    &__options {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        /* Ajuste a altura máxima conforme necessário */
+        overflow-y: auto;
+
+        &--empty {
+            padding: 8px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    }
+
+    &__option {
+        padding: 6px 12px;
+        font-size: 1em;
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 1em;
+
+            input[type="checkbox"] {
+                margin: 0;
+            }
+        }
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
+    }
+}

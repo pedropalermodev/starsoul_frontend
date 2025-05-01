@@ -18,12 +18,21 @@ function Header() {
         return <p>Dados do usuário não encontrados.</p>;
     }
 
+    const nomes = userData.nome.split(' ');
+    const primeiroNome = nomes[0];
+    const segundoNome = nomes[1];
+
+    let nomeSequente = primeiroNome;
+    if (segundoNome) {
+        nomeSequente = `${primeiroNome} ${segundoNome}`;
+    }
+
     return (
         <div className="headeradmin__container">
             <div className='headeradmin__profile'>
-                <img src={profilePicture} />
-                <p>Bem vindo(a) de volta <span>{userData.nome}!</span></p>
+                <p>Como vai seu dia <span>{nomeSequente}?</span></p>
             </div>
+            
         </div>
     )
 }
