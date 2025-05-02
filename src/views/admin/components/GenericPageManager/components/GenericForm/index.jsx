@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Box from '../../../Box' ;
+import Box from '../../../Box';
 import './styles.scss';
 import { toast } from 'react-toastify';
 import StyledMultiSelect from '../../../StyledMultiSelect';
@@ -184,9 +184,24 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
 
 
                 <form onSubmit={handleSubmit} className="generic-form">
-                    {fields
-                        .filter(field => currentSection === 'required'
-                            ? field.required : !field.required).map(renderField)}
+                    {(() => {
+                        const filteredFields = fields.filter(field =>
+                            currentSection === 'required' ? field.required : !field.required
+                        );
+
+                        if (filteredFields.length === 0) {
+                            return (
+                                <div className="generic-form__empty-info">
+                                    {currentSection === 'required'
+                                        ? 'Nenhum campo obrigatório disponível.'
+                                        : 'Nenhum campo opcional disponível.'}
+                                </div>
+                            );
+                        }
+
+                        return filteredFields.map(renderField);
+                    })()}
+
                 </form>
             </Box>
 

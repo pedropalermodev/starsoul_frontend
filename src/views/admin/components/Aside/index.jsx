@@ -1,35 +1,24 @@
 import './styles.scss'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 
 // Images
 import starsoulLogo from '../../../../assets/branding/starsoul-lettermark-blue.png';
-import profilePicture from '../../../../assets/branding/starsoul-icon-circle.png'
-
+import profilePicture from '../../../../assets/branding/starsoul-icon-circle.png';
 
 function Aside() {
     const location = useLocation();
     const currentPath = location.pathname;
-    const navigate = useNavigate();
     const { userData, globalLoading, logout } = useContext(AuthContext);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
-    if (globalLoading) {
-        return <p>Loading...</p>; // Exibe um texto enquanto os dados estão sendo carregados
-    }
-
-    if (!userData) {
-        return <p>Dados do usuário não encontrados.</p>; // Caso não tenha dados do usuário
-    }
+    if (globalLoading) return <p>Loading...</p>;
+    if (!userData) return <p>Dados do usuário não encontrados.</p>;
 
     const nomes = userData.nome.split(' ');
-    const primeiroNome = nomes[0];
-    const segundoNome = nomes[1];
-
-    let nomeSequente = primeiroNome;
-    if (segundoNome) {
-        nomeSequente = `${primeiroNome} ${segundoNome}`;
-    }
+    const nomeSequente = `${nomes[0]}${nomes[1] ? ' ' + nomes[1] : ''}`;
 
     const links = [
         { to: '/console/dashboard', icon: 'bi-box-fill', label: 'Dashboard' },
@@ -44,7 +33,7 @@ function Aside() {
         <div className="aside__container">
             <div className='aside__navbar'>
                 <div className='aside__navbar-logo'>
-                    <img src={starsoulLogo} />
+                    <img src={starsoulLogo} alt="Logo" />
                 </div>
                 <nav className='aside__navbar-content'>
                     <div className='aside__navbar-content-ul'>
@@ -62,21 +51,17 @@ function Aside() {
                 </nav>
             </div>
 
-            {/* <div className='aside__profile'>
-                <div className='aside__profile-widget'>
-                    <img src={profilePicture} />
-                    <div className='aside__profile-widget-account'>
-                        <h3 className='aside__profile-widget-account--name'>{nomeSequente}</h3>
-                        <p className='aside__profile-widget-account--email'>{userData.email}</p>
+            <div className='aside__profile'>
+                <div className='aside__profile-toggle'>
+                    <img src={profilePicture} alt="Profile" />
+                    <div>
+                        <p className='aside__profile-name'>{nomeSequente}</p>
+                        <p className='aside__profile-email'>{userData.email}</p>
                     </div>
                 </div>
-                <button onClick={logout} className='aside__profile-logout'>
-                    Logout
-                </button>
-            </div> */}
-
+            </div>
         </div>
-    )
+    );
 }
 
 export default Aside;
