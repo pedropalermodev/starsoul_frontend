@@ -7,7 +7,7 @@ function GenericPageManager({ pathMap, views, currentViewKey }) {
     const pathSegments = pathMap[currentViewKey] || [];
 
     return (
-        <div>
+        <div className='generic-page__container'>
             <div>
                 <div className='path-map'>
                     <i className="bi bi-house-fill" />

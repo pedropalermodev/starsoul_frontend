@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-import { buscarUsuarioLogado , loginUsuario  } from '../../api/login.api';
+import { buscarUsuarioLogado , loginUsuario, atualizarUsuario  } from '../../api/login.api';
 
 
 export const AuthContext = createContext({
@@ -13,6 +13,7 @@ export const AuthContext = createContext({
     globalLoading: true,
     login: (email, password) => {},
     logout: () => {},
+    updateUser: (userData) => {},
 });
 
 export const AuthProvider = ({ children }) => {
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     const [userRole, setUserRole] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('authToken') || null); // Tenta pegar o token do localStorage
     const [globalLoading, setGlobalLoading] = useState(true);
+    const [updateLoading, setUpdateLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -95,13 +97,13 @@ export const AuthProvider = ({ children }) => {
                 } else {
                     toast.error('Erro de conexão com o servidor');
                     console.error('Erro detalhado:', error);
+                    logout();
                 }
             } finally {
                 setGlobalLoading(false);
             }
         };
     
-        // Só executa se tiver token e estiver autenticado
         if (token && isAuthenticated) {
             fetchUserData();
         } else {
@@ -137,8 +139,29 @@ export const AuthProvider = ({ children }) => {
         navigate('/sign-in');
     };
 
+
+    const updateUser = async (userDataToUpdate) => {
+        setUpdateLoading(true);
+        try {
+            if (!token) {
+                toast.error('Não autenticado.');
+                return false;
+            }
+            const updatedUser = await atualizarUsuario(token, userDataToUpdate);
+            setUserData(updatedUser);
+            toast.success('Perfil atualizado com sucesso!');
+            return true;
+        } catch (error) {
+            console.error('Erro ao atualizar o perfil:', error);
+            toast.error('Erro ao atualizar o perfil.');
+            return false;
+        } finally {
+            setUpdateLoading(false);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, userRole, token, userData, globalLoading, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, userRole, token, userData, globalLoading, login, logout, updateUser, updateLoading }}>
             {children}
         </AuthContext.Provider>
     );

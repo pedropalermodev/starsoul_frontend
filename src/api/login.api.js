@@ -54,3 +54,16 @@ export const buscarUsuarioLogado = async (token) => {
         }
     }
 };
+
+// PUT - Atualizar os dados do usuário
+export const atualizarUsuario = async (token, userData) => {
+    try {
+        const response = await axios.put(`${API_BASE_URL}/usuarios/me`, userData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data; // Ou você pode retornar apenas o status da resposta (response.status === 200)
+    } catch (error) {
+        console.error('Erro ao atualizar o usuário:', error);
+        throw error;
+    }
+};

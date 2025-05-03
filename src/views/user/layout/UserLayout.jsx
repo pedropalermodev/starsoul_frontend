@@ -5,13 +5,13 @@ import './styles.scss'
 
 function UserLayout() {
     return(
-        <>
+        <div className="userlayout__container">
             <Header/>
-            <main>
+            <main className="userlayout__content">
                 <Outlet/>
             </main>
             <Footer/>
-        </>
+        </div>
     )
 }
 

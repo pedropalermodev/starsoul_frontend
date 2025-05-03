@@ -2,8 +2,8 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Outfit", sans-serif;
-    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
     // zoom: 0.98;
 }
 
@@ -12,10 +12,19 @@ body {
 }
 
 .toast-container-custom {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     top: 20px;
-    right: 20px;
-    width: auto;
+    width: max-content;
     z-index: 9999;
+
+    .Toastify__toast-container {
+        display: flex;
+        justify-content: center;
+        /* Centraliza horizontalmente */
+        align-items: center;
+    }
 
     .Toastify__toast {
         background-color: rgb(228, 115, 115);
