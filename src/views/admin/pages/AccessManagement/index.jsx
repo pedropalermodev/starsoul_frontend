@@ -177,6 +177,13 @@ function AccessManagement() {
             return;
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (newUser.email && !emailRegex.test(newUser.email)) {
+            toast.error('Por favor, insira um email válido.');
+            setLoading(false);
+            return;
+        }
+
 
         try {
             await cadastrarUsuario(newUser, token);
