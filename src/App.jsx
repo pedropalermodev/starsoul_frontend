@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './shared/contexts/AuthContext';
+import { ContentProvider } from './shared/contexts/ContentContext';
 import { ToastContainer } from 'react-toastify';
 import './styles/globalStyles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -21,8 +22,10 @@ function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <AppRoutes />
-                <ToastContainer className="toast-container-custom" position="top-center" />
+                <ContentProvider>
+                    <AppRoutes />
+                    <ToastContainer className="toast-container-custom" position="top-center" />
+                </ ContentProvider>
             </AuthProvider>
         </BrowserRouter>
     );

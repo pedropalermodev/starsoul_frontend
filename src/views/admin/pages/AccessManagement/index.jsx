@@ -161,9 +161,8 @@ function AccessManagement() {
         if (dataNascimentoInput) {
             const selectedDate = new Date(dataNascimentoInput);
             const today = new Date();
-            const minDate = new Date('1900-01-01'); // Ajuste a data mínima conforme necessário
+            const minDate = new Date('1911-10-06');
 
-            // Converter para UTC para comparação correta (removendo a influência do timezone local)
             selectedDate.setUTCHours(0, 0, 0, 0);
             today.setUTCHours(0, 0, 0, 0);
             minDate.setUTCHours(0, 0, 0, 0);
@@ -175,7 +174,7 @@ function AccessManagement() {
             }
 
             if (selectedDate < minDate) {
-                toast.error('A data de nascimento não pode ser anterior a 01/01/1900.'); // Ajuste a mensagem conforme a data mínima
+                toast.error('A data de nascimento não pode ser anterior a 06/10/1911.'); // Ajuste a mensagem conforme a data mínima
                 setLoading(false);
                 return;
             }
@@ -240,7 +239,7 @@ function AccessManagement() {
         if (dataNascimentoInput) {
             const selectedDate = new Date(dataNascimentoInput);
             const today = new Date();
-            const minDate = new Date('1900-01-01'); // Ajuste a data mínima conforme necessário
+            const minDate = new Date('1911-10-06'); // Ajuste a data mínima conforme necessário
 
             // Converter para UTC para comparação correta
             selectedDate.setUTCHours(0, 0, 0, 0);
@@ -254,7 +253,7 @@ function AccessManagement() {
             }
 
             if (selectedDate < minDate) {
-                toast.error('A data de nascimento não pode ser anterior a 01/01/1900.'); // Ajuste a mensagem conforme a data mínima
+                toast.error('A data de nascimento não pode ser anterior a 06/10/1911.'); // Ajuste a mensagem conforme a data mínima
                 setLoading(false);
                 return;
             }

@@ -37,14 +37,10 @@ export const atualizarConteudo = async (contentId, updatedContentData, token) =>
 };
 
 // FindAll
-export const listarTodosConteudos = async (token) => {
+export const listarTodosConteudos = async () => {
     try {
         console.log('Tentando buscar conteúdos...');
-        const response = await axios.get(`${API_BASE_URL}/conteudos/findAll`, {
-            headers: {
-                Authorization: `Bearer ${token}`, // Inclua o token no cabeçalho
-            },
-        });
+        const response = await axios.get(`${API_BASE_URL}/conteudos/findAll`);
         // console.log('Lista de Conteudos: ', response.data);
         return response.data;
     } catch (error) {
