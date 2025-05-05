@@ -40,7 +40,7 @@ const accessColumns = [
             <GenericActionButtons
                 item={user}
                 onEdit={() => onEdit(user)}
-                onDelete={() => {onDelete(user.id);}}
+                onDelete={() => { onDelete(user.id); }}
             />
         ),
     }
@@ -156,6 +156,34 @@ function AccessManagement() {
         setLoading(true);
         setError(null);
 
+        let dataNascimentoBRT = null;
+        const dataNascimentoInput = newUser.dataNascimento;
+        if (dataNascimentoInput) {
+            const selectedDate = new Date(dataNascimentoInput);
+            const today = new Date();
+            const minDate = new Date('1900-01-01'); // Ajuste a data mínima conforme necessário
+
+            // Converter para UTC para comparação correta (removendo a influência do timezone local)
+            selectedDate.setUTCHours(0, 0, 0, 0);
+            today.setUTCHours(0, 0, 0, 0);
+            minDate.setUTCHours(0, 0, 0, 0);
+
+            if (selectedDate > today) {
+                toast.error('A data de nascimento não pode ser posterior ao dia de hoje.');
+                setLoading(false);
+                return;
+            }
+
+            if (selectedDate < minDate) {
+                toast.error('A data de nascimento não pode ser anterior a 01/01/1900.'); // Ajuste a mensagem conforme a data mínima
+                setLoading(false);
+                return;
+            }
+
+            dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
+            console.log('Data de Nascimento enviada (BRT) para CREATE:', dataNascimentoBRT);
+        }
+
         console.log('Validando nome:', newUser.nome);
         if (newUser.nome && newUser.nome.length < 3) {
             toast.error('O nome do usuário deve ter pelo menos 2 caracteres.');
@@ -206,6 +234,34 @@ function AccessManagement() {
     const handleUpdateSubmit = async (updatedUserData) => {
         setLoading(true);
         setError(null);
+
+        let dataNascimentoBRT = null;
+        const dataNascimentoInput = updatedUserData.dataNascimento;
+        if (dataNascimentoInput) {
+            const selectedDate = new Date(dataNascimentoInput);
+            const today = new Date();
+            const minDate = new Date('1900-01-01'); // Ajuste a data mínima conforme necessário
+
+            // Converter para UTC para comparação correta
+            selectedDate.setUTCHours(0, 0, 0, 0);
+            today.setUTCHours(0, 0, 0, 0);
+            minDate.setUTCHours(0, 0, 0, 0);
+
+            if (selectedDate > today) {
+                toast.error('A data de nascimento não pode ser posterior ao dia de hoje.');
+                setLoading(false);
+                return;
+            }
+
+            if (selectedDate < minDate) {
+                toast.error('A data de nascimento não pode ser anterior a 01/01/1900.'); // Ajuste a mensagem conforme a data mínima
+                setLoading(false);
+                return;
+            }
+
+            dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
+            console.log('Data de Nascimento enviada (BRT):', dataNascimentoBRT);
+        }
 
         if (updatedUserData.nome && updatedUserData.nome.length < 3) {
             toast.error('O nome do usuário deve ter pelo menos 2 caracteres.');
