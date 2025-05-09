@@ -51,6 +51,8 @@ export const ContentProvider = ({ children }) => {
 
     useEffect(() => {
         fetchContents();
+        const intervalId = setInterval(fetchContents, 5000);
+        return () => clearInterval(intervalId);
     }, []);
 
     return (

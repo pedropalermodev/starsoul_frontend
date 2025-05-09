@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
@@ -27,6 +27,53 @@ function Home() {
         }
     };
 
+    const scrollRef = useRef(null);
+
+    // Dentro do componente
+    useEffect(() => {
+        const slider = scrollRef.current;
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        const handleMouseDown = (e) => {
+            isDown = true;
+            slider.classList.add('dragging');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        };
+
+        const handleMouseLeave = () => {
+            isDown = false;
+            slider.classList.remove('dragging');
+        };
+
+        const handleMouseUp = () => {
+            isDown = false;
+            slider.classList.remove('dragging');
+        };
+
+        const handleMouseMove = (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        };
+
+        slider.addEventListener('mousedown', handleMouseDown);
+        slider.addEventListener('mouseleave', handleMouseLeave);
+        slider.addEventListener('mouseup', handleMouseUp);
+        slider.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            slider.removeEventListener('mousedown', handleMouseDown);
+            slider.removeEventListener('mouseleave', handleMouseLeave);
+            slider.removeEventListener('mouseup', handleMouseUp);
+            slider.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
+
     return (
         <main className='home-app__container'>
             <div className='home-app__content'>
@@ -40,23 +87,20 @@ function Home() {
                 </div>
             </div>
 
-            <div className='home-app__content'>
-                <section className="conteudos__categoria">
-                    <div className="content__list">
-                        {meditacaoManha.map(content => (
-                            <div key={content.id} className="content__card">
-                                <img
-                                    src={getYouTubeThumbnail(content.arquivoUrl)}
-                                    alt={`Capa de ${content.titulo}`}
-                                    className="content__thumbnail"
-                                />
-                                <div className="content__info">
-                                    <h3>{content.titulo}</h3>
-                                </div>
-                            </div>
-                        ))}
+            <div className='home-app__contents' ref={scrollRef}>
+                {meditacaoManha.map(content => (
+                    <div key={content.id} className="content__card">
+                        <img
+                            src={getYouTubeThumbnail(content.arquivoUrl)}
+                            alt={`Capa de ${content.titulo}`}
+                            className="content__thumbnail"
+                            draggable={false}
+                        />
+                        <div className="content__info">
+                            <p>{content.titulo}</p>
+                        </div>
                     </div>
-                </section>
+                ))}
             </div>
 
         </main>
