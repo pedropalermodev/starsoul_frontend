@@ -1,4 +1,5 @@
-import { useContext, useState, useRef, useEffect } from 'react';
+import { useContext, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
@@ -7,6 +8,8 @@ import './styles.scss';
 function Home() {
     const { userData, globalLoading } = useContext(AuthContext);
     const { contents } = useContent();
+
+    const navigate = useNavigate();
 
     if (globalLoading) return <p>Loading...</p>;
     if (!userData) return <p>Dados do usuário não encontrados.</p>;
@@ -28,51 +31,50 @@ function Home() {
     };
 
     const scrollRef = useRef(null);
+    const isDraggingRef = useRef(false);
+    const startX = useRef(0);
+    const scrollLeft = useRef(0);
+    const [isDragging, setIsDragging] = useState(false);
 
-    // Dentro do componente
-    useEffect(() => {
+    const handleMouseDown = (e) => {
+        isDraggingRef.current = false;
+        setIsDragging(true);
+
         const slider = scrollRef.current;
-        let isDown = false;
-        let startX;
-        let scrollLeft;
+        slider.dataset.mouseDown = 'true';
+        slider.dataset.startX = e.pageX;
+        slider.dataset.scrollLeft = slider.scrollLeft;
+    };
 
-        const handleMouseDown = (e) => {
-            isDown = true;
-            slider.classList.add('dragging');
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-        };
+    const handleMouseMove = (e) => {
+        const slider = scrollRef.current;
+        if (slider.dataset.mouseDown !== 'true') return;
 
-        const handleMouseLeave = () => {
-            isDown = false;
-            slider.classList.remove('dragging');
-        };
+        e.preventDefault();
+        isDraggingRef.current = true;
 
-        const handleMouseUp = () => {
-            isDown = false;
-            slider.classList.remove('dragging');
-        };
+        const x = e.pageX;
+        const walk = (x - slider.dataset.startX) * 2;
+        slider.scrollLeft = slider.dataset.scrollLeft - walk;
+    };
 
-        const handleMouseMove = (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 2;
-            slider.scrollLeft = scrollLeft - walk;
-        };
+    const handleMouseUp = () => {
+        const slider = scrollRef.current;
+        slider.dataset.mouseDown = 'false';
+        setIsDragging(false);
+    };
 
-        slider.addEventListener('mousedown', handleMouseDown);
-        slider.addEventListener('mouseleave', handleMouseLeave);
-        slider.addEventListener('mouseup', handleMouseUp);
-        slider.addEventListener('mousemove', handleMouseMove);
+    const handleOpenContent = (content) => {
+        if (isDraggingRef.current) return; // não navega se estiver arrastando
 
-        return () => {
-            slider.removeEventListener('mousedown', handleMouseDown);
-            slider.removeEventListener('mouseleave', handleMouseLeave);
-            slider.removeEventListener('mouseup', handleMouseUp);
-            slider.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+        navigate(`/app/content/${content.id}`, {
+            state: {
+                titulo: content.titulo,
+                videoUrl: content.arquivoUrl,
+                descricao: content.descricao,
+            }
+        });
+    };
 
     return (
         <main className='home-app__container'>
@@ -87,22 +89,34 @@ function Home() {
                 </div>
             </div>
 
-            <div className='home-app__contents' ref={scrollRef}>
-                {meditacaoManha.map(content => (
-                    <div key={content.id} className="content__card">
-                        <img
-                            src={getYouTubeThumbnail(content.arquivoUrl)}
-                            alt={`Capa de ${content.titulo}`}
-                            className="content__thumbnail"
-                            draggable={false}
-                        />
-                        <div className="content__info">
-                            <p>{content.titulo}</p>
+            <div className='content-box'>
+                <p>Meditações para manhâ: </p>
+                <div
+                    className={`home-app__contents ${isDragging ? 'dragging' : ''}`}
+                    ref={scrollRef}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                >
+                    {meditacaoManha.map(content => (
+                        <div
+                            key={content.id}
+                            className="content__card"
+                            onClick={() => handleOpenContent(content)}
+                        >
+                            <img
+                                src={getYouTubeThumbnail(content.arquivoUrl)}
+                                alt={`Capa de ${content.titulo}`}
+                                className="content__thumbnail"
+                                draggable={false}
+                            />
+                            <div className="content__info">
+                                <p>{content.titulo}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-
         </main>
     );
 }

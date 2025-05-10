@@ -1,12 +1,20 @@
 .userlayout__container {
     background: #292827;
-    background: linear-gradient(0deg, rgba(41, 40, 39, 1) 0%, rgba(33, 43, 79, 1) 100%);
-    min-height: 100vh;
+    background: linear-gradient(0deg, rgba(41, 40, 39, 1) 0%, #212b4f 100%);
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
 .userlayout__content {
     padding-top: 80px;
     padding-left: 35px;
     padding-right: 35px;
+    min-height: 93.4vh;
+}
+
+@media (max-width: 768px) {
+    .userlayout__content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }

@@ -1,8 +1,6 @@
 .footer-app__container {
     display: flex;
     justify-content: center;
-    position: fixed;
-    bottom: 0;
     margin: auto;
     padding: 25px 35px;
     width: 100%;
@@ -33,6 +31,8 @@
 @media (max-width: 768px) {
 
     .footer-app__container {
+        position: fixed;
+        bottom: 0;
         border: none;
         border-radius: 20px;
         margin: 20px;
