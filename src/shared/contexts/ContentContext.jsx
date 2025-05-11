@@ -17,7 +17,8 @@ export const ContentProvider = ({ children }) => {
     const fetchContents = async () => {
         try {
             const data = await listarTodosConteudos();
-            setContents(data);
+            const conteudosAtivos = data.filter(content => content.codStatus === 'Ativo');
+            setContents(conteudosAtivos);
         } catch (err) {
             console.error("Erro ao carregar conteúdos:", err);
         }

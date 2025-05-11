@@ -1,9 +1,9 @@
 import { useContent } from '../../../../shared/hooks/useContent';
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import LoadingPage from '../../../../shared/components/LoadingPage';
 import './styles.scss'
-import LoadingPageContent from '../../../../shared/components/LoadingPage Content';
+import LoadingContent from '../../components/LoadingContent';
+import ErrorFoundPage from '../../../../shared/components/ErrorFoundPage';
 
 function ContentPage() {
     const { id } = useParams();
@@ -87,11 +87,11 @@ function ContentPage() {
     };
 
     if (globalLoading || isDelayedLoading || !contents || contents.length === 0) {
-        return <LoadingPageContent />;
+        return <LoadingContent />;
     }
 
     if (!content) {
-        return <p>Conteúdo não encontrado.</p>;
+        return <ErrorFoundPage />;
     };
 
     const meditacoesRelacionadas = contents.filter(otherContent =>
@@ -121,7 +121,10 @@ function ContentPage() {
                         )}
 
                     </div>
-                    <p className='video-info--description'>{content.descricao}</p>
+                    {/* <p className='video-info--description'>{content.descricao}</p> */}
+                    <p className='video-info--description'>
+                        {content.descricao ? content.descricao : 'Desconecte-se do mundo exterior e reconecte-se com sua paz interior. Esta sessão de meditação guiada foi cuidadosamente elaborada para ajudá-lo a relaxar, reduzir o estresse e cultivar a atenção plena. Seja você um iniciante ou um praticante experiente, encontre neste espaço um momento de tranquilidade e bem-estar. Permita-se respirar profundamente e embarcar nesta jornada de serenidade.'}
+                    </p>
                 </div>
             </div>
 
@@ -135,19 +138,23 @@ function ContentPage() {
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                 >
-                    {meditacoesRelacionadas.map(content => (
-                        <div key={content.id} className="content__card" onClick={(e) => handleOpenContent(content, e)}>
-                            <img
-                                src={getYouTubeThumbnail(content.arquivoUrl)}
-                                alt={`Capa de ${content.titulo}`}
-                                className="content__thumbnail"
-                                draggable={false}
-                            />
-                            <div className="content__info">
-                                <p>{content.titulo}</p>
+                    {meditacoesRelacionadas.length > 0 ? (
+                        meditacoesRelacionadas.map(content => (
+                            <div key={content.id} className="content__card" onClick={(e) => handleOpenContent(content, e)}>
+                                <img
+                                    src={getYouTubeThumbnail(content.arquivoUrl)}
+                                    alt={`Capa de ${content.titulo}`}
+                                    className="content__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{content.titulo}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <p style={{color: "#c0c0c0", fontStyle: 'italic'}}>Nenhuma meditação relacionada encontrada.</p>
+                    )}
                 </div>
             </div>
         </main>
