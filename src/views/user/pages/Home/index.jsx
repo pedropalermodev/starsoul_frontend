@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
+
 import './styles.scss';
+
+import AccordionList from '../../components/Accordion';
 
 function Home() {
     const { userData, globalLoading } = useContext(AuthContext);
@@ -76,6 +79,7 @@ function Home() {
         });
     };
 
+
     return (
         <main className='home-app__container'>
             <div className='home-app__content'>
@@ -117,6 +121,16 @@ function Home() {
                     ))}
                 </div>
             </div>
+
+            <div className="home-app__details">
+                <div className="home-app__details-box">
+                    <AccordionList />
+                </div>
+                <div className="home-app__details-box">
+                    <p>Imagem</p>
+                </div>
+            </div>
+
         </main>
     );
 }

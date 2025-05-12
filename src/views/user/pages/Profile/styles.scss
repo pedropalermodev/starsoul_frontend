@@ -1,15 +1,23 @@
 .profile-app__container {
-
-    .profile-app__page {
-        color: #fff;
-        font-size: 16px;
-    }
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 1250px;
 
     .profile-app__content {
-        margin-top: 15px;
-        & p {
-            color: #cecece;
+        margin-top: 20px;
+        
+        &--title-page {
+            color: #fff;
             font-size: 16px;
+        }
+
+        .profile-app__user {
+
+            &--text {
+                color: #cecece;
+                font-size: 14px;
+            }
         }
     }
 }

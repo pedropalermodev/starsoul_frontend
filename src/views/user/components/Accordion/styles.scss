@@ -1,0 +1,9 @@
+.accordion__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .accordion__content {
+        border-radius: 10px;
+    }
+}

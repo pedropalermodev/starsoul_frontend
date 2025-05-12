@@ -73,7 +73,6 @@
 
     .home-app__contents {
         display: flex;
-        margin: auto;
         gap: 20px;
         max-width: 1250px;
         overflow-x: auto;
@@ -108,6 +107,21 @@
             }
         }
     }
+
+    .home-app__details {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        justify-content: space-between;
+
+        &-box {
+            width: 100%;
+
+            &:last-child {
+                width: 50%;
+            }
+        }
+    }
 }
 
 
@@ -118,7 +132,12 @@
             .home-app__search {
                 display: none;
             }
+        }
 
+        .home-app__details {
+            flex-direction: column-reverse;
+            align-items: baseline;
+            gap: 30px;
         }
     }
 }

@@ -11,11 +11,14 @@ function Profile() {
 
     return (
         <main className='profile-app__container'>
-            <p className='profile-app__page'>Configurações</p>
+
             <div className='profile-app__content'>
-                <p>Informações pessoais</p>
+                <p className='profile-app__content--title-page'>Configurações</p>
+                <div className='profile-app__user'>
+                    <p className='profile-app__user--text'>Informações pessoais</p>
+                    <button onClick={logout}>Logout</button>
+                </div>
             </div>
-            <button onClick={logout}>Logout</button>
         </main>
     );
 }
