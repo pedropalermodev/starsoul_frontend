@@ -5,6 +5,7 @@ import UserLayout from "./layout/UserLayout";
 // Páginas
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Favorites from "./pages/Favorites";
 import ContentPage from "./pages/ContentPage";
 
 
@@ -16,6 +17,7 @@ function UserApp() {
                 <Route index element={<Navigate to="home" replace />} />
                 <Route path="home" element={<Home />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="favorites" element={<Favorites />} />
                 <Route path="content/:id" element={<ContentPage />} />
             </Route>
         </Routes>

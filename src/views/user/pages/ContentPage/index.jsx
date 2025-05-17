@@ -1,9 +1,11 @@
 import { useContent } from '../../../../shared/hooks/useContent';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './styles.scss'
 import LoadingContent from '../../components/LoadingContent';
 import ErrorFoundPage from '../../../../shared/components/ErrorFoundPage';
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
+import { listarFavoritos, favoritarConteudo, desfavoritarConteudo, registrarAcesso } from "../../../../api/content-user.api";
 
 function ContentPage() {
     const { id } = useParams();
@@ -13,6 +15,10 @@ function ContentPage() {
     const isDraggingRef = useRef(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isDelayedLoading, setIsDelayedLoading] = useState(true);
+    const { token } = useContext(AuthContext);
+    const [favorito, setFavorito] = useState(false);
+
+    const content = contents.find(c => c.id === Number(id));
 
     useEffect(() => {
         setIsDelayedLoading(true);
@@ -23,7 +29,32 @@ function ContentPage() {
         return () => clearTimeout(timeout);
     }, [id]);
 
-    const content = contents.find(c => String(c.id) === id);
+    useEffect(() => {
+        if (id && token) {
+            listarFavoritos(token)
+                .then(favoritos => {
+                    console.log("Favoritos retornados:", favoritos); // opcional para debug
+                    const estaFavoritado = favoritos.some(
+                        fav => String(fav.conteudo.id) === String(id)
+                    );
+                    setFavorito(estaFavoritado);
+                })
+                .catch(err => console.error("Erro ao listar favoritos", err));
+        }
+    }, [id, token]);
+
+
+
+    useEffect(() => {
+        if (content && token) {
+            registrarAcesso(content.id, token)
+                .then(() => console.log("Acesso registrado"))
+                .catch(err => console.error("Erro ao registrar acesso", err));
+        }
+    }, [content?.id, token]);
+
+
+
 
     const handleMouseDown = (e) => {
         isDraggingRef.current = false;
@@ -101,6 +132,26 @@ function ContentPage() {
         )
     );
 
+    const toggleFavorito = async () => {
+        try {
+            if (favorito) {
+                await desfavoritarConteudo(content.id, token);
+            } else {
+                await favoritarConteudo(content.id, token);
+            }
+
+            const favoritos = await listarFavoritos(token);
+            const estaFavoritado = favoritos.some(
+                fav => String(fav.conteudo.id) === String(content.id)
+            );
+            setFavorito(estaFavoritado);
+
+        } catch (err) {
+            console.error("Erro ao favoritar/desfavoritar conteúdo", err);
+        }
+    };
+
+
     return (
         <main className='content-page__container' >
             <div className="content-page__content">
@@ -125,6 +176,10 @@ function ContentPage() {
                     <p className='video-info--description'>
                         {content.descricao ? content.descricao : 'Desconecte-se do mundo exterior e reconecte-se com sua paz interior. Esta sessão de meditação guiada foi cuidadosamente elaborada para ajudá-lo a relaxar, reduzir o estresse e cultivar a atenção plena. Seja você um iniciante ou um praticante experiente, encontre neste espaço um momento de tranquilidade e bem-estar. Permita-se respirar profundamente e embarcar nesta jornada de serenidade.'}
                     </p>
+
+                    <button onClick={toggleFavorito}>
+                        {favorito ? "★ Favoritado" : "☆ Favoritar"}
+                    </button>
                 </div>
             </div>
 
@@ -153,7 +208,7 @@ function ContentPage() {
                             </div>
                         ))
                     ) : (
-                        <p style={{color: "#c0c0c0", fontStyle: 'italic'}}>Nenhuma meditação relacionada encontrada.</p>
+                        <p style={{ color: "#c0c0c0", fontStyle: 'italic' }}>Nenhuma meditação relacionada encontrada.</p>
                     )}
                 </div>
             </div>

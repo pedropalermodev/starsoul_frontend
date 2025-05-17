@@ -1,0 +1,105 @@
+.favorite-app {
+    max-width: 1250px;
+    width: 100%;
+    margin: auto;
+
+    &__content {
+        margin-top: 20px;
+
+        &--title-page {
+            color: #fff;
+            font-size: 16px;
+        }
+    }
+
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        margin-top: 50px;
+        height: 50vh;
+
+        &-link {
+            color: #a78bfa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+
+            &:hover {
+                color: #c084fc;
+            }
+        }
+    }
+
+    &__favorites {
+        margin-top: 30px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}
+
+.favorito-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #1e293b;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+
+    &__link {
+        text-decoration: none;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        & img {
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+    }
+
+    &__title {
+        padding: 10px;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    &__category {
+        padding: 0 10px 10px;
+        font-size: 0.9rem;
+        color: #a1a1aa;
+    }
+
+    .unfavorite-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #dc2626;
+        color: #fff;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 0 0 10px 10px;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+            background-color: #b91c1c;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
