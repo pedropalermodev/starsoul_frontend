@@ -6,6 +6,9 @@ import LoadingContent from '../../components/LoadingContent';
 import ErrorFoundPage from '../../../../shared/components/ErrorFoundPage';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { listarFavoritos, favoritarConteudo, desfavoritarConteudo, registrarAcesso } from "../../../../api/content-user.api";
+import { motion, AnimatePresence } from "framer-motion";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
 
 function ContentPage() {
     const { id } = useParams();
@@ -164,7 +167,50 @@ function ContentPage() {
                     />
                 </div>
                 <div className='video-info'>
-                    <p className='video-info--title'>{content.titulo}</p>
+                    <div className='video-title-favorite'>
+                        <p className='video-info--title'>{content.titulo}</p>
+                        <motion.button
+                            onClick={toggleFavorito}
+                            whileTap={{ scale: 0.9 }}
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                            className='button-motion'
+                        >
+                            <AnimatePresence mode="wait" initial={false}>
+                                {favorito ? (
+                                    <motion.span
+                                        key="filled"
+                                        initial={{ scale: 0.3, opacity: 0.8 }}
+                                        animate={{ scale: 1.3, opacity: 1 }}
+                                        exit={{ scale: 0.3, opacity: 0.8 }}
+                                        transition={{ type: "spring", stiffness: 300, damping: 12 }}
+                                        style={{
+                                            color: "red",
+                                            fontSize: "2.2rem",
+                                            filter: "drop-shadow(0 0 4px rgba(255,0,0,0.4))",
+                                        }}
+                                    >
+                                        <AiFillHeart style={{ width: '20px', height: '20px' }} />
+                                    </motion.span>
+                                ) : (
+                                    <motion.span
+                                        key="outline"
+                                        initial={{ scale: 0.3, opacity: 0.8 }}
+                                        animate={{ scale: 1.3, opacity: 1 }}
+                                        exit={{ scale: 0.3, opacity: 0.8 }}
+                                        transition={{ type: "spring", stiffness: 300, damping: 12 }}
+                                        style={{
+                                            color: "gray",
+                                            fontSize: "2.2rem",
+                                            filter: "drop-shadow(0 0 2px rgba(0,0,0,0.2))",
+                                        }}
+                                    >
+                                        <AiOutlineHeart style={{ width: '20px', height: '20px' }} />
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </motion.button>
+                    </div>
                     <div className='video-info__box'>
                         <p className='video-info__box--categories'>{content.categorias}</p>
                         {content.tags?.length > 0 && (
@@ -176,10 +222,6 @@ function ContentPage() {
                     <p className='video-info--description'>
                         {content.descricao ? content.descricao : 'Desconecte-se do mundo exterior e reconecte-se com sua paz interior. Esta sessão de meditação guiada foi cuidadosamente elaborada para ajudá-lo a relaxar, reduzir o estresse e cultivar a atenção plena. Seja você um iniciante ou um praticante experiente, encontre neste espaço um momento de tranquilidade e bem-estar. Permita-se respirar profundamente e embarcar nesta jornada de serenidade.'}
                     </p>
-
-                    <button onClick={toggleFavorito}>
-                        {favorito ? "★ Favoritado" : "☆ Favoritar"}
-                    </button>
                 </div>
             </div>
 

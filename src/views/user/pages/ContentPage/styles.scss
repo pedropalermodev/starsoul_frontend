@@ -36,6 +36,31 @@
         width: 100%;
         max-width: 450px;
 
+        .video-title-favorite {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            .button-motion {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                outline: none;
+                width: fit-content;
+                padding: 8px;
+                border-radius: 20px;
+
+                & span {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+
         &--title,
         &__box--categories,
         &__box--tags,
@@ -117,6 +142,7 @@
         }
     }
 }
+
 
 @media (max-width: 768px) {
     .content-page__container {
