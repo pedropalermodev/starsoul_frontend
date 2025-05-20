@@ -1,8 +1,10 @@
 .footer {
     display: flex;
     justify-content: center;
+    // background: #202751;
+    // background: linear-gradient(180deg, #2f3a61 0%, #09042e 100%);
     background: #202751;
-    background: linear-gradient(180deg, #212B4F 0%, #09042e 100%);
+    background: linear-gradient(180deg, #4A3E95 0%, #2a1f6d 100%);
     padding: 35px 35px;
 
     &__content {

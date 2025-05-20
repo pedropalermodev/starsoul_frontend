@@ -1,15 +1,16 @@
-.contact__container:first-child {
-    margin-top: 85px;
-    padding: 80px 35px;
+.container-contact {
+    background: #ffffff;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 40%, #4a3e95 100%);
 }
+
 
 .contact__container-hero {
     justify-content: center;
-    gap: 70px;
 }
 
-.contact__container{
+.contact__container {
     &-hero {
+        gap: 50px;
 
         &-box {
             display: flex;
@@ -17,16 +18,19 @@
             gap: 20px;
 
             &--title {
-                font-size: 35px;
-            } 
+                font-size: 30px;
+                color: #ffffff;
+            }
 
             &--subtitle {
                 font-weight: 500;
+                font-size: 13px;
+                color: #2a245f;
             }
         }
 
         &-box {
-            
+
             &-email {
                 display: flex;
                 align-items: center;
@@ -41,19 +45,27 @@
                     width: 45px;
                     height: 45px;
                     border-radius: 50px;
-                    background-color: rgb(60, 87, 111);
+                    background-color: rgb(27, 20, 58);
                 }
 
                 &-text {
+                    color: #2a245f;
+
+                    & p {
+                        font-size: 13px;
+                    }
+
                     &--email {
-                        font-weight: 700;
-                        color: rgb(43, 13, 119);
+                        font-weight: 500;
+                        color: rgb(72, 0, 255);
                     }
                 }
             }
 
             &--message {
                 font-size: 20px;
+                color: #000000;
+
             }
 
             &-form {
@@ -62,27 +74,25 @@
                 gap: 15px;
 
                 &--input {
-                    background-color: rgba(197, 221, 221, 0.25);
+                    background-color: rgb(239, 237, 255);
                     border: none;
                     border-radius: 10px;
                     padding: 15px;
-                    transition: .1s all;
                 }
 
                 &--input:focus {
-                    border: solid rgb(67, 67, 103) 3px;
                     outline: none;
                 }
             }
         }
 
         &-box:nth-child(2) {
-            background-color: rgb(251, 250, 255);
+            background-color: rgb(255, 255, 255);
             border-radius: 20px;
             padding: 40px;
-            -webkit-box-shadow: 10px 10px 23px -7px rgba(0,0,0,0.39);
-            -moz-box-shadow: 10px 10px 23px -7px rgba(0,0,0,0.39);
-            box-shadow: 10px 10px 23px -7px rgba(0,0,0,0.39);
+            -webkit-box-shadow: 10px 10px 23px -7px rgba(0, 0, 0, 0.39);
+            -moz-box-shadow: 10px 10px 23px -7px rgba(0, 0, 0, 0.39);
+            box-shadow: 10px 10px 23px -7px rgba(0, 0, 0, 0.39);
         }
     }
 }
@@ -95,24 +105,22 @@
 }
 
 .btn {
-    font-size: 16px;
+    font-size: 13px;
     padding: 10px 20px;
-    text-align: center;
     color: #fff;
-    background-color: #2063a1;
-    font-family: "Outfit", sans-serif;
-    border: solid 1px transparent;
+    background-color: #0e0329;
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.75);
+    border: none;
     border-radius: 25px;
-    text-decoration: none;
-    width:fit-content;
+    transition: .3s;
+    cursor: pointer;
 }
 
 
 .btn:hover {
-    background-color: #031a30;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #0e0422;
 }
 
 @media (max-width: 768px) {
@@ -121,6 +129,10 @@
 
         &-box {
             width: 100%;
+
+            &--title {
+                font-size: 27px;
+            }
         }
     }
 }

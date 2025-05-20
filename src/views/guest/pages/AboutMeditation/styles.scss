@@ -1,0 +1,175 @@
+.about-meditation {
+    background: #ffffff;
+    background: linear-gradient(0deg, #ffffff 40%, #4a3e95 100%);
+
+
+    .container-meditation {
+        padding: 0px 35px;
+    }
+
+    .content-meditation {
+        width: 100%;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+
+    // HERO - -
+
+    &__hero {
+        display: flex;
+        align-items: center;
+        min-height: 650px;
+    }
+
+    .hero-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+
+        &__title {
+            color: #17116d;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        &__subtitle {
+            color: #fff;
+            max-width: 600px;
+
+            p {
+                font-size: 17px;
+                margin: 0 0 15px 0;
+            }
+        }
+
+        &__quote {
+            font-style: italic;
+            color: #1a1746;
+            border-left: 4px solid #181515;
+            padding-left: 12px;
+            font-size: 15px;
+        }
+    }
+
+    .fill {
+        background: linear-gradient(to right, #572a63 0%, #191a55 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+    // SECTION - -
+    &__section {
+        background-color: #524bb3;
+
+        .section-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 50px;
+            padding: 80px 0;
+
+            .section-div {
+                display: flex;
+                flex-direction: column;
+
+                &__title {
+                    font-size: 20px;
+                    color: #fff;
+                }
+
+                &__line {
+                    border: 1px solid #8DA5D8;
+                    width: 10%;
+                }
+
+                &__img {
+                    width: 100%;
+                    border-radius: 30px;
+                    box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+                    -webkit-box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+                    -moz-box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+                }
+
+                &__content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+            }
+
+            &__content {
+                display: flex;
+                gap: 50px;
+                width: 100%;
+
+
+                &--text {
+                    color: #fff;
+                    font-size: 16px;
+                }
+
+                &--img {
+                    border-radius: 20px;
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &__section:nth-child(3) {
+        background-color: #1a1746;
+
+        .section-box {
+            flex-direction: row;
+        }
+
+        .section-div {
+            width: 100%;
+
+            &__content {
+                margin-top: 30px;
+            }
+        }
+    }
+
+
+    // ARTICLE - -
+    &__article {
+        margin: 20px 0;
+
+        .article-box {
+            display: flex;
+            justify-content: space-between;
+            background-color: #1E1E1E;
+            border-radius: 25px;
+            box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+            -webkit-box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 10px 10px 27px 0px rgba(0, 0, 0, 0.75);
+
+            &__content {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                padding: 30px;
+                gap: 20px;
+
+
+                .article-content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #181515;
+                    width: 48.6%;
+                    border-radius: 10px;
+                }
+            }
+
+            & img {
+                border-radius: 0 25px 25px 0;
+            }
+        }
+    }
+}

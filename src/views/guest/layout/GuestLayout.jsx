@@ -9,7 +9,7 @@ function GuestLayout() {
     return(
         <>
             <Header/>
-            <main>
+            <main className="content-outlet">
                 <Outlet/>
             </main>
             <Footer/>
