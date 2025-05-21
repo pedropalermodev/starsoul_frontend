@@ -1,0 +1,115 @@
+.faq {
+    background: linear-gradient(0deg, #ffffff 0%, #4a3e95 100%);
+
+    .container-faq {
+        padding: 0px 35px;
+    }
+
+    .content-faq {
+        width: 100%;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .hero-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+        padding: 60px 0;
+
+        &__image {
+            max-width: 450px;
+            width: 100%;
+
+            & img {
+                width: 100%;
+            }
+        }
+    }
+
+    .div-box {
+        width: 100%;
+        max-width: 600px;
+
+        &__intro {
+            font-size: 22px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+
+    .faq-item-button {
+        display: flex;
+        justify-content: space-between;
+        border: none;
+        width: 100%;
+        padding: 15px 35px 15px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #ffffff;
+        border-radius: 10px;
+        transition: all .2s;
+        text-align: left;
+    }
+
+    .faq-item-button:hover {
+        background: #e0e0e0;
+    }
+
+    .faq-item-button .arrow {
+        transition: .2s all;
+        width: 15px;
+        height: 15px;
+    }
+
+    .faq-item-button.active .arrow {
+        transform: rotate(180deg);
+    }
+
+    .faq-item-button.active {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .faq-item-content {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 15px;
+        background: #fff;
+        border-radius: 0 0 10px 10px ;
+        transition: all .2s;
+    }
+
+    .faq-item-content p {
+        font-size: 14px;
+        color: #585858;
+        margin: 0;
+        padding: 15px 0;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .faq {
+        .hero-box {
+            flex-direction: column;
+
+            &__image {
+                max-width: 300px ;
+            }
+
+            .div-box {
+                max-width: 100% !important;
+            }
+        }
+    }
+}

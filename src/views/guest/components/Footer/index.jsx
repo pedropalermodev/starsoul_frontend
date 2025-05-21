@@ -42,7 +42,6 @@ function Footer() {
                         <Link className="footer__content-main-box--link" to="/">Inicial</Link>
                         <Link className="footer__content-main-box--link" to="/contact">Contato</Link>
                         <Link className="footer__content-main-box--link" to="/privacy-policy-and-terms-of-use">Políticas de Privacidade e Termos de Uso</Link>
-                        <Link className="footer__content-main-box--link" to="/console/auth">Entre como administrador</Link>
                     </div>
                     <div className="footer__content-main-box">
                         <h4 className="footer__content-main-box--h4">CONTATO</h4>

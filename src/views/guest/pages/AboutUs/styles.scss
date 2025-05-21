@@ -1,0 +1,212 @@
+.about-us {
+    background: linear-gradient(0deg, #ffffff 0%, #4a3e95 100%);
+
+    .container-about-us {
+        padding: 0px 35px;
+    }
+
+    .content-about-us {
+        width: 100%;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    &__hero {
+        display: flex;
+        height: 700px;
+
+        .hero-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &__text {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                max-width: 550px;
+                min-width: none;
+
+                & p:first-child {
+                    font-size: 22px;
+                    font-weight: 500;
+                }
+
+                & p:last-child {
+                    font-size: 14px;
+                }
+
+                .fill {
+                    background: linear-gradient(to right, #572a63 0%, #191a55 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+            }
+
+            &__image {
+                max-width: 370px;
+                min-width: 250px;
+                width: 100%;
+
+                & img {
+                    width: 100%;
+                }
+
+            }
+        }
+    }
+
+
+    &__section {
+        .section-box {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+
+
+            .line {
+                margin: auto;
+                border: 1px solid #1e1e1e1e;
+                width: 100%;
+            }
+
+            &__title {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+
+
+                & p {
+                    font-size: 20px;
+                }
+
+                .line {
+                    border: 1px solid #4838a5;
+                    width: 10vw;
+                }
+            }
+
+            &__description {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                & p {
+                    font-size: 16px;
+                    color: #1f1e64;
+                }
+            }
+
+            &__about-us {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                .line {
+                    margin: 0;
+                    width: 100px;
+                    border-color: #0a0c5e;
+                }
+
+
+                & p:first-child {
+                    font-size: 19px;
+                    color: #1f1e64;
+                }
+
+                & p {
+                    font-size: 14px;
+                }
+            }
+
+            &__our-mission {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 50px 0;
+                gap: 30px;
+
+                .line {
+                    margin: 0;
+                    width: 100px;
+                    border-color: #0a0c5e;
+                }
+
+                .section-div {
+                    display: flex;
+                    flex-direction: column;
+
+                    &:first-child {
+                        gap: 15px;
+                        max-width: 65%;
+
+                        & p:first-child {
+                            font-size: 19px;
+                            color: #1f1e64;
+                        }
+
+                        & p:last-child {
+                            font-size: 14px;
+                        }
+                    }
+
+                    &:last-child {
+
+                        max-width: 400px;
+
+                        & img {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            &__more-about {
+                padding-bottom: 50px;
+
+                & p {
+                    text-align: center;
+                    font-size: 14px;
+                    color: #1f1e64;
+                }
+            }
+        }
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    .about-us {
+
+        &__hero {
+
+
+            .hero-box__image {
+                display: none;
+            }
+        }
+
+        &__section {
+
+            .section-box {
+
+                &__description {
+                    text-align: center;
+                }
+
+                &__our-mission {
+                    flex-direction: column;
+
+                    .section-div:first-child {
+                        min-width: 100% !important;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+}
