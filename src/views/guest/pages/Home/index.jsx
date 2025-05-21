@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Container from '../../../../../../../../Documents/workspace/StarSoul/starsoul-web/src/components/User/Container';
-import Content from '../../../../../../../../Documents/workspace/StarSoul/starsoul-web/src/components/User/Content';
+import Container from '../../components/Container';
+import Content from '../../components/Content';
 import './styles.scss'
 
 // Images

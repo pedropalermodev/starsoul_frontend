@@ -1,9 +1,10 @@
 import './styles.scss'
+import { GiLotus, GiMeditation, GiWindSlap, GiYinYang } from 'react-icons/gi';
 
 // Images
 import pessoaMeditandoCalmo from '../../assets/about-meditation/pessoa-meditando-em-um-ambiente-calmo.png';
 import estatuaBudaMeditacao from '../../assets/about-meditation/antiga-estatua-de-pedra-de-buda.png'
-
+import homemMeditando from '../../assets/about-meditation/homem-meditando.png'
 
 function AboutMeditaion() {
     return (
@@ -98,22 +99,75 @@ function AboutMeditaion() {
                 <div className='article-box content-meditation'>
                     <div className='article-box__content'>
                         <div className="article-content">
-                            
+                            <GiLotus />
+                            <div className="article-div">
+                                <p className="article-content__title">Programas de Bem-Estar Holístico</p>
+                                <p className="article-content__text">
+                                    Ao longo dos séculos, a meditação passou a integrar práticas físicas, mentais e emocionais, promovendo um cuidado mais completo. Hoje, é parte essencial de iniciativas que buscam equilíbrio e bem-estar integral.
+                                </p>
+                            </div>
                         </div>
+
                         <div className="article-content">
-                            
+                            <GiMeditation />
+                            <div className="article-div">
+                                <p className="article-content__title">Sessões de Meditação em Grupo</p>
+                                <p className="article-content__text">
+                                    Da tradição monástica às salas modernas, a prática em grupo fortalece conexão e foco. Nessas sessões, a energia coletiva potencializa a experiência individual.
+                                </p>
+                            </div>
                         </div>
+
                         <div className="article-content">
-                            
+                            <GiWindSlap />
+                            <div className="article-div">
+                                <p className="article-content__title">Técnicas de Relaxamento</p>
+                                <p className="article-content__text">
+                                    Com a expansão da meditação no Ocidente, surgiram abordagens voltadas ao relaxamento físico e mental. Técnicas como escaneamento corporal e relaxamento guiado ajudam a reduzir o estresse e melhorar a qualidade de vida.
+                                </p>
+                            </div>
                         </div>
+
                         <div className="article-content">
-                            
+                            <GiYinYang />
+                            <div className="article-div">
+                                <p className="article-content__title">Práticas de Respiração Consciente</p>
+                                <p className="article-content__text">
+                                    A respiração sempre foi central nas tradições meditativas. Hoje, práticas como o breathwork se destacam por sua eficácia no controle da ansiedade, foco e equilíbrio emocional.
+                                </p>
+                            </div>
                         </div>
+
                     </div>
-                    <img src={estatuaBudaMeditacao} alt="" />
+                    {/* <img src={homemMeditando} alt="" /> */}
                 </div>
             </article>
-            -
+
+            <section className='about-meditation__section container-meditation'>
+
+                <div className='section-box content-meditation'>
+                    <div className='section-div'>
+                        <div className='section-text'>
+                            <p className='section-div__title'>Origem e</p>
+                            <p className='section-div__title'>Evolução</p>
+                            <span className='section-div__line'></span>
+                        </div>
+
+                        <img src={homemMeditando} alt="" />
+                    </div>
+
+                    <div className='section-div'>
+                        <div className='section-div'>
+                            <p className='section-div__text'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore sit cumque dolorum provident, distinctio at dolorem ipsum magni laborum temporibus neque earum saepe consequuntur sint eveniet quod quo aut odit?</p>
+                        </div>
+
+                        <div className='section-images'>
+                            <img src={homemMeditando} alt="" />
+                            <img src={homemMeditando} alt="" />
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </main>
     );
