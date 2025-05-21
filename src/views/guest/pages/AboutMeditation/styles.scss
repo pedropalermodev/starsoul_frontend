@@ -158,22 +158,45 @@
         }
 
         .section-div:nth-child(1) {
+            width: 600px;
+
             & img {
                 border-radius: 30px;
-
             }
         }
 
-        .section-div:nth-child(2) {
-            width: 50vw;
-        }
-
-        .section-images {
+        .section-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 550px;
 
-            & img {
-                border-radius: 30px;
+
+
+            .section-images {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                gap: 10px;
+
+                & img {
+                    border-radius: 30px;
+                    width: 100%;
+                }
+
+                .section-div {
+                    width: fit-content;
+                    gap: 10px;
+                    align-items: center;
+                    max-width: 210px;
+                    width: 100%;
+
+
+                    & p {
+                        color: #fff;
+                        font-size: 14px;
+                    }
+                }
             }
         }
     }
@@ -236,7 +259,30 @@
     }
 }
 
-@media (max-width: 1024px) {}
+@media (max-width: 1024px) {
+    .about-meditation {
+
+        &__section:nth-child(5) {
+
+            .section-div {
+
+                & img {
+                    width: 450px;
+                }
+            }
+
+            .section-content {
+                .section-images {
+
+                    .section-div {
+                        max-width: 180px;
+                    }
+                }
+            }
+
+        }
+    }
+}
 
 @media (max-width: 768px) {
     .about-meditation {
@@ -284,6 +330,32 @@
             .article-content:nth-child(2),
             .article-content:nth-child(4) {
                 flex-direction: row-reverse;
+            }
+
+        }
+
+        &__section:nth-child(5) {
+
+            .section-box {
+                flex-direction: column;
+            }
+
+            .section-div {
+                width: 100% !important;
+
+
+                & img {
+                    width: 100%;
+                }
+            }
+
+            .section-content {
+                max-width: 100% !important;
+
+                .section-images {
+                    justify-content: space-evenly;
+                }
+
             }
 
         }

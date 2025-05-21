@@ -4,7 +4,10 @@ import { GiLotus, GiMeditation, GiWindSlap, GiYinYang } from 'react-icons/gi';
 // Images
 import pessoaMeditandoCalmo from '../../assets/about-meditation/pessoa-meditando-em-um-ambiente-calmo.png';
 import estatuaBudaMeditacao from '../../assets/about-meditation/antiga-estatua-de-pedra-de-buda.png'
-import homemMeditando from '../../assets/about-meditation/homem-meditando.png'
+import homemMeditando from '../../assets/about-meditation/homem-pratica-meditacao-sentado.png'
+import janelaAberta from '../../assets/about-meditation/janela-aber.png'
+import homemSentado from '../../assets/about-meditation/homem-sentado.png'
+
 
 function AboutMeditaion() {
     return (
@@ -148,22 +151,26 @@ function AboutMeditaion() {
                 <div className='section-box content-meditation'>
                     <div className='section-div'>
                         <div className='section-text'>
-                            <p className='section-div__title'>Origem e</p>
-                            <p className='section-div__title'>Evolução</p>
+                            <p className='section-div__title'>Dê o Primeiro Passo</p>
+                            <p className='section-div__title'>na Meditação</p>
                             <span className='section-div__line'></span>
                         </div>
 
                         <img src={homemMeditando} alt="" />
                     </div>
 
-                    <div className='section-div'>
-                        <div className='section-div'>
-                            <p className='section-div__text'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore sit cumque dolorum provident, distinctio at dolorem ipsum magni laborum temporibus neque earum saepe consequuntur sint eveniet quod quo aut odit?</p>
-                        </div>
+                    <div className='section-content'>
+                        <p className='section-div__text'>Você não precisa saber tudo para começar. Um minuto de respiração consciente já é um bom começo. Abaixo, conheça formas simples de incorporar a meditação no seu dia.</p>
 
                         <div className='section-images'>
-                            <img src={homemMeditando} alt="" />
-                            <img src={homemMeditando} alt="" />
+                            <div className="section-div">
+                                <img src={janelaAberta} alt="" />
+                                <p>Observe e respire</p>
+                            </div>
+                            <div className="section-div">
+                                <img src={homemSentado} alt="" />
+                                <p>Medite onde estiver</p>
+                            </div>
                         </div>
                     </div>
                 </div>
