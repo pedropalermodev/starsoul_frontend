@@ -29,6 +29,9 @@
 }
 
 @media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
 
     .footer-app__container {
         position: fixed;

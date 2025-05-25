@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     padding: 20px 35px;
-    background-color: #212a4bee;
+    backdrop-filter: blur(13px);
+    -webkit-backdrop-filter: blur(10px);
     position: fixed;
     width: 100%;
     height: 80px;

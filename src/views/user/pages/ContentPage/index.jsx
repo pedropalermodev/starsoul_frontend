@@ -124,9 +124,10 @@ function ContentPage() {
         return <LoadingContent />;
     }
 
-    if (!content) {
+    if (!content || content.tipoConteudo !== 'Video') {
         return <ErrorFoundPage />;
-    };
+    }
+
 
     const meditacoesRelacionadas = contents.filter(otherContent =>
         otherContent.id !== content.id &&

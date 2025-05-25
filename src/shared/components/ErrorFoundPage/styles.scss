@@ -1,8 +1,11 @@
 .error {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 70px;
+    margin: auto;
+    max-width: 1250px;
+    width: 100%;
 }
 
 

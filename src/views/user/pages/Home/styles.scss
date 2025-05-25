@@ -92,12 +92,30 @@
             cursor: pointer;
         }
 
+        .sound__card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+            width: 200px;
+            cursor: pointer;
+        }
+
         .content__thumbnail {
             width: 100%;
             height: 140px;
             object-fit: cover;
             border-radius: 10px;
         }
+
+        .sound__thumbnail {
+            width: 200px; // ou 100%, se quiser preencher o card
+            height: 200px; // torna o thumbnail quadrado
+            object-fit: cover; // recorta e mantém proporção
+            border-radius: 12px; // cantos arredondados
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // sombra leve
+        }
+
 
         .content__info {
             & p {

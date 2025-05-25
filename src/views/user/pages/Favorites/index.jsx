@@ -68,7 +68,14 @@ function Favorites() {
                     <div className="favorite-app__grid">
                         {favoritos.map((item) => (
                             <div key={item.conteudo.id} className="favorito-item">
-                                <Link to={`/app/content/${item.conteudo.id}`} className="favorito-item__link">
+                                <Link
+                                    to={
+                                        item.conteudo.tipoConteudo === 'Audio'
+                                            ? `/app/sound/${item.conteudo.id}`
+                                            : `/app/content/${item.conteudo.id}`
+                                    }
+                                    className="favorito-item__link"
+                                >
                                     <img
                                         src={getYouTubeThumbnail(item.conteudo.arquivoUrl)}
                                         alt={`Capa de ${item.conteudo.titulo}`}

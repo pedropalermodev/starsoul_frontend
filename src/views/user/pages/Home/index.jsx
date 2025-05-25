@@ -21,7 +21,8 @@ function Home() {
     const primeiroNome = nomes[0];
 
     const meditacaoManha = contents.filter(content =>
-        content.categorias?.includes('Meditação para manhã')
+        content.categorias?.includes('Meditação para manhã') && content.tipoConteudo !== 'Audio'
+        // Adicionado: Não inclui áudios do Spotify nesta seção se eles forem considerados "conteúdo de manhã"
     );
 
     const getYouTubeThumbnail = (url) => {
@@ -29,6 +30,48 @@ function Home() {
             const videoId = new URL(url).searchParams.get("v");
             return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         } catch {
+            return null;
+        }
+    };
+
+    // Nova função para gerar URLs de embed do Spotify
+    const getSpotifyEmbedUrl = (spotifyPlaylistUrl) => {
+        if (!spotifyPlaylistUrl) return null;
+
+        try {
+            // Regex para extrair o ID da playlist de diferentes formatos de URL do Spotify
+            const playlistIdMatch = spotifyPlaylistUrl.match(/playlist\/([a-zA-Z0-9]+)/);
+            const albumIdMatch = spotifyPlaylistUrl.match(/album\/([a-zA-Z0-9]+)/);
+            const trackIdMatch = spotifyPlaylistUrl.match(/track\/([a-zA-Z0-9]+)/);
+            const artistIdMatch = spotifyPlaylistUrl.match(/artist\/([a-zA-Z0-9]+)/);
+
+            let embedType = '';
+            let embedId = '';
+
+            if (playlistIdMatch && playlistIdMatch[1]) {
+                embedType = 'playlist';
+                embedId = playlistIdMatch[1];
+            } else if (albumIdMatch && albumIdMatch[1]) {
+                embedType = 'album';
+                embedId = albumIdMatch[1];
+            } else if (trackIdMatch && trackIdMatch[1]) {
+                embedType = 'track';
+                embedId = trackIdMatch[1];
+            } else if (artistIdMatch && artistIdMatch[1]) {
+                embedType = 'artist';
+                embedId = artistIdMatch[1];
+            } else {
+                // Se nenhum tipo conhecido for encontrado, retorna null
+                console.warn("URL do Spotify não reconhecida para embed:", spotifyPlaylistUrl);
+                return null;
+            }
+
+            // Construir a URL de embed do Spotify
+            // Pode ajustar o "theme" para 0 (escuro) ou 1 (claro)
+            // Também pode adicionar 'autoplay=1' se quiser que toque automaticamente
+            return `https://open.spotify.com/embed/${embedType}/${embedId}?utm_source=generator&theme=0`;
+        } catch (e) {
+            console.error("Erro ao gerar URL de embed do Spotify:", e);
             return null;
         }
     };
@@ -67,24 +110,99 @@ function Home() {
         setIsDragging(false);
     };
 
+    const scrollRefMed = useRef(null);
+    const scrollRefSpotify = useRef(null);
+
+    const isDraggingRefMed = useRef(false);
+    const isDraggingRefSpotify = useRef(false);
+
+    const [isDraggingMed, setIsDraggingMed] = useState(false);
+    const [isDraggingSpotify, setIsDraggingSpotify] = useState(false);
+
+    // Criar handlers separados para cada lista
+
+    const handleMouseDownMed = (e) => {
+        isDraggingRefMed.current = false;
+        setIsDraggingMed(true);
+
+        const slider = scrollRefMed.current;
+        slider.dataset.mouseDown = 'true';
+        slider.dataset.startX = e.pageX;
+        slider.dataset.scrollLeft = slider.scrollLeft;
+    };
+
+    const handleMouseMoveMed = (e) => {
+        const slider = scrollRefMed.current;
+        if (slider.dataset.mouseDown !== 'true') return;
+
+        e.preventDefault();
+        isDraggingRefMed.current = true;
+
+        const x = e.pageX;
+        const walk = (x - slider.dataset.startX) * 2;
+        slider.scrollLeft = slider.dataset.scrollLeft - walk;
+    };
+
+    const handleMouseUpMed = () => {
+        const slider = scrollRefMed.current;
+        slider.dataset.mouseDown = 'false';
+        setIsDraggingMed(false);
+    };
+
+    const handleMouseDownSpotify = (e) => {
+        isDraggingRefSpotify.current = false;
+        setIsDraggingSpotify(true);
+
+        const slider = scrollRefSpotify.current;
+        slider.dataset.mouseDown = 'true';
+        slider.dataset.startX = e.pageX;
+        slider.dataset.scrollLeft = slider.scrollLeft;
+    };
+
+    const handleMouseMoveSpotify = (e) => {
+        const slider = scrollRefSpotify.current;
+        if (slider.dataset.mouseDown !== 'true') return;
+
+        e.preventDefault();
+        isDraggingRefSpotify.current = true;
+
+        const x = e.pageX;
+        const walk = (x - slider.dataset.startX) * 2;
+        slider.scrollLeft = slider.dataset.scrollLeft - walk;
+    };
+
+    const handleMouseUpSpotify = () => {
+        const slider = scrollRefSpotify.current;
+        slider.dataset.mouseDown = 'false';
+        setIsDraggingSpotify(false);
+    };
+
+
+    // Adaptação da função para navegar para ContentPage ou SoundPage
     const handleOpenContent = (content) => {
         if (isDraggingRef.current) return; // não navega se estiver arrastando
 
-        navigate(`/app/content/${content.id}`, {
-            state: {
-                titulo: content.titulo,
-                videoUrl: content.arquivoUrl,
-                descricao: content.descricao,
-            }
-        });
+        if (content.tipoConteudo === 'Audio') { // Verifica se é um conteúdo de Áudio
+            navigate(`/app/sound/${content.id}`); // Navega para a SoundPage
+        } else {
+            navigate(`/app/content/${content.id}`, { // Navega para a ContentPage
+                state: {
+                    titulo: content.titulo,
+                    videoUrl: content.arquivoUrl,
+                    descricao: content.descricao,
+                }
+            });
+        }
     };
 
+    // Filtrar conteúdos do Spotify (agora como tipoConteudo: "Audio")
+    const spotifyPlaylists = contents.filter(content => content.tipoConteudo === 'Audio');
 
     return (
         <main className='home-app__container'>
             <div className='home-app__content'>
                 <div className='home-app__welcome'>
-                    <p className='home-app__welcome--name'>Olá, {primeiroNome}!</p>
+                    <p className='home-app__welcome--name'>Olá, {userData.apelido ? userData.apelido : primeiroNome}!</p>
                     <p className='home-app__welcome--text'>Veja o que preparamos para você hoje.</p>
                 </div>
                 <div className='home-app__search'>
@@ -93,14 +211,14 @@ function Home() {
                 </div>
             </div>
 
-            <div className='content-box'>
+            <div className="content-box">
                 <p>Meditações para manhâ: </p>
                 <div
-                    className={`home-app__contents ${isDragging ? 'dragging' : ''}`}
-                    ref={scrollRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
+                    className={`home-app__contents ${isDraggingMed ? 'dragging' : ''}`}
+                    ref={scrollRefMed}
+                    onMouseDown={handleMouseDownMed}
+                    onMouseMove={handleMouseMoveMed}
+                    onMouseUp={handleMouseUpMed}
                 >
                     {meditacaoManha.map(content => (
                         <div
@@ -108,8 +226,9 @@ function Home() {
                             className="content__card"
                             onClick={() => handleOpenContent(content)}
                         >
+                            {/* Assumimos que o caminhoMiniatura será usado para conteúdos não-áudio */}
                             <img
-                                src={getYouTubeThumbnail(content.arquivoUrl)}
+                                src={content.caminhoMiniatura || getYouTubeThumbnail(content.arquivoUrl)}
                                 alt={`Capa de ${content.titulo}`}
                                 className="content__thumbnail"
                                 draggable={false}
@@ -122,14 +241,47 @@ function Home() {
                 </div>
             </div>
 
-            <div className="home-app__details">
+            {/* Nova seção para playlists do Spotify (tipoConteudo: "Audio") */}
+            {spotifyPlaylists.length > 0 && (
+                <div className="content-box">
+                    <p>Playlists do Spotify:</p>
+                    <div
+                        className={`home-app__contents ${isDraggingSpotify ? 'dragging' : ''}`}
+                        ref={scrollRefSpotify}
+                        onMouseDown={handleMouseDownSpotify}
+                        onMouseMove={handleMouseMoveSpotify}
+                        onMouseUp={handleMouseUpSpotify}
+                    >
+                        {spotifyPlaylists.map(playlist => (
+                            <div
+                                key={playlist.id}
+                                className="sound__card"
+                                onClick={() => handleOpenContent(playlist)}
+                            >
+                                {/* Para áudios, o caminhoMiniatura pode ser a capa da playlist/álbum */}
+                                <img
+                                    src={playlist.caminhoMiniatura || "https://blog.trocafone.com/wp-content/uploads/2019/12/spotify.blog_-1200x640.jpg"} // Usando favicon do Spotify como placeholder
+                                    alt={`Playlist do Spotify: ${playlist.titulo}`}
+                                    className="sound__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{playlist.titulo}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* <div className="home-app__details">
                 <div className="home-app__details-box">
                     <AccordionList />
                 </div>
                 <div className="home-app__details-box">
                     <p>Imagem</p>
                 </div>
-            </div>
+            </div> */}
 
         </main>
     );
