@@ -8,8 +8,8 @@ import Profile from "./pages/Profile";
 import Favorites from "./pages/Favorites";
 import ContentPage from "./pages/ContentPage";
 import Explore from "./pages/Explore";
-import Songs from "./pages/Songs";
-import SoundPage from "./pages/SoundPage";
+// import Songs from "./pages/Songs";
+// import SoundPage from "./pages/SoundPage";
 
 
 function UserApp() {
@@ -22,9 +22,9 @@ function UserApp() {
                 <Route path="profile" element={<Profile />} />
                 <Route path="favorites" element={<Favorites />} />
                 <Route path="explore" element={<Explore />} />
-                <Route path="songs" element={<Songs />} />
                 <Route path="content/:id" element={<ContentPage />} />
-                <Route path="sound/:id" element={<SoundPage />} />
+                {/* <Route path="songs" element={<Songs />} /> */}
+                {/* <Route path="sound/:id" element={<SoundPage />} /> */}
 
             </Route>
         </Routes>

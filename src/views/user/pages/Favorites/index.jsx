@@ -69,11 +69,7 @@ function Favorites() {
                         {favoritos.map((item) => (
                             <div key={item.conteudo.id} className="favorito-item">
                                 <Link
-                                    to={
-                                        item.conteudo.tipoConteudo === 'Audio'
-                                            ? `/app/sound/${item.conteudo.id}`
-                                            : `/app/content/${item.conteudo.id}`
-                                    }
+                                    to={`/app/content/${item.conteudo.id}`}
                                     className="favorito-item__link"
                                 >
                                     <img

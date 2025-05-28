@@ -32,12 +32,12 @@ function Header() {
                                 </div>
                                 <span className='header-app__web-navbar-ul-link-line' />
                             </Link>
-                            <Link className='header-app__web-navbar-ul-link' to='/app/songs'>
+                            {/* <Link className='header-app__web-navbar-ul-link' to='/app/songs'>
                                 <div className='link__box'>
                                     <img src={songs} /><li>Sons</li>
                                 </div>
                                 <span className='header-app__web-navbar-ul-link-line' />
-                            </Link>
+                            </Link> */}
                             <Link className='header-app__web-navbar-ul-link' to='/app/favorites'>
                                 <div className='link__box'>
                                     <img src={favorites} /><li>Favoritos</li>

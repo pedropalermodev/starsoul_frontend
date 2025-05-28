@@ -7,6 +7,9 @@ import { CiSearch } from "react-icons/ci";
 import './styles.scss';
 
 import AccordionList from '../../components/Accordion';
+import cta from '../../assets/home/cta-app.png'
+import downloadOnAppStore from '../../../../assets/shared/download-on-appleStore_versionWhite.svg';
+import downloadOnPlayStore from '../../../../assets/shared/download-on-googlePlay_versionWhite.svg';
 
 function Home() {
     const { userData, globalLoading } = useContext(AuthContext);
@@ -22,7 +25,6 @@ function Home() {
 
     const meditacaoManha = contents.filter(content =>
         content.categorias?.includes('Meditação para manhã') && content.tipoConteudo !== 'Audio'
-        // Adicionado: Não inclui áudios do Spotify nesta seção se eles forem considerados "conteúdo de manhã"
     );
 
     const getYouTubeThumbnail = (url) => {
@@ -30,48 +32,6 @@ function Home() {
             const videoId = new URL(url).searchParams.get("v");
             return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         } catch {
-            return null;
-        }
-    };
-
-    // Nova função para gerar URLs de embed do Spotify
-    const getSpotifyEmbedUrl = (spotifyPlaylistUrl) => {
-        if (!spotifyPlaylistUrl) return null;
-
-        try {
-            // Regex para extrair o ID da playlist de diferentes formatos de URL do Spotify
-            const playlistIdMatch = spotifyPlaylistUrl.match(/playlist\/([a-zA-Z0-9]+)/);
-            const albumIdMatch = spotifyPlaylistUrl.match(/album\/([a-zA-Z0-9]+)/);
-            const trackIdMatch = spotifyPlaylistUrl.match(/track\/([a-zA-Z0-9]+)/);
-            const artistIdMatch = spotifyPlaylistUrl.match(/artist\/([a-zA-Z0-9]+)/);
-
-            let embedType = '';
-            let embedId = '';
-
-            if (playlistIdMatch && playlistIdMatch[1]) {
-                embedType = 'playlist';
-                embedId = playlistIdMatch[1];
-            } else if (albumIdMatch && albumIdMatch[1]) {
-                embedType = 'album';
-                embedId = albumIdMatch[1];
-            } else if (trackIdMatch && trackIdMatch[1]) {
-                embedType = 'track';
-                embedId = trackIdMatch[1];
-            } else if (artistIdMatch && artistIdMatch[1]) {
-                embedType = 'artist';
-                embedId = artistIdMatch[1];
-            } else {
-                // Se nenhum tipo conhecido for encontrado, retorna null
-                console.warn("URL do Spotify não reconhecida para embed:", spotifyPlaylistUrl);
-                return null;
-            }
-
-            // Construir a URL de embed do Spotify
-            // Pode ajustar o "theme" para 0 (escuro) ou 1 (claro)
-            // Também pode adicionar 'autoplay=1' se quiser que toque automaticamente
-            return `https://open.spotify.com/embed/${embedType}/${embedId}?utm_source=generator&theme=0`;
-        } catch (e) {
-            console.error("Erro ao gerar URL de embed do Spotify:", e);
             return null;
         }
     };
@@ -178,14 +138,13 @@ function Home() {
     };
 
 
-    // Adaptação da função para navegar para ContentPage ou SoundPage
     const handleOpenContent = (content) => {
-        if (isDraggingRef.current) return; // não navega se estiver arrastando
+        if (isDraggingRef.current) return;
 
-        if (content.tipoConteudo === 'Audio') { // Verifica se é um conteúdo de Áudio
-            navigate(`/app/sound/${content.id}`); // Navega para a SoundPage
+        if (content.tipoConteudo === 'Audio') {
+            window.location.href = content.arquivoUrl;
         } else {
-            navigate(`/app/content/${content.id}`, { // Navega para a ContentPage
+            navigate(`/app/content/${content.id}`, {
                 state: {
                     titulo: content.titulo,
                     videoUrl: content.arquivoUrl,
@@ -282,6 +241,19 @@ function Home() {
                     <p>Imagem</p>
                 </div>
             </div> */}
+
+            <div className="home-app__details">
+                <div className="home-app__details-box">
+                    <img src={cta} alt="" />
+                </div>
+                <div className="home-app__details-box">
+                    <p className='home-app__details-box--text'>Receba conteúdos novos e exclusivos com notificações instantâneas. Baixe agora e transforme sua experiência!</p>
+                    <div>
+                        <img src={downloadOnAppStore} alt="" />
+                        <img src={downloadOnPlayStore} alt="" />
+                    </div>
+                </div>
+            </div>
 
         </main>
     );
