@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { listarTodosConteudos } from '../../api/content.api'
+import { listarTodosConteudos } from '../../api/conteudo.api'
 
 export const ContentContext = createContext({
 
@@ -52,8 +52,6 @@ export const ContentProvider = ({ children }) => {
 
     useEffect(() => {
         fetchContents();
-        const intervalId = setInterval(fetchContents, 5000);
-        return () => clearInterval(intervalId);
     }, []);
 
     return (

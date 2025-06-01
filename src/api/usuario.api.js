@@ -38,7 +38,7 @@ export const atualizarUsuario = async (userId, updatedUserData, token) => {
 
 // FindAll
 export const listarTodosUsuarios = async (token) => {
-    console.log("Token recebido por listarTodosUsuarios:", token);
+    // console.log("Token recebido por listarTodosUsuarios:", token);
     try {
         // console.log('Tentando buscar usuários...');
         const response = await axios.get(`${API_BASE_URL}/usuarios/findAll`, {

@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState, useCallback } from 'react';
 import './styles.scss'
-import { cadastrarUsuario, atualizarUsuario, listarTodosUsuarios, buscarUsuarioPorId, excluirUsuario } from '../../../../api/user.api'
+import { useContext, useEffect, useState, useCallback } from 'react';
+import { cadastrarUsuario, atualizarUsuario, listarTodosUsuarios, buscarUsuarioPorId, excluirUsuario } from '../../../../api/usuario.api'
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
-import { toast } from 'react-toastify';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
+import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 
 const accessColumns = [
@@ -64,7 +64,7 @@ const accessPages = [
 const accessFormFields = [
     { name: 'nome', label: 'Nome', type: 'text', required: true },
     { name: 'email', label: 'Email', type: 'email', required: true },
-    { name: 'senhaHash', label: 'Senha', type: 'password', required: true },
+    { name: 'senha', label: 'Senha', type: 'password', required: true },
     {
         name: 'codStatus',
         label: 'Status',
@@ -137,7 +137,7 @@ function AccessManagement() {
 
         }
         return [];
-    }, [token, globalLoading, listarTodosUsuarios]); // Adicione listarTodosUsuarios como dependência
+    }, [token, globalLoading, listarTodosUsuarios]);
 
     useEffect(() => {
         console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
@@ -198,7 +198,7 @@ function AccessManagement() {
             return;
         }
 
-        if (newUser.senhaHash && newUser.senhaHash.length < 8) {
+        if (newUser.senha && newUser.senha.length < 8) {
             toast.error('A senha deve ter pelo menos 8 caracteres.');
             setLoading(false);
             return;
@@ -234,14 +234,17 @@ function AccessManagement() {
         setLoading(true);
         setError(null);
 
+        if (!updatedUserData.senha && itemToEdit?.senha) {
+            updatedUserData.senha = itemToEdit.senha;
+        }
+
         let dataNascimentoBRT = null;
         const dataNascimentoInput = updatedUserData.dataNascimento;
         if (dataNascimentoInput) {
             const selectedDate = new Date(dataNascimentoInput);
             const today = new Date();
-            const minDate = new Date('1911-10-06'); // Ajuste a data mínima conforme necessário
+            const minDate = new Date('1911-10-06');
 
-            // Converter para UTC para comparação correta
             selectedDate.setUTCHours(0, 0, 0, 0);
             today.setUTCHours(0, 0, 0, 0);
             minDate.setUTCHours(0, 0, 0, 0);
@@ -253,7 +256,7 @@ function AccessManagement() {
             }
 
             if (selectedDate < minDate) {
-                toast.error('A data de nascimento não pode ser anterior a 06/10/1911.'); // Ajuste a mensagem conforme a data mínima
+                toast.error('A data de nascimento não pode ser anterior a 06/10/1911.');
                 setLoading(false);
                 return;
             }
@@ -275,7 +278,7 @@ function AccessManagement() {
             return;
         }
 
-        if (updatedUserData.senhaHash && updatedUserData.senhaHash.length < 8) {
+        if (updatedUserData.senha && updatedUserData.senha.length < 8) {
             toast.error('A senha deve ter pelo menos 8 caracteres.');
             setLoading(false);
             return;
@@ -361,7 +364,7 @@ function AccessManagement() {
             case 'edit':
                 return itemToEdit ? (
                     <GenericForm
-                        fields={accessFormFields}
+                        fields={accessFormFields.filter(field => field.name !== 'senha')}
                         onSubmit={handleUpdateSubmit}
                         initialData={itemToEdit}
                         onBack={() => setCurrentView('list')}

@@ -1,12 +1,12 @@
 import './styles.scss'
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { listarTodasTags, buscarTagPorId, cadastrarTag, atualizarTag, excluirTag } from '../../../../api/tag.api';
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
 
 const tagsColumns = [
     { key: 'id', label: 'ID' },

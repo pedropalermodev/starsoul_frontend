@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
 import './styles.scss'
-import { desfavoritarConteudo, listarFavoritos } from "../../../../api/content-user.api";
+import { useContext, useEffect, useState } from 'react';
+import { desfavoritarConteudo, listarFavoritos } from "../../../../api/historico.api";
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
-import { Link } from 'react-router-dom';
 import LoadingContent from '../../components/LoadingContent';
+import { Link } from 'react-router-dom';
 import { IoRemoveOutline, IoHeartDislikeSharp } from 'react-icons/io5';
 
 function Favorites() {
@@ -13,15 +13,14 @@ function Favorites() {
 
     useEffect(() => {
         const fetchFavoritos = async () => {
-            setIsLoading(true); // Inicia o carregamento
+            setIsLoading(true);
             try {
                 const data = await listarFavoritos(token);
                 setFavoritos(data);
             } catch (error) {
                 console.error("Erro ao buscar favoritos", error);
-                // Lide com o erro aqui, talvez exibindo uma mensagem ao usuário
             } finally {
-                setIsLoading(false); // Finaliza o carregamento, independentemente do resultado
+                setIsLoading(false);
             }
         };
 
@@ -73,7 +72,7 @@ function Favorites() {
                                     className="favorito-item__link"
                                 >
                                     <img
-                                        src={getYouTubeThumbnail(item.conteudo.arquivoUrl)}
+                                        src={getYouTubeThumbnail(item.conteudo.url)}
                                         alt={`Capa de ${item.conteudo.titulo}`}
                                         draggable={false}
                                     />

@@ -1,11 +1,11 @@
 import './styles.scss'
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { listarTodosFeedbacks } from '../../../../api/feedback.api'
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
 
 const feedbacksColumns = [
     { key: 'id', label: 'ID' },

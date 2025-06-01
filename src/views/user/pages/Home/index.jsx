@@ -187,7 +187,7 @@ function Home() {
                         >
                             {/* Assumimos que o caminhoMiniatura será usado para conteúdos não-áudio */}
                             <img
-                                src={content.caminhoMiniatura || getYouTubeThumbnail(content.arquivoUrl)}
+                                src={getYouTubeThumbnail(content.url)}
                                 alt={`Capa de ${content.titulo}`}
                                 className="content__thumbnail"
                                 draggable={false}
@@ -246,7 +246,7 @@ function Home() {
                 <div className="home-app__details-box">
                     <img src={cta} alt="" />
                 </div>
-                <p>Teste</p>
+                
                 <div className="home-app__details-box">
                     <p className='home-app__details-box--text'>Receba conteúdos novos e exclusivos com notificações instantâneas. Baixe agora e transforme sua experiência!</p>
                     <div>

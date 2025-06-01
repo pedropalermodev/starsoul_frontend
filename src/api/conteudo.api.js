@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:8080/api'
 // POST
 export const cadastrarConteudo = async (newContent, token) => {
     try {
-        console.log('Dados para criar conteúdo: ', newContent);
+        // console.log('Dados para criar conteúdo: ', newContent);
         const response = await axios.post(`${API_BASE_URL}/conteudos`, newContent, {
             headers: {
                 Authorization: `Bearer ${token}`, // Inclua o token no cabeçalho
@@ -22,7 +22,7 @@ export const cadastrarConteudo = async (newContent, token) => {
 // PUT
 export const atualizarConteudo = async (contentId, updatedContentData, token) => {
     try {
-        console.log(`Dados para atualizar conteúdo com ID ${contentId}: `, updatedContentData);
+        // console.log(`Dados para atualizar conteúdo com ID ${contentId}: `, updatedContentData);
         const response = await axios.put(`${API_BASE_URL}/conteudos/${contentId}`, updatedContentData, {
             headers: {
                 Authorization: `Bearer ${token}`, // Inclua o token no cabeçalho
@@ -39,7 +39,7 @@ export const atualizarConteudo = async (contentId, updatedContentData, token) =>
 // FindAll
 export const listarTodosConteudos = async () => {
     try {
-        console.log('Tentando buscar conteúdos...');
+        // console.log('Tentando buscar conteúdos...');
         const response = await axios.get(`${API_BASE_URL}/conteudos/findAll`);
         // console.log('Lista de Conteudos: ', response.data);
         return response.data;

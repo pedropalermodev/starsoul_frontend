@@ -26,9 +26,7 @@ CREATE TABLE usuario (
 
 INSERT INTO usuario (nome, email, senha, tipoConta, codStatus)
 	VALUES 
-		('Pedro Henrique Silva Palermo', 'pedropalermo.dev@gmail.com', '12345678', 'Administrador', 'Ativo'),
-		('Giovanna Ramos Lima', 'gi@gmail.com', '12345678', 'Usuário', 'Ativo');
-
+		('Pedro Henrique Silva Palermo', 'pedropalermo.dev@gmail.com', '$2a$10$8GeRASnuI4py495eWagIIuXrLdOpEMifB5OOcjcZK6bRHAFkjUxVq', 'Administrador', 'Ativo');
 
 
 /* - - REDEFINIR SENHA - - */
@@ -40,6 +38,7 @@ CREATE TABLE redefinir_senha (
 	dataCriacao DATETIME DEFAULT GETDATE(),
 	FOREIGN KEY (email) REFERENCES usuario(email) ON DELETE CASCADE
 );
+
 
 /* - - CATEGORIAS - - */
 CREATE TABLE categoria (

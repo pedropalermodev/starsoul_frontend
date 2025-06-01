@@ -23,7 +23,6 @@ function AdminApp() {
                 <Route path="category-management" element={<CategoryManagement />} />
                 <Route path="tag-management" element={<TagManagement />} />
                 <Route path="feedback-management" element={<FeedbackManagement />} />
-
             </Route>
         </Routes>
     )

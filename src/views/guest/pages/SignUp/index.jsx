@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { usuarioCadastrar } from '../../../../api/login.api';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import './styles.scss'
+import '../SignIn/styles.scss'
 
 // Images
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
@@ -26,7 +25,7 @@ function SignUp() {
         specialChar: false
     });
 
-
+    const [errors, setErrors] = useState({});
     const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const isFormValid = formData.name.trim() !== '' && formData.email.trim() !== '' && formData.password.trim() !== '' && formData.confirmPassword.trim() !== '';
@@ -36,6 +35,7 @@ function SignUp() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        setErrors({ ...errors, [name]: '' });
 
         if (name === 'password') {
             setPasswordRequirements({
@@ -50,39 +50,38 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const newErrors = {};
 
         if (formData.name && formData.name.length < 3) {
-            toast.error('O nome deve ter pelo menos 2 caracteres.');
-            return;
+            newErrors.name = 'O nome deve ter pelo menos 2 caracteres.';
         }
 
         const hasNumber = /\d/.test(formData.name);
         if (formData.name && hasNumber) {
-            toast.error('O nome não pode conter números.');
-            return;
+            newErrors.name = 'O nome não pode conter números.';
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (formData.email && !emailRegex.test(formData.email)) {
-            toast.error('Por favor, insira um email válido.');
-            return;
+            newErrors.email = 'Por favor, insira um email válido.';
         }
 
         if (formData.password && formData.password.length < 8) {
-            toast.error('A senha deve ter pelo menos 8 caracteres.');
-            return;
+            newErrors.password = 'A senha deve ter pelo menos 8 caracteres.';
         }
 
         if (formData.password !== formData.confirmPassword) {
-            toast.error('As senhas não correspondem.')
-            return;
+            newErrors.confirmPassword = 'As senhas não correspondem.';
         }
 
         if (!Object.values(passwordRequirements).every(req => req)) {
-            toast.error('A senha não atende a todos os requisitos');
-            return;
+            newErrors.password = 'A senha não atende a todos os requisitos';
         }
 
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
         try {
             setLoading(true);
@@ -90,20 +89,18 @@ function SignUp() {
             await usuarioCadastrar({
                 nome: formData.name,
                 email: formData.email,
-                senhaHash: formData.password,
+                senha: formData.password,
                 tipoConta: 'Usuário'
             });
             setFormData({ name: '', email: '', password: '', confirmPassword: '' });
-            toast.success('Cadastro realizado com sucesso!')
+            setErrors({});
             navigate('/sign-in');
 
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                toast.error('Este email já está cadastrado.');
-            } else if (error.response && error.response.data) {
-                console.error("Detalhes do erro:", error.response.data);
+                setErrors({ email: 'Este email já está cadastrado.' });
             } else {
-                toast.error('Erro ao se cadastrar. Por favor, tente novamente.')
+                setErrors({ general: 'Erro ao se cadastrar. Por favor, tente novamente.' })
             }
         } finally {
             setLoading(false);
@@ -128,6 +125,7 @@ function SignUp() {
                             onChange={handleChange}
                             required
                         />
+                        {errors.name && <p className="sign__form-error">{errors.name}</p>}
                     </div>
 
                     <div className='sign__form-content'>
@@ -140,6 +138,8 @@ function SignUp() {
                             onChange={handleChange}
                             required
                         />
+                        {errors.email && <p className="sign__form-error">{errors.email}</p>}
+
                     </div>
 
                     <div className="password-field-wrapper ">
@@ -164,6 +164,7 @@ function SignUp() {
                                     {showPassword ? <FiEyeOff /> : <FiEye />}
                                 </button>
                             </div>
+                            {errors.password && <p className="sign__form-error">{errors.password}</p>}
                         </div>
 
                         {showPasswordTooltip && (
@@ -199,7 +200,12 @@ function SignUp() {
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
                             </button>
                         </div>
+                        {errors.confirmPassword && <p className="sign__form-error">{errors.confirmPassword}</p>}
+
                     </div>
+
+                    {errors.general && <p className="sign__form-error">{errors.general}</p>}
+
                     <SubmitButton isValid={isFormValid} loading={loading}>
                         Cadastrar
                     </SubmitButton>

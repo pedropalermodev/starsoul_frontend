@@ -124,7 +124,6 @@ export const AuthProvider = ({ children }) => {
             navigate(decodedToken.role === 'Administrador' ? '/console/dashboard' : '/app/home');
         } catch (error) {
             // console.error('Erro ao comunicar com o servidor:', error);
-            toast.error('Erro de login. Verifique suas credenciais.');
             setIsAuthenticated(false);
             setUserRole(null);
             throw error;

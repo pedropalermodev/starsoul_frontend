@@ -1,28 +1,28 @@
 import './styles.scss';
-import { cadastrarConteudo, atualizarConteudo, listarTodosConteudos, buscarConteudoPorId, excluirConteudo } from '../../../../api/content.api'
-import { listarTodasCategorias } from '../../../../api/category.api';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { cadastrarConteudo, atualizarConteudo, listarTodosConteudos, buscarConteudoPorId, excluirConteudo } from '../../../../api/conteudo.api'
+import { listarTodasCategorias } from '../../../../api/categoria.api';
 import { listarTodasTags } from '../../../../api/tag.api';
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
 
 const contentColumns = [
     { key: 'id', label: 'ID' },
     { key: 'titulo', label: 'Titulo' },
     { key: 'descricao', label: 'Descricao' },
     {
-        key: 'tipoConteudo',
+        key: 'formato',
         label: 'Modelo',
         cellStyle: { padding: 0 },
         render: (content) => (
             <div className='badge-container'>
                 <span className="badge badge-modelo">
-                    {content.tipoConteudo}
+                    {content.formato}
                 </span>
             </div>
         ),
@@ -101,8 +101,8 @@ const contentPages = [
 const getcontentFormFields = (categorias, tags) => [
     { name: 'titulo', label: 'Titulo', type: 'text', required: true },
     {
-        name: 'tipoConteudo',
-        label: 'Modelo',
+        name: 'formato',
+        label: 'Formato',
         type: 'select',
         required: true,
         options: [
@@ -144,9 +144,8 @@ const getcontentFormFields = (categorias, tags) => [
             { value: 'Inativo', label: 'Inativo' }
         ],
     },
-    { name: 'arquivoUrl', label: 'Adicione a URL para o conteúdo', type: 'text', required: true },
+    { name: 'url', label: 'Adicione a URL para o conteúdo', type: 'text', required: true },
     { name: 'descricao', label: 'Descricao', type: 'text', required: false },
-    { name: 'caminhoMiniatura', label: 'Caminho para miniatura', type: 'text', required: false },
 ];
 
 
@@ -268,7 +267,7 @@ function ContentManagement() {
         setError(null);
         try {
             const contentData = await buscarConteudoPorId(content.id, token);
-            console.log("Dados para edição:", contentData);
+            // console.log("Dados para edição:", contentData);
 
             const initialCategoriaIds = contentData.categorias?.map(nomeCategoria => {
                 const categoriaEncontrada = categorias.find(cat => cat.nome === nomeCategoria);
@@ -282,7 +281,7 @@ function ContentManagement() {
 
             setItemToEdit({
                 ...contentData,
-                tipoConteudo: Array.isArray(contentData.tipoConteudo) ? contentData.tipoConteudo[0] : contentData.tipoConteudo,
+                formato: Array.isArray(contentData.formato) ? contentData.formato[0] : contentData.formato,
                 codStatus: Array.isArray(contentData.codStatus) ? contentData.codStatus[0] : contentData.codStatus,
                 categoriaIds: initialCategoriaIds,
                 tagIds: initialTagIds,

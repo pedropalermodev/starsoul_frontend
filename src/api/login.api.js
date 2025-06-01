@@ -10,10 +10,10 @@ export const loginUsuario = async (email, password) => {
             email,
             password,
         });
-        return response.data; // Retorna os dados da resposta (como o token)
+        return response.data;
     } catch (error) {
-        console.error('Erro ao fazer login: ', error);
-        throw error; // Retorna o erro para ser tratado onde a função é chamada
+        // console.error('Erro ao fazer login: ', error);
+        throw error;
     }
 };
 
@@ -25,7 +25,7 @@ export const usuarioCadastrar = async (newUser) => {
         // console.log('Usuário cadastrado com sucesso: ', response.data);
         return response.data;
     } catch (error) {
-        console.error('Erro ao se cadastrar: ', error);
+        // console.error('Erro ao se cadastrar: ', error);
         throw error;
     }
 };
@@ -61,7 +61,7 @@ export const atualizarUsuario = async (token, userData) => {
         const response = await axios.put(`${API_BASE_URL}/usuarios/me`, userData, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        return response.data; // Ou você pode retornar apenas o status da resposta (response.status === 200)
+        return response.data;
     } catch (error) {
         console.error('Erro ao atualizar o usuário:', error);
         throw error;

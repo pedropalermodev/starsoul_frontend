@@ -8,7 +8,7 @@ export const cadastrarCategoria = async (newCategory, token) => {
         // console.log('Dados para cirar categoria: ', newCategory);
         const response = await axios.post(`${API_BASE_URL}/categorias`, newCategory, {
             headers: {
-                Authorization: `Bearer ${token}`, // Inclua o token no cabeçalho
+                Authorization: `Bearer ${token}`,
             },
         });
         // console.log('Categoria criado com sucesso: ', response.data);
@@ -38,7 +38,7 @@ export const atualizarCategoria = async (categoryId, updatedCategoryData, token)
 // FindAll
 export const listarTodasCategorias = async (token) => {
     try {
-        console.log('Tentando buscar categorias...');
+        // console.log('Tentando buscar categorias...');
         const response = await axios.get(`${API_BASE_URL}/categorias/findAll`, {
             headers: {
                 Authorization: `Bearer ${token}`,

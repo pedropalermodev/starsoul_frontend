@@ -2,7 +2,6 @@ import './styles.scss';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import './styles.scss'
 
@@ -15,9 +14,9 @@ import SubmitButton from '../../components/SubmitButton';
 function SignIn() {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const isFormValid = email.trim() !== '' && password.trim() !== '';
     const [showPassword, setShowPassword] = useState(false);
@@ -28,10 +27,9 @@ function SignIn() {
         setLoading(true);
         try {
             await login(email, password);
-            toast.success('Login realizado com sucesso!');
         } catch (err) {
-            // toast.error('Email ou senha inválidos');
             // console.error('Erro de login:', err);
+            setError('Email ou senha inválidos');
         } finally {
             setLoading(false);
         }
@@ -52,9 +50,14 @@ function SignIn() {
                             type="email"
                             value={email}
                             className='sign__form-content-input'
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                if (error) setError('');
+                            }}
                             required
                         />
+                        {error && <p className="sign__form-error">{error}</p>}
+
                     </div>
 
                     <div>
@@ -65,7 +68,10 @@ function SignIn() {
                                     type={showPassword ? "text" : "password"}
                                     value={password}
                                     className='sign__form-content-input'
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        if (error) setError('');
+                                    }}
                                     required
                                 />
                                 <button

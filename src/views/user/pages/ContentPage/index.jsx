@@ -1,11 +1,11 @@
-import { useContent } from '../../../../shared/hooks/useContent';
+import './styles.scss'
 import { useRef, useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './styles.scss'
+import { listarFavoritos, favoritarConteudo, desfavoritarConteudo, registrarAcesso } from "../../../../api/historico.api";
+import { useContent } from '../../../../shared/hooks/useContent';
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import LoadingContent from '../../components/LoadingContent';
 import ErrorFoundPage from '../../../../shared/components/ErrorFoundPage';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
-import { listarFavoritos, favoritarConteudo, desfavoritarConteudo, registrarAcesso } from "../../../../api/content-user.api";
 import { motion, AnimatePresence } from "framer-motion";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -36,7 +36,7 @@ function ContentPage() {
         if (id && token) {
             listarFavoritos(token)
                 .then(favoritos => {
-                    console.log("Favoritos retornados:", favoritos); // opcional para debug
+                    // console.log("Favoritos retornados:", favoritos);
                     const estaFavoritado = favoritos.some(
                         fav => String(fav.conteudo.id) === String(id)
                     );
@@ -114,7 +114,7 @@ function ContentPage() {
         navigate(`/app/content/${content.id}`, {
             state: {
                 titulo: content.titulo,
-                videoUrl: content.arquivoUrl,
+                videoUrl: content.url,
                 descricao: content.descricao,
             }
         });
@@ -124,7 +124,7 @@ function ContentPage() {
         return <LoadingContent />;
     }
 
-    if (!content || content.tipoConteudo !== 'Video') {
+    if (!content || content.formato !== 'Video') {
         return <ErrorFoundPage />;
     }
 
@@ -162,7 +162,7 @@ function ContentPage() {
                 <div className='video-container'>
                     <iframe
                         className='iframe'
-                        src={getEmbedUrl(content.arquivoUrl)}
+                        src={getEmbedUrl(content.url)}
                         title={content.titulo}
                         allowFullScreen
                     />
@@ -240,7 +240,7 @@ function ContentPage() {
                         meditacoesRelacionadas.map(content => (
                             <div key={content.id} className="content__card" onClick={(e) => handleOpenContent(content, e)}>
                                 <img
-                                    src={getYouTubeThumbnail(content.arquivoUrl)}
+                                    src={getYouTubeThumbnail(content.url)}
                                     alt={`Capa de ${content.titulo}`}
                                     className="content__thumbnail"
                                     draggable={false}

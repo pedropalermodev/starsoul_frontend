@@ -15,18 +15,17 @@ function Profile() {
         email: '',
         apelido: '',
         dataNascimento: '',
-        genero: null,
+        genero: '',
     });
 
     useEffect(() => {
         if (userData) {
             setEditableUserData({
-                // Garanta que todas as propriedades sejam strings vazias se forem null/undefined
                 nome: userData.nome || '',
                 email: userData.email || '',
                 apelido: userData.apelido || '',
                 dataNascimento: userData.dataNascimento || '',
-                genero: userData.genero === null ? null : (userData.genero || ''), // Gênero: null ou string
+                genero: userData.genero || '',
             });
         }
     }, [userData]);
@@ -43,15 +42,14 @@ function Profile() {
     };
 
     const toggleEditMode = () => {
-        setIsEditing(!isEditing);
-        // Quando entra no modo de edição (isEditing era false e agora é true), copia os dados atuais
+        setIsEditing(!isEditing)
         if (!isEditing) {
             setEditableUserData({
                 nome: userData.nome || '',
                 email: userData.email || '',
                 apelido: userData.apelido || '',
                 dataNascimento: userData.dataNascimento || '',
-                genero: userData.genero === null ? null : (userData.genero || ''),
+                genero: userData.genero || '',
             });
         }
     };
@@ -60,10 +58,8 @@ function Profile() {
         setLoading(true);
         setError(null);
 
-        // Use editableUserData para as validações, pois é o que o usuário modificou
-        const updatedUserData = { ...editableUserData }; // Faça uma cópia para evitar mutações diretas
+        const updatedUserData = { ...editableUserData }; 
 
-        // 1. Validação da Data de Nascimento (já existente)
         let dataNascimentoBRT = null;
         const dataNascimentoInput = updatedUserData.dataNascimento;
         if (dataNascimentoInput) {
@@ -88,14 +84,9 @@ function Profile() {
             }
             dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
         }
-        // Se você estiver enviando dataNascimentoBRT, certifique-se de que `updatedUserData.dataNascimento`
-        // seja atualizado com esse formato, ou crie um novo objeto para envio.
-        // Por enquanto, vou assumir que você enviará `updatedUserData.dataNascimento` como está no input.
-
-
-        // 2. Validação do Nome (comprimento e sem números)
-        if (updatedUserData.nome) { // Verifique se o nome não é nulo/vazio antes de validar
-            if (updatedUserData.nome.length < 2) { // Alterei para 2 caracteres para corresponder à sua mensagem 'pelo menos 2 caracteres'
+        
+        if (updatedUserData.nome) {
+            if (updatedUserData.nome.length < 2) {
                 toast.error('O nome do usuário deve ter pelo menos 2 caracteres.');
                 setLoading(false);
                 return;
@@ -109,9 +100,8 @@ function Profile() {
         }
 
 
-        // 3. Validação do Email (formato)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (updatedUserData.email) { // Verifique se o email não é nulo/vazio antes de validar
+        if (updatedUserData.email) {
             if (!emailRegex.test(updatedUserData.email)) {
                 toast.error('Por favor, insira um email válido.');
                 setLoading(false);
@@ -120,23 +110,20 @@ function Profile() {
         }
 
 
-        // 4. Lógica para Expiração da Sessão se o Email Mudar
-        const emailChanged = userData.email !== updatedUserData.email; // Compara com o email original do contexto
+        const emailChanged = userData.email !== updatedUserData.email;
 
         try {
-            // Envie os dados para a API (atualizado: usando updatedUserData)
-            const response = await atualizarUsuario(token, updatedUserData); // Envia os dados validados
+            const response = await atualizarUsuario(token, updatedUserData);
 
-            // Se a atualização for bem-sucedida
             if (emailChanged) {
                 toast.info('Seu e-mail foi alterado. Por favor, faça login novamente.', {
-                    autoClose: false, // Opcional: mantém o toast visível até o usuário fazer algo
+                    autoClose: false,
                     closeOnClick: false,
                     draggable: false,
                 });
                 setTimeout(() => {
-                    logout(); // Função para encerrar a sessão e limpar o token
-                }, 3000); // Dá um tempo para o usuário ler a mensagem antes de deslogar
+                    logout();
+                }, 3000);
             } else {
                 updateUser(response);
             }
@@ -181,10 +168,10 @@ function Profile() {
                             Nome:
                             <input
                                 type="text"
-                                id="nome" // Adicione um id para a label htmlFor
-                                name="nome" // Adicione um name para handleChange
+                                id="nome"
+                                name="nome"
                                 value={isEditing ? editableUserData.nome : userData.nome}
-                                readOnly={!isEditing} // readOnly é true se não estiver editando
+                                readOnly={!isEditing}
                                 onChange={handleChange}
                             />
                         </label>
@@ -199,35 +186,42 @@ function Profile() {
                                 onChange={handleChange}
                             />
                         </label>
+
+                        <div className='line'>
+                            <span/>
+                            <p>Opcionais</p>
+                            <span/>
+                        </div>
+
                         <label htmlFor="apelido">
-                            Apelido (Opcional):
+                            Apelido:
                             <input
                                 type="text"
                                 id="apelido"
                                 name="apelido"
-                                value={isEditing ? (editableUserData.apelido || '') : (userData.apelido || 'não possui')}
+                                value={isEditing ? (editableUserData.apelido || '') : (userData.apelido || '')}
                                 readOnly={!isEditing}
                                 onChange={handleChange}
                             />
                         </label>
                         <label htmlFor="dataNascimento">
-                            Data de Nascimento (Opcional):
+                            Data de Nascimento:
                             <input
                                 type="date"
                                 id="dataNascimento"
                                 name="dataNascimento"
                                 value={isEditing ? editableUserData.dataNascimento : userData.dataNascimento}
-                                readOnly={!isEditing}
+                                disabled={!isEditing}
                                 onChange={handleChange}
                             />
                         </label>
                         <label htmlFor="genero">
-                            Gênero (Opcional):
+                            Gênero:
                             {isEditing ? (
                                 <select
                                     id="genero"
                                     name="genero"
-                                    value={editableUserData.genero === null ? '' : editableUserData.genero}
+                                    value={editableUserData.genero || ''}
                                     onChange={handleChange}
                                 >
                                     <option value="">Selecione seu gênero</option>
@@ -240,9 +234,8 @@ function Profile() {
                                     type="text"
                                     id="genero"
                                     name="genero"
-                                    // Se o gênero for null no modo de visualização, exibe 'não possui'
-                                    value={userData.genero || 'não possui'}
-                                    readOnly // Sempre readOnly no modo de visualização
+                                    value={userData.genero || ''}
+                                    readOnly
                                 />
                             )}
                         </label>

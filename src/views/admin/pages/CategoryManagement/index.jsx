@@ -1,13 +1,12 @@
 import './styles.scss'
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { cadastrarCategoria, atualizarCategoria, listarTodasCategorias, excluirCategoria, buscarCategoriaPorId } from '../../../../api/categoria.api';
+import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
-import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
+import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
 import { toast } from 'react-toastify';
-import { cadastrarCategoria, atualizarCategoria, listarTodasCategorias, excluirCategoria, buscarCategoriaPorId } from '../../../../api/category.api';
-import { AuthContext } from '../../../../shared/contexts/AuthContext';
-
 
 const categoriesColumns = [
     { key: 'id', label: 'ID' },
