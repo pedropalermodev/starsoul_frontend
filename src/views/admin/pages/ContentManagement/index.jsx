@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 const contentColumns = [
     { key: 'id', label: 'ID' },
     { key: 'titulo', label: 'Titulo' },
-    { key: 'descricao', label: 'Descricao' },
+    // { key: 'descricao', label: 'Descricao' },
     {
         key: 'formato',
         label: 'Modelo',
@@ -78,7 +78,7 @@ const contentColumns = [
             <GenericActionButtons
                 item={user}
                 onEdit={() => onEdit(user)}
-                onDelete={() => {onDelete(user.id);}}
+                onDelete={() => { onDelete(user.id); }}
             />
         ),
     }
@@ -156,28 +156,25 @@ function ContentManagement() {
     const [tags, setTags] = useState([]);
     const [currentView, setCurrentView] = useState('list');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
 
     const fetchData = useCallback(async () => {
         if (!globalLoading && token) {
             setLoading(true);
-            setError(null);
             try {
                 const [conteudos, categoriasResult, tagsResult] = await Promise.all([
                     listarTodosConteudos(token),
                     listarTodasCategorias(token),
                     listarTodasTags(token)
                 ]);
-                console.log('Dados de conteúdos recebidos:', conteudos);
+                // console.log('Dados de conteúdos recebidos:', conteudos);
                 setContents(conteudos);
                 setCategorias(categoriasResult);
                 setTags(tagsResult);
                 return conteudos;
             } catch (error) {
                 console.error('Erro ao buscar conteúdos:', error);
-                setError(error.message || 'Erro ao buscar conteúdos.');
-                toast.error('Erro ao buscar conteúdos.')
+                toast.error('Erro ao buscar conteúdos.', { toastId: 'contentFetchError' })
                 return [];
             } finally {
                 setLoading(false);
@@ -187,7 +184,7 @@ function ContentManagement() {
             return [];
 
         } else if (!token) {
-            setError('Autenticação necessária.');
+            toast.error('Autenticação necessária.')
             return [];
 
         }
@@ -195,7 +192,7 @@ function ContentManagement() {
     }, [token, globalLoading, listarTodosConteudos, listarTodasCategorias, listarTodasTags]);
 
     useEffect(() => {
-        console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
+        // console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
         fetchData();
     }, [token, globalLoading]);
 
@@ -210,7 +207,6 @@ function ContentManagement() {
 
     const handleCreateSubmit = async (newContent) => {
         setLoading(true);
-        setError(null);
 
         if (newContent.titulo && newContent.titulo.length < 11) {
             toast.error('O titulo deve ter pelo menos 10 caracteres.');
@@ -224,11 +220,9 @@ function ContentManagement() {
             toast.success('Informações salvas com sucesso!');
         } catch (err) {
             console.error('Error ao criar conteúdo:', err);
-            setError(err.message || 'Erro ao criar conteúdo.');
-            if (err.response && err.response.status === 400) {
+            if (err.response && err.response.status === 409) {
                 toast.error('Esse conteúdo já existe.');
             } else {
-                setError(err.message || 'Erro ao criar conteúdo.');
                 toast.error('Erro ao criar conteúdo.');
             }
         } finally {
@@ -238,7 +232,6 @@ function ContentManagement() {
     }
     const handleUpdateSubmit = async (updatedContentData) => {
         setLoading(true);
-        setError(null);
 
         if (updatedContentData.titulo && updatedContentData.titulo.length < 11) {
             toast.error('O titulo deve ter pelo menos 10 caracteres.');
@@ -249,13 +242,27 @@ function ContentManagement() {
         console.log('Dados recebidos para atualização:', updatedContentData);
 
         try {
+
+            const categoriasInativas = categorias.filter(cat =>
+                updatedContentData.categoriaIds.map(Number).includes(cat.id) &&
+                cat.codStatus?.toLowerCase() === 'inativo'
+            );
+
+            console.log("Categorias inativas encontradas:", categoriasInativas);
+
+            if (updatedContentData.codStatus?.trim().toLowerCase() === 'ativo' && categoriasInativas.length > 0) {
+                toast.warn('Atenção: Este conteúdo está sendo ativado mesmo com uma ou mais categorias inativas.', {
+                    toastId: 'categoriaInativaAviso'
+                });
+            }
+
+
             await atualizarConteudo(itemToEdit.id, updatedContentData, token);
             setCurrentView('list');
             setItemToEdit(null);
             toast.success('Informações atualizadas com sucesso!');
         } catch (err) {
             console.error('Error ao atualizar conteúdo:', err);
-            setError(err.message || 'Erro ao atualizar conteúdo.');
             toast.error('Erro ao atualizar categoria.');
         } finally {
             setLoading(false);
@@ -264,7 +271,6 @@ function ContentManagement() {
 
     const handleEditClick = async (content) => {
         setLoading(true);
-        setError(null);
         try {
             const contentData = await buscarConteudoPorId(content.id, token);
             // console.log("Dados para edição:", contentData);
@@ -289,7 +295,6 @@ function ContentManagement() {
             setCurrentView('edit');
         } catch (err) {
             console.error('Error ao buscar conteúdo para edicão:', err);
-            setError(err.message || 'Erro ao buscar conteúdo para edição.');
             toast.error('Erro ao buscar conteúdo para edição.');
         } finally {
             setLoading(false);
@@ -298,13 +303,11 @@ function ContentManagement() {
 
     const handleDeleteClick = async (contentId) => {
         setLoading(true);
-        setError(null);
         try {
             await excluirConteudo(contentId, token);
             toast.success('Conteúdo deletada com sucesso!');
         } catch (err) {
             console.error('Error ao deletar conteúdo:', err);
-            setError(err.message || 'Erro ao deletar conteúdo.');
             toast.error('Erro ao deletar conteúdo.');
         } finally {
             setLoading(false);

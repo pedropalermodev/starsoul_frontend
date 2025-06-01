@@ -59,7 +59,7 @@ function Dashboard() {
                 const feedbacks = await listarTodosFeedbacks(token);
                 const recentFb = [...feedbacks]
                     .sort((a, b) => new Date(b.dataEnvio) - new Date(a.dataEnvio))
-                    .slice(0, 5);
+                    .slice(0, 2);
                 setRecentFeedbacks(recentFb);
 
                 // Usuários

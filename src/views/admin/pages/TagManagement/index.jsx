@@ -43,22 +43,19 @@ function TagManagement() {
     const [tags, setTags] = useState([]);
     const [currentView, setCurrentView] = useState('list');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
 
     const fetchData = useCallback(async () => {
         if (!globalLoading && token) {
             setLoading(true);
-            setError(null);
             try {
                 const data = await listarTodasTags(token);
                 setTags(data);
-                console.log("Dados das tags recebidos:", data);
+                // console.log("Dados das tags recebidos:", data);
                 return data;
             } catch (error) {
                 console.error('Erro ao buscar tags:', error);
-                setError(error.message || 'Erro ao buscar tags.');
-                toast.error('Erro ao buscar tags.')
+                toast.error('Erro ao buscar tags.', { toastId: 'tagFetchError' })
                 return [];
             } finally {
                 setLoading(false);
@@ -68,7 +65,7 @@ function TagManagement() {
             return [];
 
         } else if (!token) {
-            setError('Autenticação necessária.');
+            toast.error('Autenticação necessária.')
             return [];
 
         }
@@ -76,7 +73,7 @@ function TagManagement() {
     }, [token, globalLoading, listarTodasTags]);
 
     useEffect(() => {
-        console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
+        // console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
         fetchData();
     }, [token, globalLoading]);
 
@@ -91,7 +88,6 @@ function TagManagement() {
     // BOTÃO DE SALVAR CRIAÇÃO NO FORM
     const handleCreateSubmit = async (newTag) => {
         setLoading(true);
-        setError(null);
         try {
             await cadastrarTag(newTag, token);
             setCurrentView('list');
@@ -101,7 +97,6 @@ function TagManagement() {
             if (err.response && err.response.status === 409) {
                 toast.error('Essa tag já existe.');
             } else {
-                setError(err.message || 'Erro ao cadastrar tag.');
                 toast.error('Erro ao cadastrar tag.');
             }
         } finally {
@@ -112,7 +107,6 @@ function TagManagement() {
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
     const handleEditSubmit = async (updateTagData) => {
         setLoading(true);
-        setError(null);
         try {
             await atualizarTag(itemToEdit.id, updateTagData, token);
             setCurrentView('list');
@@ -120,7 +114,6 @@ function TagManagement() {
             toast.success('Informações atualizadas com sucesso!');
         } catch (err) {
             console.error('Erro ao atualizar tag: ', err);
-            setError(err.message || 'Erro ao atualizar tag.');
             toast.error('Erro ao atualizar tag.');
         } finally { }
     }
@@ -128,14 +121,12 @@ function TagManagement() {
     // BOTÃO DE EDITAR NO LIST
     const handleEditClick = async (tag) => {
         setLoading(true);
-        setError(null);
         try {
             const tagData = await buscarTagPorId(tag.id, token);
             setItemToEdit(tagData);
             setCurrentView('edit');
         } catch (err) {
             console.error('Erro ao buscar tag para edição: ', err);
-            setError(err.message || 'Erro ao buscar tag para edição.');
             toast.error('Erro ao buscar tag para edição.');
         } finally {
             setLoading(false);
@@ -145,13 +136,11 @@ function TagManagement() {
     // BOTÃO DE EXCLUIR NO LIST
     const handleDeleteClick = async (tagId) => {
         setLoading(true);
-        setError(null);
         try {
             await excluirTag(tagId, token);
             toast.success('Tag deletada com sucesso!');
         } catch (err) {
             console.error('Erro ao deletar tag: ', err);
-            setError(err.message || 'Erro ao deletar tag.');
             toast.error('Erro ao deletar tag.');
         } finally {
             setLoading(false);

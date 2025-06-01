@@ -47,7 +47,7 @@ export const listarTodosUsuarios = async (token) => {
             },
         });
         // console.log('Lista de Usuários: ', response.data);
-        console.log("Resposta da API (listarTodosUsuarios):", response);
+        // console.log("Resposta da API (listarTodosUsuarios):", response);
         return response.data;
     } catch (error) {
         console.error('Erro ao buscar usuários: ', error);

@@ -1,10 +1,10 @@
 import './styles.scss';
 
-function LoadingPage() {
+function LoadingPage(props) {
     return (
         <div className="loading-container">
             <div className="spinner"></div>
-            <p>Carregando...</p>
+            <p>{props.message}</p>
         </div>
     );
 }

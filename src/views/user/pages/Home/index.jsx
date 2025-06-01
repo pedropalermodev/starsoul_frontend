@@ -1,8 +1,9 @@
-import { useContext, useState, useRef } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
+import LoadingPage from '../../../../shared/components/LoadingPage'
 
 import './styles.scss';
 
@@ -13,12 +14,23 @@ import downloadOnPlayStore from '../../../../assets/shared/download-on-googlePla
 
 function Home() {
     const { userData, globalLoading } = useContext(AuthContext);
-    const { contents } = useContent();
-
+    const { contents, loading, fetchContents } = useContent();
     const navigate = useNavigate();
 
-    if (globalLoading) return <p>Loading...</p>;
-    if (!userData) return <p>Dados do usuário não encontrados.</p>;
+    const scrollRef = useRef(null);
+    const isDraggingRef = useRef(false);
+    const startX = useRef(0);
+    const scrollLeft = useRef(0);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const scrollRefMed = useRef(null);
+    const scrollRefSpotify = useRef(null);
+    const isDraggingRefMed = useRef(false);
+    const isDraggingRefSpotify = useRef(false);
+    const [isDraggingMed, setIsDraggingMed] = useState(false);
+    const [isDraggingSpotify, setIsDraggingSpotify] = useState(false);
+
+    if (globalLoading || loading) return <LoadingPage message="Carregando conteúdos..." />;
 
     const nomes = userData.nome.split(' ');
     const primeiroNome = nomes[0];
@@ -36,11 +48,6 @@ function Home() {
         }
     };
 
-    const scrollRef = useRef(null);
-    const isDraggingRef = useRef(false);
-    const startX = useRef(0);
-    const scrollLeft = useRef(0);
-    const [isDragging, setIsDragging] = useState(false);
 
     const handleMouseDown = (e) => {
         isDraggingRef.current = false;
@@ -70,14 +77,6 @@ function Home() {
         setIsDragging(false);
     };
 
-    const scrollRefMed = useRef(null);
-    const scrollRefSpotify = useRef(null);
-
-    const isDraggingRefMed = useRef(false);
-    const isDraggingRefSpotify = useRef(false);
-
-    const [isDraggingMed, setIsDraggingMed] = useState(false);
-    const [isDraggingSpotify, setIsDraggingSpotify] = useState(false);
 
     // Criar handlers separados para cada lista
 
@@ -246,7 +245,7 @@ function Home() {
                 <div className="home-app__details-box">
                     <img src={cta} alt="" />
                 </div>
-                
+
                 <div className="home-app__details-box">
                     <p className='home-app__details-box--text'>Receba conteúdos novos e exclusivos com notificações instantâneas. Baixe agora e transforme sua experiência!</p>
                     <div>

@@ -25,7 +25,7 @@ const categoriesColumns = [
             <GenericActionButtons
                 item={category}
                 onEdit={() => onEdit(category)}
-                onDelete={() => {onDelete(category.id);}}
+                onDelete={() => { onDelete(category.id); }}
             />
         ),
     }
@@ -48,7 +48,6 @@ const categoriesFormFields = [
         required: true,
         options: [
             { label: 'Ativo', value: 'Ativo' },
-            { label: 'Suspenso', value: 'Suspenso' },
             { label: 'Inativo', value: 'Inativo' }
         ]
     },
@@ -61,22 +60,19 @@ function CategoryManagement() {
     const [categories, setCategories] = useState([]);
     const [currentView, setCurrentView] = useState('list');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
 
     const fetchData = useCallback(async () => {
         if (!globalLoading && token) {
             setLoading(true);
-            setError(null);
             try {
                 const data = await listarTodasCategorias(token);
                 setCategories(data);
-                console.log("Dados das categorias recebidos:", data);
+                // console.log("Dados das categorias recebidos:", data);
                 return data;
             } catch (error) {
                 console.error('Erro ao buscar categorias:', error);
-                setError(error.message || 'Erro ao buscar categorias.');
-                toast.error('Erro ao buscar categorias.')
+                toast.error('Erro ao buscar categorias.', { toastId: 'categoryFetchError' })
                 return [];
             } finally {
                 setLoading(false);
@@ -86,7 +82,7 @@ function CategoryManagement() {
             return [];
 
         } else if (!token) {
-            setError('Autenticação necessária.');
+            toast.error('Autenticação necessária.')
             return [];
 
         }
@@ -94,7 +90,7 @@ function CategoryManagement() {
     }, [token, globalLoading, listarTodasCategorias]);
 
     useEffect(() => {
-        console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
+        // console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
         fetchData();
     }, [token, globalLoading]);
 
@@ -109,7 +105,6 @@ function CategoryManagement() {
     // BOTÃO DE SALVAR CRIAÇÃO NO FORM
     const handleCreateSubmit = async (newCategory) => {
         setLoading(true);
-        setError(null);
 
         if (newCategory.nome && newCategory.nome.length < 3) {
             toast.error('O nome deve ter pelo menos 3 caracteres.');
@@ -132,7 +127,6 @@ function CategoryManagement() {
             if (err.response && err.response.status === 409) {
                 toast.error('Essa categoria já existe.');
             } else {
-                setError(err.message || 'Erro ao cadastrar categoria.');
                 toast.error('Erro ao cadastrar conteúdo.');
             }
         } finally {
@@ -143,7 +137,6 @@ function CategoryManagement() {
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
     const handleEditSubmit = async (updateCategoryData) => {
         setLoading(true);
-        setError(null);
 
         if (updateCategoryData.nome && updateCategoryData.nome.length < 3) {
             toast.error('O nome deve ter pelo menos 3 caracteres.');
@@ -164,7 +157,6 @@ function CategoryManagement() {
             toast.success('Informações atualizadas com sucesso!');
         } catch (err) {
             console.error('Erro ao atualizar categoria: ', err);
-            setError(err.message || 'Erro ao atualizar categoria.');
             toast.error('Erro ao atualizar categoria.');
         } finally {
             setLoading(false);
@@ -174,14 +166,12 @@ function CategoryManagement() {
     // BOTÃO DE EDITAR NO LIST
     const handleEditClick = async (category) => {
         setLoading(true);
-        setError(null);
         try {
             const categoryData = await buscarCategoriaPorId(category.id, token);
             setItemToEdit(categoryData);
             setCurrentView('edit');
         } catch (err) {
             console.error('Erro ao buscar categoria para edição: ', err);
-            setError(err.message || 'Erro ao buscar categoria para edição.');
             toast.error('Erro ao buscar categoria para edição.');
         } finally {
             setLoading(false);
@@ -191,13 +181,11 @@ function CategoryManagement() {
     // BOTÃO DE EXCLUIR NO LIST
     const handleDeleteClick = async (categoryId) => {
         setLoading(true);
-        setError(null);
         try {
             await excluirCategoria(categoryId, token);
             toast.success('Categoria deletada com sucesso!');
         } catch (err) {
             console.error('Erro ao deletar categoria: ', err);
-            setError(err.message || 'Erro ao deletar categoria.');
             toast.error('Erro ao deletar categoria.');
         } finally {
             setLoading(false);

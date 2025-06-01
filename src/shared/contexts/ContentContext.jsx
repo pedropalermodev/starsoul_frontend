@@ -7,6 +7,7 @@ export const ContentContext = createContext({
 
 export const ContentProvider = ({ children }) => {
     const [contents, setContents] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [filteredContents, setFilteredContents] = useState([]);
     const [filters, setFilters] = useState({
         tags: [],
@@ -15,12 +16,15 @@ export const ContentProvider = ({ children }) => {
     });
 
     const fetchContents = async () => {
+        setLoading(true);
         try {
             const data = await listarTodosConteudos();
             const conteudosAtivos = data.filter(content => content.codStatus === 'Ativo');
             setContents(conteudosAtivos);
         } catch (err) {
             console.error("Erro ao carregar conteúdos:", err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -61,6 +65,7 @@ export const ContentProvider = ({ children }) => {
             filters,
             setFilters,
             fetchContents,
+            loading,
         }}>
             {children}
         </ContentContext.Provider>

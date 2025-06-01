@@ -29,21 +29,18 @@ function FeedbackManagement() {
     const [feedbacks, setFeedbacks] = useState([]);
     const [currentView, setCurrentView] = useState('list');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     const fetchData = useCallback(async () => {
         if (!globalLoading && token) {
             setLoading(true);
-            setError(null);
             try {
                 const data = await listarTodosFeedbacks(token);
                 setFeedbacks(data);
-                console.log("Dados dos feedbacks recebidos:", data);
+                // console.log("Dados dos feedbacks recebidos:", data);
                 return data;
             } catch (error) {
                 console.error('Erro ao buscar feedbacks:', error);
-                setError(error.message || 'Erro ao buscar feedbacks.');
-                toast.error('Erro ao buscar feedbacks.')
+                toast.error('Erro ao buscar feedbacks.', { toastId: 'feedbackFetchError' });
                 return [];
             } finally {
                 setLoading(false);
@@ -53,7 +50,7 @@ function FeedbackManagement() {
             return [];
 
         } else if (!token) {
-            setError('Autenticação necessária.');
+            toast.error('Autenticação necessária.')
             return [];
 
         }
@@ -61,7 +58,7 @@ function FeedbackManagement() {
     }, [token, globalLoading, listarTodosFeedbacks]);
 
     useEffect(() => {
-        console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
+        // console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
         fetchData();
     }, [token, globalLoading]);
 

@@ -107,22 +107,19 @@ function AccessManagement() {
     const [users, setUsers] = useState([]);
     const [currentView, setCurrentView] = useState('list');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [itemToEdit, setItemToEdit] = useState(null);
 
     const fetchData = useCallback(async () => {
         if (!globalLoading && token) {
             setLoading(true);
-            setError(null);
             try {
                 const data = await listarTodosUsuarios(token);
                 setUsers(data);
-                console.log("Dados dos usuários recebidos:", data);
+                // console.log("Dados dos usuários recebidos:", data);
                 return data;
             } catch (error) {
                 console.error('Erro ao buscar usuários:', error);
-                setError(error.message || 'Erro ao buscar usuários.');
-                toast.error('Erro ao buscar usuários.')
+                toast.error('Erro ao buscar usuários.', { toastId: 'userFetchError' })
                 return [];
             } finally {
                 setLoading(false);
@@ -132,15 +129,14 @@ function AccessManagement() {
             return [];
 
         } else if (!token) {
-            setError('Autenticação necessária.');
+            toast.error('Autenticação necessária.')
             return [];
-
         }
         return [];
     }, [token, globalLoading, listarTodosUsuarios]);
 
     useEffect(() => {
-        console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
+        // console.log('useEffect executado - Token:', token, 'Global Loading:', globalLoading);
         fetchData();
     }, [token, globalLoading]);
 
@@ -154,7 +150,6 @@ function AccessManagement() {
 
     const handleCreateSubmit = async (newUser) => {
         setLoading(true);
-        setError(null);
 
         let dataNascimentoBRT = null;
         const dataNascimentoInput = newUser.dataNascimento;
@@ -221,7 +216,6 @@ function AccessManagement() {
             if (err.response && err.response.status === 409) {
                 toast.error('Este email já está cadastrado.');
             } else {
-                setError(err.message || 'Erro ao cadastrar usuário.');
                 toast.error('Erro ao cadastrar usuário.');
             }
         } finally {
@@ -232,7 +226,6 @@ function AccessManagement() {
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
     const handleUpdateSubmit = async (updatedUserData) => {
         setLoading(true);
-        setError(null);
 
         if (!updatedUserData.senha && itemToEdit?.senha) {
             updatedUserData.senha = itemToEdit.senha;
@@ -262,7 +255,7 @@ function AccessManagement() {
             }
 
             dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
-            console.log('Data de Nascimento enviada (BRT):', dataNascimentoBRT);
+            // console.log('Data de Nascimento enviada (BRT):', dataNascimentoBRT);
         }
 
         if (updatedUserData.nome && updatedUserData.nome.length < 3) {
@@ -298,7 +291,6 @@ function AccessManagement() {
             toast.success('Informações atualizadas com sucesso!');
         } catch (err) {
             console.error('Erro ao atualizar usuário:', err);
-            setError(err.message || 'Erro ao atualizar usuário.');
             toast.error('Erro ao atualizar usuário.');
         } finally {
             setLoading(false);
@@ -308,14 +300,12 @@ function AccessManagement() {
     // BOTÃO DE EDITAR NO LIST
     const handleEditClick = async (user) => {
         setLoading(true);
-        setError(null);
         try {
             const userData = await buscarUsuarioPorId(user.id, token);
             setItemToEdit(userData);
             setCurrentView('edit');
         } catch (err) {
             console.error('Erro ao buscar usuário para edição:', err);
-            setError(err.message || 'Erro ao buscar usuário para edição.');
             toast.error('Erro ao buscar usuário para edição.');
         } finally {
             setLoading(false);
@@ -325,13 +315,11 @@ function AccessManagement() {
     // BOTÃO DE EXCLUIR NO LIST
     const handleDeleteClick = async (userId) => {
         setLoading(true);
-        setError(null);
         try {
             await excluirUsuario(userId, token);
             toast.success('Usuário deletado com sucesso!');
         } catch (err) {
             console.error('Erro ao deletar usuário:', err);
-            setError(err.message || 'Erro ao deletar usuário.');
             toast.error('Erro ao deletar usuário.');
         } finally {
             setLoading(false);

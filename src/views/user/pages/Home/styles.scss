@@ -182,6 +182,26 @@
             align-items: baseline;
             gap: 30px;
         }
+
+        .home-app__details {
+            display: flex;
+            flex-direction: column;
+
+            &-box {
+
+                &:first-child {
+                    width: 100%;
+                }
+
+                &:last-child {
+                    width: 100%;
+
+                    & div {
+                        width: 250px;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -11,7 +11,7 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
 
     useEffect(() => {
         const initialValues = {};
-        console.log('initialData no GenericForm:', initialData);
+        // console.log('initialData no GenericForm:', initialData);
         fields.forEach(field => {
             if (field.name === 'codStatus') {
                 initialValues[field.name] = initialData ? initialData[field.name] : 'Ativo';
@@ -35,7 +35,7 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
             newValue = value;
         }
 
-        console.log('handleChange:', name, newValue);
+        // console.log('handleChange:', name, newValue);
 
         setFormData(prevFormData => ({
             ...prevFormData,
@@ -60,7 +60,7 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
             convertedFormData.tagIds = convertedFormData.tagIds.map(id => Number(id));
         }
 
-        console.log('convertedFormData no handleSubmit:', convertedFormData);
+        // console.log('convertedFormData no handleSubmit:', convertedFormData);
 
         fields.forEach(field => {
             if (!field.required && !convertedFormData[field.name]) {

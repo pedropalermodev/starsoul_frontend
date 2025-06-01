@@ -1,4 +1,16 @@
 .sign__box--p {
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+.sign__message {
+    font-size: 12px;
+
+    &--error {
+        color: #d9534f;
+    }
+
+    &--success {
+        color: #5cb85c;
+    }
 }

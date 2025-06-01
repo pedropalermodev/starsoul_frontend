@@ -18,9 +18,16 @@ function ResetPassword() {
     const [newPassword, setNewPassword] = useState('');
     const [newConfirmPassword, setNewConfirmPassword] = useState('');
     const [step, setStep] = useState(1);
-    const isFormValidStep1 = email.trim() !== '' ;
+    const isFormValidStep1 = email.trim() !== '';
     const isFormValidStep2 = token.trim() !== '' && newPassword.trim() !== '' && newConfirmPassword.trim() !== '';
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState({ text: '', type: '' });
+
+    const showMessage = (text, type = 'error', duration = 3000) => {
+        setMessage({ text, type });
+        setTimeout(() => setMessage({ text: '', type: '' }), duration);
+    };
+
 
     const [passwordRequirements, setPasswordRequirements] = useState({
         length: false,
@@ -32,6 +39,7 @@ function ResetPassword() {
 
     const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
@@ -39,11 +47,16 @@ function ResetPassword() {
 
         try {
             await solicitarResetSenha(email);
-            toast.success('Um email com instruções foi enviado!');
+            showMessage('Um email com instruções foi enviado!', 'success')
             setStep(2);
         } catch (err) {
-            console.error(err);
-            toast.error('Erro ao enviar o email. Tente novamente mais tarde!');
+            // console.error(err);
+            const status = err.response?.status || 0;
+            if (status === 404) {
+                showMessage('Email não encontrado. Verifique e tente novamente.', 'error');
+            } else {
+                showMessage('Erro interno. Por favor, tente novamente mais tarde.', 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -54,22 +67,25 @@ function ResetPassword() {
         setLoading(true);
 
         if (newPassword !== newConfirmPassword) {
-            toast.error('As senhas não correspondem.');
+            showMessage('As senhas não correspondem.', 'error')
+
             return;
         }
 
         if (!Object.values(passwordRequirements).every(req => req)) {
-            toast.error('A nova senha não atende a todos os requisitos.');
+            showMessage('A nova senha não atende a todos os requisitos.', 'error')
             return;
         }
 
         try {
             await redefinirSenha(email, token, newPassword);
-            toast.success('Senha redefinida com sucesso!');
+            showMessage('Senha redefinida com sucesso!', 'success')
+            await delay(1500);
             navigate('/sign-in');
         } catch (err) {
             console.error(err);
-            toast.error('Erro ao redefinir senha.');
+            showMessage('Erro ao redefinir senha.', 'error')
+
         } finally {
             setLoading(false);
         }
@@ -113,6 +129,12 @@ function ResetPassword() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
+                            {message.text && (
+                                <p className={`sign__message sign__message--${message.type}`}>
+                                    {message.text}
+                                </p>
+                            )}
+
                         </div>
                         <SubmitButton isValid={isFormValidStep1} loading={loading}>
                             Enviar
@@ -147,6 +169,11 @@ function ResetPassword() {
                                 onChange={(e) => setToken(e.target.value)}
                                 required
                             />
+                            {message.text && (
+                                <p className={`sign__message sign__message--${message.type}`}>
+                                    {message.text}
+                                </p>
+                            )}
                         </div>
 
                         <div className="password-field-wrapper ">

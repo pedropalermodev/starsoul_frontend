@@ -18,7 +18,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
         try {
             const fetchedData = await dataFetcher();
             setData(fetchedData);
-            console.log("Dados setados no estado 'data' do GenericList:", fetchedData);
+            // console.log("Dados setados no estado 'data' do GenericList:", fetchedData);
         } catch (err) {
             console.error('Erro ao buscar dados:', err);
             setError(err.message || 'Erro ao buscar dados.');
@@ -122,7 +122,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                 </tr>
                             </thead>
                             <tbody className='gerenic__tbody'>
-                                {console.log('filteredData:', filteredData)}
+                                {/* {console.log('filteredData:', filteredData)} */}
                                 {Array.isArray(filteredData) && filteredData.length > 0 ? ( // Verifique se filteredData tem itens
                                     filteredData.map(item => (
                                         <tr

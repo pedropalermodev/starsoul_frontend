@@ -25,10 +25,10 @@ function Footer() {
                     <nav className='footer-app__webapp-navbar'>
                         <ul className='footer-app__webapp-navbar-ul'>
                             <Link className='footer-app__webapp-navbar-ul-link' to='/app/home'> <img src={home} /> <li>Home</li> </Link>
-                            <Link className='footer-app__webapp-navbar-ul-link' to='/app/profile'> <img src={profile} /> <li>Perfil</li> </Link>
                             <Link className='footer-app__webapp-navbar-ul-link' to='/app/explore'> <img src={explore} /> <li>Explorar</li> </Link>
-                            <Link className='footer-app__webapp-navbar-ul-link' to='/app/songs'> <img src={songs} /> <li>Sons</li> </Link>
+                            {/* <Link className='footer-app__webapp-navbar-ul-link' to='/app/songs'> <img src={songs} /> <li>Sons</li> </Link> */}
                             <Link className='footer-app__webapp-navbar-ul-link' to='/app/favorites'> <img src={favorites} /> <li>Favoritos</li> </Link>
+                            <Link className='footer-app__webapp-navbar-ul-link' to='/app/profile'> <img src={profile} /> <li>Perfil</li> </Link>
                         </ul>
                     </nav>
                 </div>
