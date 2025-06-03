@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8080/api/conteudo-usuario';
+const API_BASE_URL = 'https://starsoul-backend.onrender.com/api/conteudo-usuario';
 
 export const registrarAcesso = async (conteudoId, token) => {
     const response = await axios.post(`${API_BASE_URL}/${conteudoId}/acessar`, {}, {

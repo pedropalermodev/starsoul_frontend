@@ -175,17 +175,17 @@ function AccessManagement() {
             }
 
             dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
-            console.log('Data de Nascimento enviada (BRT) para CREATE:', dataNascimentoBRT);
+            // console.log('Data de Nascimento enviada (BRT) para CREATE:', dataNascimentoBRT);
         }
 
-        console.log('Validando nome:', newUser.nome);
+        // console.log('Validando nome:', newUser.nome);
         if (newUser.nome && newUser.nome.length < 3) {
             toast.error('O nome do usuário deve ter pelo menos 2 caracteres.');
             setLoading(false);
             return;
         }
 
-        console.log('Validando nome (números):', newUser.nome);
+        // console.log('Validando nome (números):', newUser.nome);
         const hasNumber = /\d/.test(newUser.nome);
         if (newUser.nome && hasNumber) {
             toast.error('O nome do usuário não pode conter números.');
@@ -223,8 +223,16 @@ function AccessManagement() {
         }
     };
 
+    // useEffect(() => {
+    //     if (itemToEdit) {
+    //         console.log('Item a editar:', itemToEdit);
+    //     }
+    // }, [itemToEdit]);
+
+
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
     const handleUpdateSubmit = async (updatedUserData) => {
+        console.log('Data recebida no submit:', updatedUserData.dataNascimento);
         setLoading(true);
 
         if (!updatedUserData.senha && itemToEdit?.senha) {
@@ -254,7 +262,7 @@ function AccessManagement() {
                 return;
             }
 
-            dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
+            dataNascimentoBRT = dataNascimentoInput;
             // console.log('Data de Nascimento enviada (BRT):', dataNascimentoBRT);
         }
 
@@ -284,7 +292,13 @@ function AccessManagement() {
             return;
         }
 
+        if (dataNascimentoInput) {
+            dataNascimentoBRT = dataNascimentoInput;
+            updatedUserData.dataNascimento = dataNascimentoBRT;
+        }
+
         try {
+            // console.log('Objeto a enviar na atualização:', updatedUserData);
             await atualizarUsuario(itemToEdit.id, updatedUserData, token);
             setCurrentView('list');
             setItemToEdit(null);

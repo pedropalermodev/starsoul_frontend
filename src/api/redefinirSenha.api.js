@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/password-reset';
+const API_BASE_URL = 'https://starsoul-backend.onrender.com/api/password-reset';
 
 // POST
 export const solicitarResetSenha = async (email) => {

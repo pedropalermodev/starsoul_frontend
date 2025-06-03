@@ -116,14 +116,10 @@ function Profile() {
             const response = await atualizarUsuario(token, updatedUserData);
 
             if (emailChanged) {
-                toast.info('Seu e-mail foi alterado. Por favor, faça login novamente.', {
-                    autoClose: false,
-                    closeOnClick: false,
-                    draggable: false,
-                });
+                alert('Seu e-mail foi alterado. Por favor, faça login novamente.')
                 setTimeout(() => {
                     logout();
-                }, 3000);
+                }, 1000);
             } else {
                 updateUser(response);
             }
