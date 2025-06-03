@@ -12,6 +12,7 @@ import AdminApp from './views/admin/AdminApp';
 
 // Component
 import LoadingPage from './shared/components/LoadingPage'
+import ScrollToTop from './shared/components/ScrollToTop';
 
 // Página de Login/Cadastro
 import SignIn from './views/guest/pages/SignIn';
@@ -21,6 +22,7 @@ import ResetPassword from './views/guest/pages/ResetPassword';
 function App() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <AuthProvider>
                 <ContentProvider>
                     <AppRoutes />

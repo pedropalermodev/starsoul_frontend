@@ -35,8 +35,6 @@
                 display: flex;
                 align-items: center;
                 gap: 15px;
-                margin-top: 20px;
-                margin-left: 20px;
 
                 &--icon {
                     display: flex;
@@ -138,13 +136,20 @@
 @media (max-width: 768px) {
     .contact__container-hero {
         flex-direction: column;
+        width: 100%;
+        min-width: 100px;
 
         &-box {
             width: 100%;
 
             &--title {
-                font-size: 27px;
+                font-size: 25px;
+                width: 100%;
             }
         }
+    }
+
+    .contact__container-hero-box:nth-child(2) {
+        padding: 20px;
     }
 }
