@@ -200,6 +200,7 @@ function CategoryManagement() {
                     <GenericList
                         columns={categoriesColumns}
                         dataFetcher={fetchData}
+                        tableName="Categorias"
                         pages={categoriesPages}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}

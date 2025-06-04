@@ -77,6 +77,7 @@ function FeedbackManagement() {
                     <GenericList
                         columns={feedbacksColumns}
                         dataFetcher={fetchData}
+                        tableName="Feedbacks"
                     />
                 );
             default:

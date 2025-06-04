@@ -140,13 +140,13 @@ function Home() {
     const handleOpenContent = (content) => {
         if (isDraggingRef.current) return;
 
-        if (content.tipoConteudo === 'Audio') {
-            window.location.href = content.arquivoUrl;
+        if (content.formato === 'Audio') {
+            window.location.href = content.url;
         } else {
             navigate(`/app/content/${content.id}`, {
                 state: {
                     titulo: content.titulo,
-                    videoUrl: content.arquivoUrl,
+                    videoUrl: content.url,
                     descricao: content.descricao,
                 }
             });
@@ -154,7 +154,7 @@ function Home() {
     };
 
     // Filtrar conteúdos do Spotify (agora como tipoConteudo: "Audio")
-    const spotifyPlaylists = contents.filter(content => content.tipoConteudo === 'Audio');
+    const spotifyPlaylists = contents.filter(content => content.formato === 'Audio');
 
     return (
         <main className='home-app__container'>
@@ -218,7 +218,7 @@ function Home() {
                             >
                                 {/* Para áudios, o caminhoMiniatura pode ser a capa da playlist/álbum */}
                                 <img
-                                    src={playlist.caminhoMiniatura || "https://blog.trocafone.com/wp-content/uploads/2019/12/spotify.blog_-1200x640.jpg"} // Usando favicon do Spotify como placeholder
+                                    src={"https://blog.trocafone.com/wp-content/uploads/2019/12/spotify.blog_-1200x640.jpg"} // Usando favicon do Spotify como placeholder
                                     alt={`Playlist do Spotify: ${playlist.titulo}`}
                                     className="sound__thumbnail"
                                     draggable={false}

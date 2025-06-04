@@ -154,6 +154,7 @@ function TagManagement() {
                     <GenericList
                         columns={tagsColumns}
                         dataFetcher={fetchData}
+                        tableName="Tags"
                         pages={tagsPages}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}

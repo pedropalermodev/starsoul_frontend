@@ -245,6 +245,17 @@
     }
 }
 
+
+@media (max-width: 1080px) {
+
+    .password-requirements-tooltip {
+        position: absolute;
+        top: 55px;
+        left: 45%;
+        z-index: 2;
+    }
+}
+
 @media (max-width: 480px) {
 
 

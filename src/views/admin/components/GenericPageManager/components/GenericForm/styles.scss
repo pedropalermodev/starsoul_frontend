@@ -18,6 +18,10 @@
 
     &__content {}
 
+    &__error {
+        color: rgb(230, 31, 31);
+    }
+
     &__label {
         font-size: 1em;
         color: #555;

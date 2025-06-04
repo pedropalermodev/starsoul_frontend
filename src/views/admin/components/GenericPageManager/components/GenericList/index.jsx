@@ -1,8 +1,11 @@
+import './styles.scss';
 import React, { useState, useEffect } from 'react';
 import Box from '../../../Box';
-import './styles.scss';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { format } from 'date-fns';
 
-function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView }) {
+function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView, tableName }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -11,6 +14,10 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
     const [itemToDeleteId, setItemToDeleteId] = useState(null);
     const [itemToDeleteHighlightId, setItemToDeleteHighlightId] = useState(null);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // número de itens por página
+
 
     const loadData = async () => {
         setLoading(true);
@@ -40,21 +47,22 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                 return;
             }
 
-            if (!searchTerm) {
-                setFilteredData(data);
-                return;
-            }
-            const lowerTerm = searchTerm.toLowerCase();
+            let newData = [...data];
 
-            const newData = data.filter(item => {
-                return (
-                    (item?.id?.toString() || '').toLowerCase().includes(lowerTerm) || // Pesquisa por ID
+            if (searchTerm) {
+                const lowerTerm = searchTerm.toLowerCase();
+                newData = newData.filter(item =>
+                    (item?.id?.toString() || '').toLowerCase().includes(lowerTerm) ||
                     columns.some(column => {
                         const value = item[column.key];
                         return (value?.toString() || '').toLowerCase().includes(lowerTerm);
                     })
                 );
-            });
+            }
+
+            // Ordena do maior para o menor ID
+            newData.sort((a, b) => a.id - b.id);
+
             setFilteredData(newData);
         };
 
@@ -84,6 +92,75 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
         setItemToDeleteId(null);
         setItemToDeleteHighlightId(null);
     };
+
+
+    // Gerar PDF
+    const generatePDF = () => {
+        const doc = new jsPDF();
+
+
+        // ✅ Título e data de geração
+        doc.setFontSize(16);
+        doc.text(`Relatório: ${tableName || 'Dados'}`, 105, 30, { align: 'center' });
+
+        doc.setFontSize(10);
+        const now = format(new Date(), 'dd/MM/yyyy HH:mm');
+        doc.text(`Gerado em: ${now}`, 105, 36, { align: 'center' });
+
+        // ✅ Cabeçalhos
+        const tableColumn = columns.map(col => col.label);
+
+        // ✅ Corpo com formatação de datas
+        const tableRows = filteredData.map(row =>
+            columns.map(col => {
+                const value = row[col.key];
+
+                if (col.key.toLowerCase().includes('data') && value) {
+                    try {
+                        return format(new Date(value), 'dd/MM/yyyy HH:mm');
+                    } catch (e) {
+                        return value;
+                    }
+                }
+
+                return typeof value === 'string' || typeof value === 'number'
+                    ? value
+                    : '';
+            })
+        );
+
+        const newTableColumn = tableColumn.slice(0, -1);
+        const newTableRows = tableRows.map(row => row.slice(0, -1));
+
+        // ✅ Renderiza a tabela
+        autoTable(doc, {
+            startY: 42,
+            head: [newTableColumn],
+            body: newTableRows,
+            styles: {
+                fontSize: 10,
+                cellPadding: 2
+            },
+            headStyles: {
+                fillColor: [30, 56, 97],
+                textColor: 255,
+            }
+        });
+
+        doc.setFontSize(9);
+        doc.text('© 2025 StarSoul - Meditações e Guias para conhecimento.', 105, 290, { align: 'center' });
+
+
+        doc.save(`${tableName?.toLowerCase().replace(/\s+/g, '_') || 'relatorio'}.pdf`);
+    };
+
+    // Paginação
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = filteredData.slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
 
     return (
         <main>
@@ -123,8 +200,8 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                             </thead>
                             <tbody className='gerenic__tbody'>
                                 {/* {console.log('filteredData:', filteredData)} */}
-                                {Array.isArray(filteredData) && filteredData.length > 0 ? ( // Verifique se filteredData tem itens
-                                    filteredData.map(item => (
+                                {Array.isArray(currentItems) && currentItems.length > 0 ? (
+                                    currentItems.map(item => (
                                         <tr
                                             key={item.id}
                                             className={`generic__tbody-tr ${item.id === itemToDeleteHighlightId ? 'highlight-delete' : ''}`}
@@ -140,15 +217,56 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                             ))}
                                         </tr>
                                     ))
-                                ) : ( 
+                                ) : (
                                     <tr key="no-data-row">
                                         <td colSpan={columns.length} style={{ textAlign: 'center', padding: '16px' }}>
                                             Nenhum dado encontrado.
                                         </td>
                                     </tr>
                                 )}
+
                             </tbody>
                         </table>
+
+                        <div className="box__items">
+                            <div></div>
+
+                            {totalPages > 1 && (
+                                <div className="pagination">
+                                    <button
+                                        className="pagination-button"
+                                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        ⟵
+                                    </button>
+
+                                    {[...Array(totalPages)].map((_, index) => (
+                                        <button
+                                            key={index + 1}
+                                            className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+                                            onClick={() => setCurrentPage(index + 1)}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        className="pagination-button"
+                                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        ⟶
+                                    </button>
+                                </div>
+                            )}
+
+                            <button className="export-button" onClick={generatePDF}>
+                                Exportar PDF
+                            </button>
+                        </div>
+
+
                     </>
                 )}
             </Box>

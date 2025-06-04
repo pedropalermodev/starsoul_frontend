@@ -20,11 +20,9 @@ const contentColumns = [
         label: 'Modelo',
         cellStyle: { padding: 0 },
         render: (content) => (
-            <div className='badge-container'>
-                <span className="badge badge-modelo">
-                    {content.formato}
-                </span>
-            </div>
+            <span className="badge-container">
+                <p className={`badge ${content.formato === 'Audio' ? 'formato-audio' : (content.formato === 'Video' ? 'formato-video' : (content.formato === 'Texto' ? 'formato-texto' : undefined))}`}>{content.formato}</p>
+            </span>
         ),
     },
     {
@@ -169,8 +167,8 @@ function ContentManagement() {
                 ]);
                 // console.log('Dados de conteúdos recebidos:', conteudos);
                 setContents(conteudos);
-                setCategorias(categoriasResult);
-                setTags(tagsResult);
+                setCategorias(categoriasResult.filter(cat => cat.codStatus?.toLowerCase() === 'ativo'));
+                setTags(tagsResult.filter(tag => tag.codStatus?.toLowerCase() === 'ativo'));
                 return conteudos;
             } catch (error) {
                 console.error('Erro ao buscar conteúdos:', error);
@@ -322,6 +320,7 @@ function ContentManagement() {
                     <GenericList
                         columns={contentColumns}
                         dataFetcher={fetchData}
+                        tableName="Conteúdos"
                         pages={contentPages}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}

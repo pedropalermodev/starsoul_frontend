@@ -347,6 +347,7 @@ function AccessManagement() {
                     <GenericList
                         columns={accessColumns}
                         dataFetcher={fetchData}
+                        tableName="Usuários"
                         pages={accessPages}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}
