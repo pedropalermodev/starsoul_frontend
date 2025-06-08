@@ -78,7 +78,9 @@ function Favorites() {
                                     />
                                     <p className="favorito-item__title">{item.conteudo.titulo}</p>
                                     {item.conteudo.categorias && (
-                                        <p className="favorito-item__category">{item.conteudo.categorias[0].categoria.nome}</p>
+                                        <p className="favorito-item__category">
+                                            {item.conteudo.categorias?.[0]?.categoria?.nome ?? 'Sem categoria'}
+                                        </p>
                                     )}
                                 </Link>
                                 <div
