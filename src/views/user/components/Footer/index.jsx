@@ -16,8 +16,8 @@ function Footer() {
         <footer className='footer-app__container'>
             <div className='footer-app__content'>
                 <div className='footer-app__web'>
-                    <Link to=''>Termos de Uso</Link>
-                    <Link to=''>Políticas de Privacidade</Link>
+                    <Link to='/app/privacy-policy-and-terms-of-use#terms-of-use'>Termos de Uso</Link>
+                    <Link to='/app/privacy-policy-and-terms-of-use'>Políticas de Privacidade</Link>
                     <p>© 2025 StarSoul</p>
                 </div>
 

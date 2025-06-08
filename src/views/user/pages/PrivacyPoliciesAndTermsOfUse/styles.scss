@@ -1,0 +1,65 @@
+.privacy-policies-and-terms-of-use {
+    padding: 30px 0;
+    color: #fff;
+
+    .container-ppatou {
+        padding: 0px 35px;
+    }
+
+    .content-ppatou {
+        width: 100%;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .hero-box {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding-top: 50px;
+
+        &__title {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            & p {
+                font-size: 18px !important;
+                color: rgb(255, 255, 255);
+                font-weight: 500;
+            }
+        }
+
+        .line {
+            border: 1px solid rgb(20, 67, 155);
+            width: 100px;
+        }
+
+        .line2 {
+            border: 1px solid rgba(211, 192, 255, 0.486);
+            width: 100%;
+        }
+
+        & p {
+            font-size: 14px;
+        }
+
+        & ul {
+
+            & li {
+                list-style-type: none;
+                font-size: 14px;
+            }
+        }
+
+        & h2 {
+            color: #5a63b5;
+            font-size: 16px;
+        }
+
+        .important {
+            color: #947bd0;
+        }
+    }
+
+}

@@ -213,7 +213,9 @@ function ContentPage() {
                         </motion.button>
                     </div>
                     <div className='video-info__box'>
-                        <p className='video-info__box--categories'>{content.categorias}</p>
+                        {content.categorias?.length > 0 && (
+                            <p className='video-info__box--categories'>{content.categorias.join(', ')}</p>
+                        )}
                         {content.tags?.length > 0 && (
                             <p className='video-info__box--tags'>{content.tags.join(', ')}</p>
                         )}

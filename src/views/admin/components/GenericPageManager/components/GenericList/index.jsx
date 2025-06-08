@@ -16,7 +16,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // número de itens por página
+    const itemsPerPage = 10;
 
 
     const loadData = async () => {
@@ -26,6 +26,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
             const fetchedData = await dataFetcher();
             setData(fetchedData);
             // console.log("Dados setados no estado 'data' do GenericList:", fetchedData);
+            // console.log("Tamanho de data original após fetch:", fetchedData.length);
         } catch (err) {
             console.error('Erro ao buscar dados:', err);
             setError(err.message || 'Erro ao buscar dados.');
@@ -64,6 +65,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
             newData.sort((a, b) => a.id - b.id);
 
             setFilteredData(newData);
+            // console.log('Tamanho de filteredData após filtro:', newData.length); // Adicione esta linha
         };
 
         filterData();
@@ -241,15 +243,59 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                         ⟵
                                     </button>
 
-                                    {[...Array(totalPages)].map((_, index) => (
-                                        <button
-                                            key={index + 1}
-                                            className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </button>
-                                    ))}
+                                    {totalPages <= 5 ? (
+                                        // Exibe todos os botões se tiver até 5 páginas
+                                        [...Array(totalPages)].map((_, index) => (
+                                            <button
+                                                key={index + 1}
+                                                className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+                                                onClick={() => setCurrentPage(index + 1)}
+                                            >
+                                                {index + 1}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <button
+                                                className={`pagination-button ${currentPage === 1 ? 'active' : ''}`}
+                                                onClick={() => setCurrentPage(1)}
+                                            >
+                                                1
+                                            </button>
+                                            {currentPage > 3 && <span className="pagination-ellipsis">...</span>}
+
+                                            {currentPage > 2 && currentPage < totalPages - 1 && (
+                                                <button
+                                                    className="pagination-button active"
+                                                    onClick={() => setCurrentPage(currentPage)}
+                                                >
+                                                    {currentPage}
+                                                </button>
+                                            )}
+
+                                            {currentPage < totalPages - 2 && <span className="pagination-ellipsis">...</span>}
+                                            <button
+                                                className={`pagination-button ${currentPage === totalPages ? 'active' : ''}`}
+                                                onClick={() => setCurrentPage(totalPages)}
+                                            >
+                                                {totalPages}
+                                            </button>
+
+                                            {/* Dropdown para seleção direta */}
+                                            <select
+                                                className="pagination-select"
+                                                value={currentPage}
+                                                onChange={(e) => setCurrentPage(Number(e.target.value))}
+                                            >
+                                                {[...Array(totalPages)].map((_, index) => (
+                                                    <option key={index + 1} value={index + 1}>
+                                                        Página {index + 1}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </>
+                                    )}
+
 
                                     <button
                                         className="pagination-button"

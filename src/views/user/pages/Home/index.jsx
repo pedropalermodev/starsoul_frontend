@@ -1,6 +1,7 @@
-import { useContext, useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
+import { useHorizontalScroll } from '../../hooks/useHorizontalScroll';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
 import LoadingPage from '../../../../shared/components/LoadingPage'
@@ -9,26 +10,24 @@ import './styles.scss';
 
 import AccordionList from '../../components/Accordion';
 import cta from '../../assets/home/cta-app.png'
+import ctaMobile from '../../assets/home/cta-mobile.png'
+
 import downloadOnAppStore from '../../../../assets/shared/download-on-appleStore_versionWhite.svg';
 import downloadOnPlayStore from '../../../../assets/shared/download-on-googlePlay_versionWhite.svg';
+
 
 function Home() {
     const { userData, globalLoading } = useContext(AuthContext);
     const { contents, loading, fetchContents } = useContent();
+
+    const [currentFrase, setCurrentFrase] = useState(null);
+    const [currentFraseIndex, setCurrentFraseIndex] = useState(0);
+    const [animateClass, setAnimateClass] = useState('');
+
     const navigate = useNavigate();
+    const { scrollRef: scrollRefMed, isDragging: isDraggingMed } = useHorizontalScroll();
+    const { scrollRef: scrollRefSpo, isDragging: isDraggingSpo } = useHorizontalScroll();
 
-    const scrollRef = useRef(null);
-    const isDraggingRef = useRef(false);
-    const startX = useRef(0);
-    const scrollLeft = useRef(0);
-    const [isDragging, setIsDragging] = useState(false);
-
-    const scrollRefMed = useRef(null);
-    const scrollRefSpotify = useRef(null);
-    const isDraggingRefMed = useRef(false);
-    const isDraggingRefSpotify = useRef(false);
-    const [isDraggingMed, setIsDraggingMed] = useState(false);
-    const [isDraggingSpotify, setIsDraggingSpotify] = useState(false);
 
     if (globalLoading || loading) return <LoadingPage message="Carregando conteúdos..." />;
 
@@ -36,7 +35,7 @@ function Home() {
     const primeiroNome = nomes[0];
 
     const meditacaoManha = contents.filter(content =>
-        content.categorias?.includes('Meditação para manhã') && content.tipoConteudo !== 'Audio'
+        content.categorias?.includes('Meditação para manhã') && content.formato !== 'Audio'
     );
 
     const getYouTubeThumbnail = (url) => {
@@ -48,97 +47,8 @@ function Home() {
         }
     };
 
-
-    const handleMouseDown = (e) => {
-        isDraggingRef.current = false;
-        setIsDragging(true);
-
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'true';
-        slider.dataset.startX = e.pageX;
-        slider.dataset.scrollLeft = slider.scrollLeft;
-    };
-
-    const handleMouseMove = (e) => {
-        const slider = scrollRef.current;
-        if (slider.dataset.mouseDown !== 'true') return;
-
-        e.preventDefault();
-        isDraggingRef.current = true;
-
-        const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
-    };
-
-    const handleMouseUp = () => {
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'false';
-        setIsDragging(false);
-    };
-
-
-    // Criar handlers separados para cada lista
-
-    const handleMouseDownMed = (e) => {
-        isDraggingRefMed.current = false;
-        setIsDraggingMed(true);
-
-        const slider = scrollRefMed.current;
-        slider.dataset.mouseDown = 'true';
-        slider.dataset.startX = e.pageX;
-        slider.dataset.scrollLeft = slider.scrollLeft;
-    };
-
-    const handleMouseMoveMed = (e) => {
-        const slider = scrollRefMed.current;
-        if (slider.dataset.mouseDown !== 'true') return;
-
-        e.preventDefault();
-        isDraggingRefMed.current = true;
-
-        const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
-    };
-
-    const handleMouseUpMed = () => {
-        const slider = scrollRefMed.current;
-        slider.dataset.mouseDown = 'false';
-        setIsDraggingMed(false);
-    };
-
-    const handleMouseDownSpotify = (e) => {
-        isDraggingRefSpotify.current = false;
-        setIsDraggingSpotify(true);
-
-        const slider = scrollRefSpotify.current;
-        slider.dataset.mouseDown = 'true';
-        slider.dataset.startX = e.pageX;
-        slider.dataset.scrollLeft = slider.scrollLeft;
-    };
-
-    const handleMouseMoveSpotify = (e) => {
-        const slider = scrollRefSpotify.current;
-        if (slider.dataset.mouseDown !== 'true') return;
-
-        e.preventDefault();
-        isDraggingRefSpotify.current = true;
-
-        const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
-    };
-
-    const handleMouseUpSpotify = () => {
-        const slider = scrollRefSpotify.current;
-        slider.dataset.mouseDown = 'false';
-        setIsDraggingSpotify(false);
-    };
-
-
-    const handleOpenContent = (content) => {
-        if (isDraggingRef.current) return;
+    const handleOpenContent = useCallback((content) => {
+        if (isDraggingMed) return; // Impede a navegação se estiver arrastando
 
         if (content.formato === 'Audio') {
             window.location.href = content.url;
@@ -148,10 +58,50 @@ function Home() {
                     titulo: content.titulo,
                     videoUrl: content.url,
                     descricao: content.descricao,
-                }
+                },
             });
         }
-    };
+    }, [isDraggingMed, navigate]);
+
+    const frasesMotivacionais = React.useMemo(() => {
+        return contents.filter(content =>
+            content.tags?.includes('Frases motivacionais') && content.formato === 'Texto'
+        );
+    }, [contents]);
+
+    useEffect(() => {
+        if (frasesMotivacionais.length > 0) {
+            setCurrentFrase(frasesMotivacionais[currentFraseIndex]);
+
+            const intervalId = setInterval(() => {
+                setCurrentFraseIndex(prevIndex => {
+                    const nextIndex = (prevIndex + 1) % frasesMotivacionais.length;
+                    return nextIndex;
+                });
+            }, 5000);
+
+            return () => clearInterval(intervalId);
+        }
+    }, [frasesMotivacionais, currentFraseIndex]);
+
+    useEffect(() => {
+        if (frasesMotivacionais.length > 0) {
+            setAnimateClass('fade-out');
+
+            const timeoutId = setTimeout(() => {
+                setCurrentFrase(frasesMotivacionais[currentFraseIndex]);
+                setAnimateClass('fade-in');
+            }, 150);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [currentFraseIndex, frasesMotivacionais]);
+
+    useEffect(() => {
+        if (frasesMotivacionais.length > 0) {
+            setCurrentFrase(frasesMotivacionais[currentFraseIndex]);
+        }
+    }, [currentFraseIndex, frasesMotivacionais]);
 
     // Filtrar conteúdos do Spotify (agora como tipoConteudo: "Audio")
     const spotifyPlaylists = contents.filter(content => content.formato === 'Audio');
@@ -163,10 +113,25 @@ function Home() {
                     <p className='home-app__welcome--name'>Olá, {userData.apelido ? userData.apelido : primeiroNome}!</p>
                     <p className='home-app__welcome--text'>Veja o que preparamos para você hoje.</p>
                 </div>
-                <div className='home-app__search'>
+                {/* <div className='home-app__search'>
                     <input className='home-app__search--input' type="text" placeholder='Pesquisar...' />
                     <button className='home-app__search--button'><CiSearch /></button>
-                </div>
+                </div> */}
+            </div>
+
+            <div className='box-div'>
+                {currentFrase ? (
+                    <div
+                        key={currentFrase.id}
+                        className={`box-div--text ${animateClass}`}
+                    >
+                        <p>"{currentFrase.titulo}"</p>
+                    </div>
+                ) : (
+                    <div className='box-div--text'>
+                        <p>Carregando frases motivacionais...</p>
+                    </div>
+                )}
             </div>
 
             <div className="content-box">
@@ -174,9 +139,6 @@ function Home() {
                 <div
                     className={`home-app__contents ${isDraggingMed ? 'dragging' : ''}`}
                     ref={scrollRefMed}
-                    onMouseDown={handleMouseDownMed}
-                    onMouseMove={handleMouseMoveMed}
-                    onMouseUp={handleMouseUpMed}
                 >
                     {meditacaoManha.map(content => (
                         <div
@@ -184,7 +146,6 @@ function Home() {
                             className="content__card"
                             onClick={() => handleOpenContent(content)}
                         >
-                            {/* Assumimos que o caminhoMiniatura será usado para conteúdos não-áudio */}
                             <img
                                 src={getYouTubeThumbnail(content.url)}
                                 alt={`Capa de ${content.titulo}`}
@@ -199,16 +160,12 @@ function Home() {
                 </div>
             </div>
 
-            {/* Nova seção para playlists do Spotify (tipoConteudo: "Audio") */}
             {spotifyPlaylists.length > 0 && (
                 <div className="content-box">
                     <p>Playlists do Spotify:</p>
                     <div
-                        className={`home-app__contents ${isDraggingSpotify ? 'dragging' : ''}`}
-                        ref={scrollRefSpotify}
-                        onMouseDown={handleMouseDownSpotify}
-                        onMouseMove={handleMouseMoveSpotify}
-                        onMouseUp={handleMouseUpSpotify}
+                        className={`home-app__contents ${isDraggingSpo ? 'dragging' : ''}`}
+                        ref={scrollRefSpo}
                     >
                         {spotifyPlaylists.map(playlist => (
                             <div
@@ -244,6 +201,8 @@ function Home() {
             <div className="home-app__details">
                 <div className="home-app__details-box">
                     <img src={cta} alt="" />
+                    <img src={ctaMobile} alt="" />
+
                 </div>
 
                 <div className="home-app__details-box">

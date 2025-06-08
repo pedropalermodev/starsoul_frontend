@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Favorites from "./pages/Favorites";
 import ContentPage from "./pages/ContentPage";
 import Explore from "./pages/Explore";
+import PrivacyPoliciesAndTermsOfUse from "./pages/PrivacyPoliciesAndTermsOfUse";
 // import Songs from "./pages/Songs";
 // import SoundPage from "./pages/SoundPage";
 
@@ -23,6 +24,7 @@ function UserApp() {
                 <Route path="favorites" element={<Favorites />} />
                 <Route path="explore" element={<Explore />} />
                 <Route path="content/:id" element={<ContentPage />} />
+                <Route path="privacy-policy-and-terms-of-use" element={<PrivacyPoliciesAndTermsOfUse />} />
                 {/* <Route path="songs" element={<Songs />} /> */}
                 {/* <Route path="sound/:id" element={<SoundPage />} /> */}
 

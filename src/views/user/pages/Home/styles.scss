@@ -1,7 +1,7 @@
 .home-app__container {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
     margin: auto;
     max-width: 1250px;
 
@@ -42,34 +42,70 @@
         }
 
 
-        .home-app__search {
-            display: flex;
+        // .home-app__search {
+        //     display: flex;
 
-            &--input {
-                border: none;
-                padding: 7px;
-                width: 225px;
-                border-radius: 10px 0px 0px 10px;
+        //     &--input {
+        //         border: none;
+        //         padding: 7px;
+        //         width: 225px;
+        //         border-radius: 10px 0px 0px 10px;
+        //     }
+
+
+        //     &--button {
+        //         display: flex;
+        //         background-color: #fff;
+        //         cursor: pointer;
+        //         justify-content: center;
+        //         align-items: center;
+        //         padding: 7px;
+        //         border-radius: 0 10px 10px 0;
+        //         border: none;
+
+        //         & svg {
+        //             width: 15px;
+        //             height: 15px;
+        //         }
+        //     }
+        // }
+    }
+
+    .box-div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        border-radius: 20px;
+        padding: 30px;
+        background: linear-gradient(153deg, #0b345f 0%, #4a3e95 100%);
+
+
+        &--text {
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            position: relative;
+
+            & p {
+                color: #fff;
+                font-size: 14px;
+                text-align: center;
             }
 
+            &.fade-out {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
 
-            &--button {
-                display: flex;
-                background-color: #fff;
-                cursor: pointer;
-                justify-content: center;
-                align-items: center;
-                padding: 7px;
-                border-radius: 0 10px 10px 0;
-                border: none;
-
-                & svg {
-                    width: 15px;
-                    height: 15px;
-                }
+            &.fade-in {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     }
+
 
     .home-app__contents {
         display: flex;
@@ -109,11 +145,11 @@
         }
 
         .sound__thumbnail {
-            width: 200px; // ou 100%, se quiser preencher o card
-            height: 200px; // torna o thumbnail quadrado
-            object-fit: cover; // recorta e mantém proporção
-            border-radius: 12px; // cantos arredondados
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // sombra leve
+            width: 200px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
 
@@ -141,6 +177,14 @@
 
                 & img {
                     border-radius: 20px;
+                }
+
+                & img:first-child {
+                    display: block;
+                }
+
+                & img:last-child {
+                    display: none;
                 }
             }
 
@@ -170,6 +214,8 @@
 
 @media (max-width: 768px) {
     .home-app__container {
+        gap: 30px;
+
         .home-app__content {
 
             .home-app__search {
@@ -206,5 +252,19 @@
 }
 
 @media (max-width: 480px) {
-    .home-app__container {}
+    .home-app__container {
+        .home-app__details {
+
+            &-box:first-child {
+
+                & img:first-child {
+                    display: none;
+                }
+
+                & img:last-child {
+                    display: block;
+                }
+            }
+        }
+    }
 }

@@ -168,7 +168,7 @@ function ContentManagement() {
                 // console.log('Dados de conteúdos recebidos:', conteudos);
                 setContents(conteudos);
                 setCategorias(categoriasResult.filter(cat => cat.codStatus?.toLowerCase() === 'ativo'));
-                setTags(tagsResult.filter(tag => tag.codStatus?.toLowerCase() === 'ativo'));
+                setTags(tagsResult);
                 return conteudos;
             } catch (error) {
                 console.error('Erro ao buscar conteúdos:', error);
