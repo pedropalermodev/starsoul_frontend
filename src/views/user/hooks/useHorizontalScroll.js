@@ -23,8 +23,10 @@ export const useHorizontalScroll = () => {
         isDraggingRef.current = true;
 
         const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
+        const startX = parseInt(slider.dataset.startX, 10);
+        const scrollLeft = parseInt(slider.dataset.scrollLeft, 10);
+        const walk = (x - startX) * 2;
+        slider.scrollLeft = scrollLeft - walk;
     }, []);
 
     const handleMouseUp = useCallback(() => {
@@ -50,5 +52,5 @@ export const useHorizontalScroll = () => {
         };
     }, [handleMouseDown, handleMouseMove, handleMouseUp]);
 
-    return { scrollRef, isDragging };
+    return { scrollRef, isDragging, isDraggingRef };
 };

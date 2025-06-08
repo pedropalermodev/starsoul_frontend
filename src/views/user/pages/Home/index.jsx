@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useHorizontalScroll } from '../../hooks/useHorizontalScroll';
@@ -25,30 +25,11 @@ function Home() {
     const [animateClass, setAnimateClass] = useState('');
 
     const navigate = useNavigate();
-    const { scrollRef: scrollRefMed, isDragging: isDraggingMed } = useHorizontalScroll();
-    const { scrollRef: scrollRefSpo, isDragging: isDraggingSpo } = useHorizontalScroll();
-
-
-    if (globalLoading || loading) return <LoadingPage message="Carregando conteúdos..." />;
-
-    const nomes = userData.nome.split(' ');
-    const primeiroNome = nomes[0];
-
-    const meditacaoManha = contents.filter(content =>
-        content.categorias?.includes('Meditação para manhã') && content.formato !== 'Audio'
-    );
-
-    const getYouTubeThumbnail = (url) => {
-        try {
-            const videoId = new URL(url).searchParams.get("v");
-            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-        } catch {
-            return null;
-        }
-    };
+    const { scrollRef: scrollRefMed, isDraggingRef: isDraggingRefMed } = useHorizontalScroll();
+    const { scrollRef: scrollRefSpo, isDraggingRef: isDraggingRefSpo } = useHorizontalScroll();
 
     const handleOpenContent = useCallback((content) => {
-        if (isDraggingMed) return; // Impede a navegação se estiver arrastando
+        if (isDraggingRefMed.current) return;
 
         if (content.formato === 'Audio') {
             window.location.href = content.url;
@@ -61,13 +42,22 @@ function Home() {
                 },
             });
         }
-    }, [isDraggingMed, navigate]);
+    }, [isDraggingRefMed, navigate]);
 
     const frasesMotivacionais = React.useMemo(() => {
         return contents.filter(content =>
             content.tags?.includes('Frases motivacionais') && content.formato === 'Texto'
         );
     }, [contents]);
+
+    const meditacaoManha = contents.filter(content =>
+        content.categorias?.includes('Meditação para manhã') && content.formato !== 'Audio'
+    );
+
+    const spotifyPlaylists = useMemo(() => { // Use useMemo para evitar recalcular em cada renderização
+        return contents.filter(content => content.formato === 'Audio');
+    }, [contents])
+
 
     useEffect(() => {
         if (frasesMotivacionais.length > 0) {
@@ -103,8 +93,23 @@ function Home() {
         }
     }, [currentFraseIndex, frasesMotivacionais]);
 
-    // Filtrar conteúdos do Spotify (agora como tipoConteudo: "Audio")
-    const spotifyPlaylists = contents.filter(content => content.formato === 'Audio');
+
+    const primeiroNome = useMemo(() => {
+        return userData?.nome ? userData.nome.split(' ')[0] : 'Usuário';
+    }, [userData]);
+
+    if (globalLoading || loading || !userData) {
+        return <LoadingPage message="Carregando..." />;
+    }
+
+    const getYouTubeThumbnail = (url) => {
+        try {
+            const videoId = new URL(url).searchParams.get("v");
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        } catch {
+            return null;
+        }
+    };
 
     return (
         <main className='home-app__container'>
@@ -137,7 +142,7 @@ function Home() {
             <div className="content-box">
                 <p>Meditações para manhâ: </p>
                 <div
-                    className={`home-app__contents ${isDraggingMed ? 'dragging' : ''}`}
+                    className={`home-app__contents ${isDraggingRefMed.current ? 'dragging' : ''}`}
                     ref={scrollRefMed}
                 >
                     {meditacaoManha.map(content => (
@@ -164,7 +169,7 @@ function Home() {
                 <div className="content-box">
                     <p>Playlists do Spotify:</p>
                     <div
-                        className={`home-app__contents ${isDraggingSpo ? 'dragging' : ''}`}
+                        className={`home-app__contents ${isDraggingRefSpo.current ? 'dragging' : ''}`}
                         ref={scrollRefSpo}
                     >
                         {spotifyPlaylists.map(playlist => (
