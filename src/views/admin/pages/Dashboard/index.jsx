@@ -87,7 +87,7 @@ function Dashboard() {
         }
     }, [token, globalLoading]);
 
-    if (!globalLoading || !loading) {
+    if (globalLoading || loading) {
         return (
             <MuiBox
                 display="flex"
