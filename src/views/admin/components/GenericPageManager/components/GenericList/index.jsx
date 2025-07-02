@@ -4,6 +4,8 @@ import Box from '../../../Box';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
+import { Pagination, Typography } from '@mui/material';
+import { CircularProgress, Box as MuiBox } from '@mui/material';
 
 function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView, tableName }) {
     const [data, setData] = useState([]);
@@ -163,11 +165,28 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+    if (loading) {
+        return (
+            <MuiBox
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="70vh"
+                gap={2}
+            >
+                <CircularProgress color="inherit" size={30} />
+                <Typography variant="body" color="Primary">
+                    Carregando...
+                </Typography>
+            </MuiBox>
+        );
+    }
 
     return (
         <main>
             <Box className='generic__content'>
-                {loading && <div>Carregando dados...</div>}
+
                 {error && <div>Erro ao carregar dados: {error}</div>}
 
                 {!loading && !error && (
@@ -234,77 +253,15 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                             <div></div>
 
                             {totalPages > 1 && (
-                                <div className="pagination">
-                                    <button
-                                        className="pagination-button"
-                                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                        disabled={currentPage === 1}
-                                    >
-                                        ⟵
-                                    </button>
+                                <Pagination
+                                    count={totalPages}
+                                    page={currentPage}
+                                    onChange={(event, value) => setCurrentPage(value)}
+                                    color="primary"
+                                    variant="outlined"
+                                    shape="rounded"
+                                />
 
-                                    {totalPages <= 5 ? (
-                                        // Exibe todos os botões se tiver até 5 páginas
-                                        [...Array(totalPages)].map((_, index) => (
-                                            <button
-                                                key={index + 1}
-                                                className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                                                onClick={() => setCurrentPage(index + 1)}
-                                            >
-                                                {index + 1}
-                                            </button>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <button
-                                                className={`pagination-button ${currentPage === 1 ? 'active' : ''}`}
-                                                onClick={() => setCurrentPage(1)}
-                                            >
-                                                1
-                                            </button>
-                                            {currentPage > 3 && <span className="pagination-ellipsis">...</span>}
-
-                                            {currentPage > 2 && currentPage < totalPages - 1 && (
-                                                <button
-                                                    className="pagination-button active"
-                                                    onClick={() => setCurrentPage(currentPage)}
-                                                >
-                                                    {currentPage}
-                                                </button>
-                                            )}
-
-                                            {currentPage < totalPages - 2 && <span className="pagination-ellipsis">...</span>}
-                                            <button
-                                                className={`pagination-button ${currentPage === totalPages ? 'active' : ''}`}
-                                                onClick={() => setCurrentPage(totalPages)}
-                                            >
-                                                {totalPages}
-                                            </button>
-
-                                            {/* Dropdown para seleção direta */}
-                                            <select
-                                                className="pagination-select"
-                                                value={currentPage}
-                                                onChange={(e) => setCurrentPage(Number(e.target.value))}
-                                            >
-                                                {[...Array(totalPages)].map((_, index) => (
-                                                    <option key={index + 1} value={index + 1}>
-                                                        Página {index + 1}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </>
-                                    )}
-
-
-                                    <button
-                                        className="pagination-button"
-                                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        ⟶
-                                    </button>
-                                </div>
                             )}
 
                             <button className="export-button" onClick={generatePDF}>

@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, } from 'recharts';
 import useFeedbacksChartData from '../../hooks/useFeedbackChartData';
 import useUsersChartData from '../../hooks/useUsersChartData';
+import { Box as MuiBox, CircularProgress, Typography } from '@mui/material';
 
 function Dashboard() {
     const { userData, globalLoading, token } = useContext(AuthContext);
@@ -86,66 +87,84 @@ function Dashboard() {
         }
     }, [token, globalLoading]);
 
-    if (globalLoading || loading) return <p className="dashboard__loading">Carregando dashboard...</p>;
-    if (!userData) return <p className="dashboard__error">Usuário não encontrado</p>;
+    if (!globalLoading || !loading) {
+        return (
+            <MuiBox
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="80vh"
+                gap={2}
+            >
+                <CircularProgress color="inherit" size={30} />
+                <Typography variant="body" color="Primary">
+                    Carregando...
+                </Typography>
+            </MuiBox>
+        );
+    }
+        if (!userData) return <p className="dashboard__error">Usuário não encontrado</p>;
 
-    return (
-        <main className="dashboard">
-            <section className="dashboard__charts">
-                <h3 className="dashboard__section-title">Atividades da semana</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                    <LineChart
-                        data={mergedChartData}
-                        margin={{ top: 10, right: 20, bottom: 5, left: 0 }}
-                        className="dashboard__line-chart"
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="feedbacks" stroke="#8884d8" strokeWidth={2} />
-                        <Line type="monotone" dataKey="users" stroke="#5d4386" strokeWidth={2} />
-                    </LineChart>
-                </ResponsiveContainer>
-            </section>
+        return (
+            <main className="dashboard">
+                <section className="dashboard__charts">
+                    <h3 className="dashboard__section-title">Atividades da semana</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart
+                            data={mergedChartData}
+                            margin={{ top: 10, right: 20, bottom: 5, left: 0 }}
+                            className="dashboard__line-chart"
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="feedbacks" stroke="#8884d8" strokeWidth={2} />
+                            <Line type="monotone" dataKey="users" stroke="#5d4386" strokeWidth={2} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </section>
 
-            <section className="dashboard__lists">
-                <div className="dashboard__list">
-                    <h3 className="dashboard__section-title">Últimos Feedbacks</h3>
-                    <ul className="dashboard__list-items">
-                        {recentFeedbacks.map((fb) => (
-                            <li key={fb.id} className="dashboard__list-item">
-                                <strong className="dashboard__list-item-name">{fb.nome}</strong>{' '}
-                                <span className="dashboard__list-item-email">({fb.email})</span> -{' '}
-                                <span className="dashboard__list-item-subject">{fb.assunto}</span>
-                                <br />
-                                <small className="dashboard__list-item-date">
-                                    {format(new Date(fb.dataEnvio), 'dd/MM/yyyy HH:mm')}
-                                </small>
-                                <p className="dashboard__list-item-message">{fb.mensagem}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <section className="dashboard__lists">
+                    <div className="dashboard__list">
+                        <h3 className="dashboard__section-title">Últimos Feedbacks</h3>
+                        <ul className="dashboard__list-items">
+                            {recentFeedbacks.map((fb) => (
+                                <li key={fb.id} className="dashboard__list-item">
+                                    <strong className="dashboard__list-item-name">{fb.nome}</strong>{' '}
+                                    <span className="dashboard__list-item-email">({fb.email})</span> -{' '}
+                                    <span className="dashboard__list-item-subject">{fb.assunto}</span>
+                                    <br />
+                                    <small className="dashboard__list-item-date">
+                                        {format(new Date(fb.dataEnvio), 'dd/MM/yyyy HH:mm')}
+                                    </small>
+                                    <p className="dashboard__list-item-message">{fb.mensagem}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                <div className="dashboard__list">
-                    <h3 className="dashboard__section-title">Últimos Conteúdos Publicados</h3>
-                    <ul className="dashboard__list-items">
-                        {recentContents.map((content) => (
-                            <li key={content.id} className="dashboard__list-item">
-                                <strong className="dashboard__list-item-title">{content.titulo}</strong>
-                                <br />
-                                <small className="dashboard__list-item-date">
-                                    {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')}
-                                </small>
-                                <p className="dashboard__list-item-description">{content.descricao}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </section>
-        </main>
-    );
-}
+                    <div className="dashboard__list">
+                        <h3 className="dashboard__section-title">Últimos Conteúdos Publicados</h3>
+                        <ul className="dashboard__list-items">
+                            {recentContents.map((content) => (
+                                <li key={content.id} className="dashboard__list-item">
+                                    <strong className="dashboard__list-item-title">{content.titulo}</strong>
 
-export default Dashboard;
+                                    <strong className="dashboard__list-item-subject"> ({content.formato})</strong>
+                                    <br />
+                                    <small className="dashboard__list-item-date">
+                                        {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')}
+                                    </small>
+                                    {/* <p className="dashboard__list-item-description">{content.descricao}</p> */}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        );
+    }
+
+    export default Dashboard;

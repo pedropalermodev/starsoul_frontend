@@ -21,6 +21,7 @@ function GenericPageManager({ pathMap, views, currentViewKey }) {
             </div>
 
             <div>
+                
                 {currentView}
             </div>
         </div>
