@@ -104,67 +104,72 @@ function Dashboard() {
             </MuiBox>
         );
     }
-        if (!userData) return <p className="dashboard__error">Usuário não encontrado</p>;
+    if (!userData) return <p className="dashboard__error">Usuário não encontrado</p>;
 
-        return (
-            <main className="dashboard">
-                <section className="dashboard__charts">
-                    <h3 className="dashboard__section-title">Atividades da semana</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart
-                            data={mergedChartData}
-                            margin={{ top: 10, right: 20, bottom: 5, left: 0 }}
-                            className="dashboard__line-chart"
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="feedbacks" stroke="#8884d8" strokeWidth={2} />
-                            <Line type="monotone" dataKey="users" stroke="#5d4386" strokeWidth={2} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </section>
+    return (
+        <main className="dashboard">
+            <section className="dashboard__charts">
+                <h3 className="dashboard__section-title">Atividades da semana</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart
+                        data={mergedChartData}
+                        margin={{ top: 10, right: 20, bottom: 5, left: 0 }}
+                        className="dashboard__line-chart"
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis
+                            // Define o domínio para garantir que os valores sejam inteiros
+                            // O "dataMin" e "dataMax" pegam o mínimo e o máximo dos seus dados
+                            domain={['dataMin', 'dataMax']}
+                            allowDecimals={false} // Isso tenta evitar números decimais nos ticks
+                        />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="feedbacks" stroke="#8884d8" strokeWidth={2} />
+                        <Line type="monotone" dataKey="users" stroke="#5d4386" strokeWidth={2} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </section>
 
-                <section className="dashboard__lists">
-                    <div className="dashboard__list">
-                        <h3 className="dashboard__section-title">Últimos Feedbacks</h3>
-                        <ul className="dashboard__list-items">
-                            {recentFeedbacks.map((fb) => (
-                                <li key={fb.id} className="dashboard__list-item">
-                                    <strong className="dashboard__list-item-name">{fb.nome}</strong>{' '}
-                                    <span className="dashboard__list-item-email">({fb.email})</span> -{' '}
-                                    <span className="dashboard__list-item-subject">{fb.assunto}</span>
-                                    <br />
-                                    <small className="dashboard__list-item-date">
-                                        {format(new Date(fb.dataEnvio), 'dd/MM/yyyy HH:mm')}
-                                    </small>
-                                    <p className="dashboard__list-item-message">{fb.mensagem}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+            <section className="dashboard__lists">
+                <div className="dashboard__list">
+                    <h3 className="dashboard__section-title">Últimos Feedbacks</h3>
+                    <ul className="dashboard__list-items">
+                        {recentFeedbacks.map((fb) => (
+                            <li key={fb.id} className="dashboard__list-item">
+                                <strong className="dashboard__list-item-name">{fb.nome}</strong>{' '}
+                                <span className="dashboard__list-item-email">({fb.email})</span> -{' '}
+                                <span className="dashboard__list-item-subject">{fb.assunto}</span>
+                                <br />
+                                <small className="dashboard__list-item-date">
+                                    {format(new Date(fb.dataEnvio), 'dd/MM/yyyy HH:mm')}
+                                </small>
+                                <p className="dashboard__list-item-message">{fb.mensagem}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                    <div className="dashboard__list">
-                        <h3 className="dashboard__section-title">Últimos Conteúdos Publicados</h3>
-                        <ul className="dashboard__list-items">
-                            {recentContents.map((content) => (
-                                <li key={content.id} className="dashboard__list-item">
-                                    <strong className="dashboard__list-item-title">{content.titulo}</strong>
+                <div className="dashboard__list">
+                    <h3 className="dashboard__section-title">Últimos Conteúdos Publicados</h3>
+                    <ul className="dashboard__list-items">
+                        {recentContents.map((content) => (
+                            <li key={content.id} className="dashboard__list-item">
+                                <strong className="dashboard__list-item-title">{content.titulo}</strong>
 
-                                    <strong className="dashboard__list-item-subject"> ({content.formato})</strong>
-                                    <br />
-                                    <small className="dashboard__list-item-date">
-                                        {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')}
-                                    </small>
-                                    {/* <p className="dashboard__list-item-description">{content.descricao}</p> */}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </section>
-            </main>
-        );
-    }
+                                <strong className="dashboard__list-item-subject"> ({content.formato})</strong>
+                                <br />
+                                <small className="dashboard__list-item-date">
+                                    {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')}
+                                </small>
+                                {/* <p className="dashboard__list-item-description">{content.descricao}</p> */}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
+        </main>
+    );
+}
 
-    export default Dashboard;
+export default Dashboard;

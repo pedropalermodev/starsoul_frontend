@@ -8,7 +8,7 @@ function GenericPageManager({ pathMap, views, currentViewKey }) {
 
     return (
         <div className='generic-page__container'>
-            <div>
+            {/* <div>
                 <div className='path-map'>
                     <i className="bi bi-house-fill" />
                     {pathSegments.map((segment, index) => (
@@ -18,7 +18,7 @@ function GenericPageManager({ pathMap, views, currentViewKey }) {
                         </React.Fragment>
                     ))}
                 </div>
-            </div>
+            </div> */}
 
             <div>
                 

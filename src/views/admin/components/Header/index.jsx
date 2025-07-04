@@ -16,6 +16,24 @@ function Header() {
     const nomes = userData.nome.split(' ');
     const nomeSequente = `${nomes[0]}${nomes[1] ? ' ' + nomes[1] : ''}`;
 
+    const messages = [
+        `Bem-vindo, <span>${nomeSequente}</span>! Seu painel está pronto.`,
+        'Confira os novos registros adicionados hoje.',
+        'Precisa editar algum item? Use a função de busca!',
+        'Lembre-se de salvar suas alterações antes de sair.',
+        'Seus dados estão sempre seguros e acessíveis.',
+    ];
+
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentMessageIndex(prevIndex => (prevIndex + 1) % messages.length);
+        }, 8000);
+
+        return () => clearInterval(intervalId);
+    }, [messages.length]);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,7 +50,9 @@ function Header() {
     return (
         <header className="headeradmin__container">
             <div className="headeradmin__left">
-                <p>Bem-vindo de volta, <span>{nomeSequente}</span></p>
+                <p className="headeradmin__rotating-message"
+                    dangerouslySetInnerHTML={{ __html: messages[currentMessageIndex] }}>
+                </p>
             </div>
             <div className="headeradmin__right" ref={dropdownRef}>
                 <button className="headeradmin__icon">
@@ -46,7 +66,7 @@ function Header() {
                     <img src={profilePicture} alt="User" />
                 </div>
 
-                {isOpen  && (
+                {isOpen && (
                     <div className="dropdown-menu">
                         <div className='user-info'>
                             <p className="name">{userData.nome}</p>

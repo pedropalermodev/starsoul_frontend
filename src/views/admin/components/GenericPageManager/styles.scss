@@ -2,7 +2,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 18px;
     color: #666666;
     background-color: #63789e44;
     width: max-content;
@@ -11,6 +10,6 @@
     border-radius: 20px;
 
     &>i {
-        font-size: 18px;
+        font-size: 14px;
     }
 }

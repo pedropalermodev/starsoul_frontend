@@ -12,13 +12,36 @@
     box-shadow: -4px 10px 29px -15px rgba(0, 0, 0, 0.75);
 }
 
-.headeradmin__left p {
+.headeradmin__rotating-message {
     font-size: 1rem;
     color: #333;
+    font-weight: 500;
 
     span {
         font-weight: 600;
         color: #4840bf;
+    }
+
+    animation: fadeInOutSlide 8s infinite forwards;
+}
+
+@keyframes fadeInOutSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    5% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    95%, 100% {
+        opacity: 0;
+        transform: translateY(-100%);
     }
 }
 

@@ -172,7 +172,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                height="70vh"
+                height="80vh"
                 gap={2}
             >
                 <CircularProgress color="inherit" size={30} />
@@ -185,32 +185,31 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
 
     return (
         <main>
-            <Box className='generic__content'>
+            <div className='generic__bar'>
+                <input
+                    className='generic__bar--search'
+                    type="text"
+                    placeholder='Pesquisar...'
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {pages && pages.map(page => (
+                    <button
+                        className={page.className}
+                        key={page.label || page.view}
+                        onClick={() => setCurrentView(page.view)}
+                    >
+                        {page.label}
+                        {page.iconClass && <i className={page.iconClass}></i>}
+                    </button>
+                ))}
+            </div>
 
+            <Box className='generic__content'>
                 {error && <div>Erro ao carregar dados: {error}</div>}
 
                 {!loading && !error && (
                     <>
-                        <div className='generic__bar'>
-                            <input
-                                className='generic__bar--search'
-                                type="text"
-                                placeholder='Pesquisar...'
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            {pages && pages.map(page => (
-                                <button
-                                    className={page.className}
-                                    key={page.label || page.view}
-                                    onClick={() => setCurrentView(page.view)}
-                                >
-                                    {page.label}
-                                    {page.iconClass && <i className={page.iconClass}></i>}
-                                </button>
-                            ))}
-                        </div>
-
                         <table className='generic__table'>
                             <thead className='generic__thead'>
                                 <tr>
@@ -219,6 +218,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                     ))}
                                 </tr>
                             </thead>
+                            
                             <tbody className='gerenic__tbody'>
                                 {/* {console.log('filteredData:', filteredData)} */}
                                 {Array.isArray(currentItems) && currentItems.length > 0 ? (

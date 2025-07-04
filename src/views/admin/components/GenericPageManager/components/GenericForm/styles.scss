@@ -161,7 +161,6 @@
 }
 
 .generic-form__field {
-    // Se já tiver outros estilos, mantenha-os
 
     .generic-form__input[multiple] {
         padding: 8px;
@@ -169,29 +168,21 @@
         border-radius: 4px;
         background-color: #f9f9f9;
         appearance: none;
-        /* Remove a aparência padrão do select */
         -webkit-appearance: none;
         -moz-appearance: none;
         background-image: none !important;
-        /* Remove a seta padrão */
         min-height: 40px;
-        /* Ajuste a altura conforme necessário */
         overflow-y: auto;
-        /* Adiciona scroll se muitas opções forem selecionadas */
 
-        /* Estilos para as opções selecionadas (chips) */
         option:checked {
             background-color: #007bff;
-            /* Cor de fundo do chip */
             color: white;
-            /* Cor do texto do chip */
             padding: 4px 8px;
             border-radius: 4px;
             display: inline-block;
             margin-right: 4px;
         }
 
-        /* Esconde a opção padrão "Selecione uma opção" após a primeira seleção */
         option[value=""]:not(:first-child) {
             display: none;
         }

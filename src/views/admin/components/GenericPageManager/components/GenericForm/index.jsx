@@ -11,7 +11,6 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
 
     useEffect(() => {
         const initialValues = {};
-        // console.log('initialData no GenericForm:', initialData);
         fields.forEach(field => {
             if (field.name === 'codStatus') {
                 initialValues[field.name] = initialData ? initialData[field.name] : 'Ativo';
@@ -50,7 +49,6 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
         const validationErrors = {};
         let isValid = true;
 
-        // Converte as categorias e tags para números antes de enviar
         const convertedFormData = { ...formData };
 
         if (Array.isArray(convertedFormData.categoriaIds)) {
