@@ -83,7 +83,7 @@ function Home() {
                     <div className='home__container-feature-box'>
                         <img src={Test} alt="" />
                         <p className='home__container-feature-box--p'>Descubra seu caminho para a paz interior</p>
-                        <h1 className='home__container-feature-box--h1'>Meditação, Yoga, Retiros e Programs gratuitos para transformar sua vida</h1>
+                        <h1 className='home__container-feature-box--h1'>Meditação, Yoga, Retiros e Programas gratuitos para transformar sua vida</h1>
                     </div>
                     <div className='home__container-feature-triple'>
                         <div className="home__container-feature-triple-child">
