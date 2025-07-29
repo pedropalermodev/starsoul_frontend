@@ -87,6 +87,15 @@ function Dashboard() {
         }
     }, [token, globalLoading]);
 
+    const getYouTubeThumbnail = (url) => {
+        try {
+            const videoId = new URL(url).searchParams.get("v");
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        } catch {
+            return null;
+        }
+    };
+
     if (globalLoading || loading) {
         return (
             <MuiBox
@@ -155,14 +164,33 @@ function Dashboard() {
                     <ul className="dashboard__list-items">
                         {recentContents.map((content) => (
                             <li key={content.id} className="dashboard__list-item">
-                                <strong className="dashboard__list-item-title">{content.titulo}</strong>
+                                 {content.url && content.url.startsWith('https://www.') ? (
+                                    <div className='box-thumbnail'>
+                                    <div className="box1">
+                                        <img
+                                        src={getYouTubeThumbnail(content.url)}
+                                        alt={`Capa de ${content.titulo}`}
+                                        className='thumbnail_dashboard'
+                                        draggable={false}
+                                        />
+                                    </div>
+                                    <div className='box2'>
+                                        <strong className="dashboard__list-item-title">{content.titulo} </strong>
+                                        <small className="dashboard__list-item-date">
+                                            {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')} 
+                                        </small>
+                                        </div>
+                                    </div>
 
-                                <strong className="dashboard__list-item-subject"> ({content.formato})</strong>
-                                <br />
-                                <small className="dashboard__list-item-date">
-                                    {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')}
-                                </small>
-                                {/* <p className="dashboard__list-item-description">{content.descricao}</p> */}
+                                 ) : (
+                                    <>
+                                    <strong className="dashboard__list-item-title">{content.titulo}</strong>
+                                    <br />
+                                    <small className="dashboard__list-item-date">
+                                        {format(new Date(content.dataPublicacao), 'dd/MM/yyyy')} | Formato: {content.formato}
+                                    </small>
+                                    </>
+                                 )}
                             </li>
                         ))}
                     </ul>

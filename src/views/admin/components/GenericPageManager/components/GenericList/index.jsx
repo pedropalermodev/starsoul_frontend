@@ -18,7 +18,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 15;
 
 
     const loadData = async () => {
@@ -257,9 +257,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                     count={totalPages}
                                     page={currentPage}
                                     onChange={(event, value) => setCurrentPage(value)}
-                                    color="primary"
-                                    variant="outlined"
-                                    shape="rounded"
+
                                 />
 
                             )}

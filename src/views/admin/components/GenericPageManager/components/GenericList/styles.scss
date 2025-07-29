@@ -12,7 +12,7 @@
 
     &--search {
         padding: 12px 15px;
-        border-radius: 10px;
+        border-radius: 20px;
         border: 1px solid #ddd;
         width: 100%;
         font-size: 1rem;
@@ -62,13 +62,13 @@
 
 .generic__table {
     width: 100%;
-    // border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .generic__thead {
     &--th {
-        border: 1px solid #e0e0e0;
-        border-radius: 15px;
+        // border: 1px solid #e0e0e062;
+        // border-radius: 15px;
         text-align: left;
         font-weight: 500;
         padding: 10px;
@@ -80,7 +80,7 @@
         display: table-row;
 
         &:nth-child(odd) {
-            background-color: #3655923b;
+            background-color: #9fafcf3b;
         }
 
         &--td {
@@ -145,6 +145,7 @@
 .box__items {
     display: flex;
     justify-content: space-between;
+    padding: 10px 0 0 0;
 
     .pagination {
         text-align: center;

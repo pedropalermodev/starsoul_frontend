@@ -96,3 +96,18 @@
     margin: 2px 0;
     font-size: 14px;
 }
+
+.thumbnail_dashboard {
+    width: 135px;
+    height: 76px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-right: 10px;
+
+}
+
+.box-thumbnail{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

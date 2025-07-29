@@ -55,9 +55,6 @@ function Header() {
                 </p>
             </div>
             <div className="headeradmin__right" ref={dropdownRef}>
-                <button className="headeradmin__icon">
-                    <i className="bi bi-bell-fill"></i>
-                </button>
 
                 <div
                     className="headeradmin__avatar"
