@@ -23,6 +23,8 @@ function Home() {
     const [currentFrase, setCurrentFrase] = useState(null);
     const [currentFraseIndex, setCurrentFraseIndex] = useState(0);
     const [animateClass, setAnimateClass] = useState('');
+    const [conteudosFiltrados, setConteudosFiltrados] = useState([]);
+    const [categoriaDoDia, setCategoriaDoDia] = useState('');
 
     const navigate = useNavigate();
     const { scrollRef: scrollRefMed, isDraggingRef: isDraggingRefMed } = useHorizontalScroll();
@@ -50,11 +52,29 @@ function Home() {
         );
     }, [contents]);
 
-    const meditacaoManha = contents.filter(content =>
-        content.categorias?.includes('Meditação para manhã') && content.formato !== 'Audio'
-    );
+    useEffect(() => {
+        const horaAtual = new Date().getHours();
+        let categoria = '';
 
-    const spotifyPlaylists = useMemo(() => { // Use useMemo para evitar recalcular em cada renderização
+        if (horaAtual >= 6 && horaAtual < 12) {
+            categoria = 'Meditação para manhã';
+        } else if (horaAtual >= 12 && horaAtual < 18) {
+            categoria = 'Meditação para tarde';
+        } else {
+            categoria = 'Meditação para noite';
+        }
+
+        setCategoriaDoDia(categoria);
+
+        const conteudosFiltrados = contents.filter(content =>
+            content.categorias?.includes(categoriaDoDia) && content.formato !== 'Audio'
+        );
+
+        setConteudosFiltrados(conteudosFiltrados); 
+    }, [contents]);
+
+
+    const spotifyPlaylists = useMemo(() => {
         return contents.filter(content => content.formato === 'Audio');
     }, [contents])
 
@@ -140,12 +160,12 @@ function Home() {
             </div>
 
             <div className="content-box">
-                <p>Meditações para manhâ: </p>
+                <p>{categoriaDoDia}: </p>
                 <div
                     className={`home-app__contents ${isDraggingRefMed.current ? 'dragging' : ''}`}
                     ref={scrollRefMed}
                 >
-                    {meditacaoManha.map(content => (
+                    {conteudosFiltrados.map(content => (
                         <div
                             key={content.id}
                             className="content__card"
