@@ -1,7 +1,6 @@
 import React, { useContext, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
-import { useHorizontalScroll } from '../../hooks/useHorizontalScroll';
 import { useContent } from '../../../../shared/hooks/useContent';
 import { CiSearch } from "react-icons/ci";
 import LoadingPage from '../../../../shared/components/LoadingPage'
@@ -23,16 +22,11 @@ function Home() {
     const [currentFrase, setCurrentFrase] = useState(null);
     const [currentFraseIndex, setCurrentFraseIndex] = useState(0);
     const [animateClass, setAnimateClass] = useState('');
-    const [conteudosFiltrados, setConteudosFiltrados] = useState([]);
     const [categoriaDoDia, setCategoriaDoDia] = useState('');
 
     const navigate = useNavigate();
-    const { scrollRef: scrollRefMed, isDraggingRef: isDraggingRefMed } = useHorizontalScroll();
-    const { scrollRef: scrollRefSpo, isDraggingRef: isDraggingRefSpo } = useHorizontalScroll();
 
     const handleOpenContent = useCallback((content) => {
-        if (isDraggingRefMed.current) return;
-
         if (content.formato === 'Audio') {
             window.location.href = content.url;
         } else {
@@ -44,7 +38,7 @@ function Home() {
                 },
             });
         }
-    }, [isDraggingRefMed, navigate]);
+    }, [navigate]);
 
     const frasesMotivacionais = React.useMemo(() => {
         return contents.filter(content =>
@@ -52,26 +46,28 @@ function Home() {
         );
     }, [contents]);
 
+    // Define a categoria do dia com base no horário
     useEffect(() => {
         const horaAtual = new Date().getHours();
         let categoria = '';
 
         if (horaAtual >= 6 && horaAtual < 12) {
-            categoria = 'Meditação para manhã';
+            categoria = 'Meditação para Manhã';
         } else if (horaAtual >= 12 && horaAtual < 18) {
-            categoria = 'Meditação para tarde';
+            categoria = 'Meditação para Tarde';
         } else {
-            categoria = 'Meditação para noite';
+            categoria = 'Meditação para Noite';
         }
 
         setCategoriaDoDia(categoria);
+    }, []);
 
-        const conteudosFiltrados = contents.filter(content =>
+    const conteudosFiltrados = useMemo(() => {
+        return contents.filter(content =>
             content.categorias?.includes(categoriaDoDia) && content.formato !== 'Audio'
         );
+    }, [contents, categoriaDoDia]);
 
-        setConteudosFiltrados(conteudosFiltrados); 
-    }, [contents]);
 
 
     const spotifyPlaylists = useMemo(() => {
@@ -161,14 +157,11 @@ function Home() {
 
             <div className="content-box">
                 <p>{categoriaDoDia}: </p>
-                <div
-                    className={`home-app__contents ${isDraggingRefMed.current ? 'dragging' : ''}`}
-                    ref={scrollRefMed}
-                >
+                <div className="scroll-container home-app__contents">
                     {conteudosFiltrados.map(content => (
                         <div
                             key={content.id}
-                            className="content__card"
+                            className="content__card scroll-item"
                             onClick={() => handleOpenContent(content)}
                         >
                             <img
@@ -188,14 +181,11 @@ function Home() {
             {spotifyPlaylists.length > 0 && (
                 <div className="content-box">
                     <p>Playlists do Spotify:</p>
-                    <div
-                        className={`home-app__contents ${isDraggingRefSpo.current ? 'dragging' : ''}`}
-                        ref={scrollRefSpo}
-                    >
+                    <div className="scroll-container home-app__contents">
                         {spotifyPlaylists.map(playlist => (
                             <div
                                 key={playlist.id}
-                                className="sound__card"
+                                className="sound__card scroll-item"
                                 onClick={() => handleOpenContent(playlist)}
                             >
                                 {/* Para áudios, o caminhoMiniatura pode ser a capa da playlist/álbum */}
