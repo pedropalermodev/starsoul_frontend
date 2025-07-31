@@ -3,64 +3,13 @@ import React, { useState, useEffect, useContext, useRef, useCallback } from 'rea
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { useContent } from '../../../../shared/hooks/useContent';
+import LoadingPage from '../../../../shared/components/LoadingPage'
 
-const useHorizontalScroll = () => {
-    const [isDragging, setIsDragging] = useState(false);
-    const scrollRef = useRef(null);
-    const isDraggingRef = useRef(false);
-
-    const handleMouseDown = useCallback((e) => {
-        isDraggingRef.current = false;
-        setIsDragging(true);
-
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'true';
-        slider.dataset.startX = e.pageX;
-        slider.dataset.scrollLeft = slider.scrollLeft;
-    }, []);
-
-    const handleMouseMove = useCallback((e) => {
-        const slider = scrollRef.current;
-        if (slider.dataset.mouseDown !== 'true') return;
-
-        e.preventDefault();
-        isDraggingRef.current = true;
-
-        const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
-    }, []);
-
-    const handleMouseUp = useCallback(() => {
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'false';
-        setIsDragging(false);
-    }, []);
-
-    useEffect(() => {
-        const slider = scrollRef.current;
-        if (!slider) return;
-
-        slider.addEventListener('mousedown', handleMouseDown);
-        slider.addEventListener('mousemove', handleMouseMove);
-        slider.addEventListener('mouseup', handleMouseUp);
-        slider.addEventListener('mouseleave', handleMouseUp);
-
-        return () => {
-            slider.removeEventListener('mousedown', handleMouseDown);
-            slider.removeEventListener('mousemove', handleMouseMove);
-            slider.removeEventListener('mouseup', handleMouseUp);
-            slider.removeEventListener('mouseleave', handleMouseUp);
-        };
-    }, [handleMouseDown, handleMouseMove, handleMouseUp]);
-
-    return { scrollRef, isDragging };
-};
 
 function Explore() {
     const [mensagem, setMensagem] = useState('');
     const { contents, loading, fetchContents } = useContent();
-    const { userData } = useContext(AuthContext);
+    const { userData, globalLoading } = useContext(AuthContext);
 
     const [currentFrase, setCurrentFrase] = useState(null);
     const [currentFraseIndex, setCurrentFraseIndex] = useState(0);
@@ -69,14 +18,8 @@ function Explore() {
     const primeiroNome = userData?.nome?.split(' ')[0] || 'Visitante';
 
     const navigate = useNavigate();
-    const { scrollRef: scrollRefMed, isDragging: isDraggingMed } = useHorizontalScroll();
-    const { scrollRef: scrollRefMed1, isDragging: isDraggingMed1 } = useHorizontalScroll();
-    const { scrollRef: scrollRefMed2, isDragging: isDraggingMed2 } = useHorizontalScroll();
-
 
     const handleOpenContent = useCallback((content) => {
-        if (isDraggingMed) return; // Impede a navegação se estiver arrastando
-
         if (content.formato === 'Audio') {
             window.location.href = content.url;
         } else {
@@ -88,7 +31,7 @@ function Explore() {
                 },
             });
         }
-    }, [isDraggingMed, navigate]);
+    }, [navigate]);
 
     const frasesMotivacionais = React.useMemo(() => {
         return contents.filter(content =>
@@ -155,6 +98,9 @@ function Explore() {
     );
     const spotifyPlaylists = contents.filter(content => content.formato === 'Audio');
 
+    if (globalLoading || loading || !userData) {
+        return <LoadingPage />;
+    }
 
     const getYouTubeThumbnail = (url) => {
         try {
@@ -201,10 +147,7 @@ function Explore() {
 
                 <div className='content-box'>
                     <p>Em destaque: </p>
-                    <div
-                        className={`explore-app__contents-box ${isDraggingMed ? 'dragging' : ''}`}
-                        ref={scrollRefMed}
-                    >
+                    <div className='explore-app__contents-box'>
                         {destaque.map(content => (
                             <div
                                 key={content.id}
@@ -227,10 +170,7 @@ function Explore() {
 
                 <div className='content-box'>
                     <p>Meditações para aliviar o stress do dia-a-dia: </p>
-                    <div
-                        className={`explore-app__contents-box ${isDraggingMed1 ? 'dragging' : ''}`}
-                        ref={scrollRefMed1}
-                    >
+                    <div className='explore-app__contents-box'>
                         {meditacaoAliviarStress.map(content => (
                             <div
                                 key={content.id}
@@ -253,10 +193,7 @@ function Explore() {
 
                 <div className='content-box'>
                     <p>Meditações e playlists relaxantes: </p>
-                    <div
-                        className={`explore-app__contents-box ${isDraggingMed2 ? 'dragging' : ''}`}
-                        ref={scrollRefMed2}
-                    >
+                    <div className='explore-app__contents-box'>
                         {spotifyPlaylists.map(playlist => (
                             <div
                                 key={playlist.id}

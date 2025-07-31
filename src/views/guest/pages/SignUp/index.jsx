@@ -8,6 +8,7 @@ import '../SignIn/styles.scss'
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
 import SubmitButton from '../../components/SubmitButton';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 function SignUp() {
     const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
     const isFormValid = formData.name.trim() !== '' && formData.email.trim() !== '' && formData.password.trim() !== '' && formData.confirmPassword.trim() !== '';
     const [loading, setLoading] = useState(false);
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -94,7 +96,13 @@ function SignUp() {
             });
             setFormData({ name: '', email: '', password: '', confirmPassword: '' });
             setErrors({});
-            navigate('/sign-in');
+
+            setShowSuccessAnimation(true);
+
+            // Aguarda 2 segundos antes de navegar
+            setTimeout(() => {
+                navigate('/sign-in');
+            }, 4500);
 
         } catch (error) {
             if (error.response && error.response.status === 409) {
@@ -114,7 +122,14 @@ function SignUp() {
                     <img src={starsoulBrandmark} />
                     <img src={starsoulLettermark} />
                 </div>
-                <form onSubmit={handleSubmit} className='sign__form'>
+                {showSuccessAnimation ? (
+                    <DotLottieReact
+                    src="https://lottie.host/3d8cae56-38ad-4310-8970-03046fb98bf1/hGLXeSV4aH.lottie"
+                    style={{width: 850 ,height: 'auto'}}
+                    loop
+                    autoplay
+                    />
+                ) : (<form onSubmit={handleSubmit} className='sign__form'>
                     <div className='sign__form-content'>
                         <label className='sign__form-content-label'>Nome</label>
                         <input
@@ -210,6 +225,7 @@ function SignUp() {
                         Cadastrar
                     </SubmitButton>
                 </form>
+                )}
                 <div className='sign__link'>
                     <div className='divider'><span className='line' /> Já possui uma conta StarSoul? <span className='line' /></div>
                     <Link to='/sign-in' className='sign__link-button-sign'>Entre com sua conta</Link>

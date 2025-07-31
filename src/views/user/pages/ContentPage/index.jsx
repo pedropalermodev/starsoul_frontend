@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { listarFavoritos, favoritarConteudo, desfavoritarConteudo, registrarAcesso } from "../../../../api/historico.api";
 import { useContent } from '../../../../shared/hooks/useContent';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
-import LoadingContent from '../../components/LoadingContent';
+import LoadingPage from '../../../../shared/components/LoadingPage'
 import ErrorFoundPage from '../../../../shared/components/ErrorFoundPage';
 import { motion, AnimatePresence } from "framer-motion";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -56,38 +56,6 @@ function ContentPage() {
         }
     }, [content?.id, token]);
 
-
-
-
-    const handleMouseDown = (e) => {
-        isDraggingRef.current = false;
-        setIsDragging(true);
-
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'true';
-        slider.dataset.startX = e.pageX;
-        slider.dataset.scrollLeft = slider.scrollLeft;
-    };
-
-    const handleMouseMove = (e) => {
-        const slider = scrollRef.current;
-        if (slider.dataset.mouseDown !== 'true') return;
-
-        e.preventDefault();
-        isDraggingRef.current = true;
-
-        const x = e.pageX;
-        const walk = (x - slider.dataset.startX) * 2;
-        slider.scrollLeft = slider.dataset.scrollLeft - walk;
-    };
-
-    const handleMouseUp = () => {
-        const slider = scrollRef.current;
-        slider.dataset.mouseDown = 'false';
-        setIsDragging(false);
-    };
-
-
     const getEmbedUrl = (url) => {
         try {
             const videoId = new URL(url).searchParams.get("v");
@@ -121,7 +89,7 @@ function ContentPage() {
     };
 
     if (globalLoading || isDelayedLoading || !contents || contents.length === 0) {
-        return <LoadingContent />;
+        return <LoadingPage />;
     }
 
     if (!content || content.formato !== 'Video') {
@@ -231,13 +199,7 @@ function ContentPage() {
             <div className='content-page__related'>
                 <p className='content-page__related--p'>Conteúdos relacionados: </p>
 
-                <div
-                    className={`content-page__contents ${isDragging ? 'dragging' : ''}`}
-                    ref={scrollRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                >
+                <div className='content-page__contents'>
                     {meditacoesRelacionadas.length > 0 ? (
                         meditacoesRelacionadas.map(content => (
                             <div key={content.id} className="content__card" onClick={(e) => handleOpenContent(content, e)}>

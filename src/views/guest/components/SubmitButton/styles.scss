@@ -7,8 +7,11 @@
     border: none;
     background-color: #9e9e9e;
     color: #fff;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, opacity 0.2s;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         background-color: #161D34;
@@ -18,7 +21,15 @@
         background-color: #161D34;
 
         &:hover {
-            // background-color: darken(#161D34, 10%);
+            // background-color: color.scale(#161D34, $lightness: -10%);
+        }
+    }
+
+    &.loading {
+        padding: 2px; 
+        svg,
+        canvas {
+            margin: auto;
         }
     }
 

@@ -2,7 +2,7 @@ import './styles.scss'
 import { useContext, useEffect, useState } from 'react';
 import { desfavoritarConteudo, listarFavoritos } from "../../../../api/historico.api";
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
-import LoadingContent from '../../components/LoadingContent';
+import LoadingPage from '../../../../shared/components/LoadingPage'
 import { Link } from 'react-router-dom';
 import { IoRemoveOutline, IoHeartDislikeSharp } from 'react-icons/io5';
 
@@ -38,7 +38,7 @@ function Favorites() {
 
 
     if (isLoading) {
-        return <LoadingContent />;
+        return <LoadingPage />;
     }
 
     const getYouTubeThumbnail = (url) => {

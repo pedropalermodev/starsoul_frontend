@@ -25,6 +25,7 @@ function Home() {
     const [categoriaDoDia, setCategoriaDoDia] = useState('');
 
     const navigate = useNavigate();
+    
 
     const handleOpenContent = useCallback((content) => {
         if (content.formato === 'Audio') {
@@ -46,28 +47,26 @@ function Home() {
         );
     }, [contents]);
 
-    // Define a categoria do dia com base no horário
     useEffect(() => {
-        const horaAtual = new Date().getHours();
-        let categoria = '';
+    const horaAtual = new Date().getHours();
+    let categoria = '';
 
-        if (horaAtual >= 6 && horaAtual < 12) {
-            categoria = 'Meditação para Manhã';
-        } else if (horaAtual >= 12 && horaAtual < 18) {
-            categoria = 'Meditação para Tarde';
-        } else {
-            categoria = 'Meditação para Noite';
-        }
+    if (horaAtual >= 6 && horaAtual < 12) {
+        categoria = 'Meditação para Manhã';
+    } else if (horaAtual >= 12 && horaAtual < 18) {
+        categoria = 'Meditação para Tarde';
+    } else {
+        categoria = 'Meditação para Noite';
+    }
 
-        setCategoriaDoDia(categoria);
-    }, []);
+    setCategoriaDoDia(categoria);
+}, []);
 
     const conteudosFiltrados = useMemo(() => {
         return contents.filter(content =>
             content.categorias?.includes(categoriaDoDia) && content.formato !== 'Audio'
         );
     }, [contents, categoriaDoDia]);
-
 
 
     const spotifyPlaylists = useMemo(() => {
@@ -115,7 +114,7 @@ function Home() {
     }, [userData]);
 
     if (globalLoading || loading || !userData) {
-        return <LoadingPage message="Carregando..." />;
+        return <LoadingPage />;
     }
 
     const getYouTubeThumbnail = (url) => {
@@ -157,11 +156,11 @@ function Home() {
 
             <div className="content-box">
                 <p>{categoriaDoDia}: </p>
-                <div className="scroll-container home-app__contents">
+                <div className="home-app__contents scroll-container">
                     {conteudosFiltrados.map(content => (
                         <div
                             key={content.id}
-                            className="content__card scroll-item"
+                            className="content__card"
                             onClick={() => handleOpenContent(content)}
                         >
                             <img
@@ -181,11 +180,11 @@ function Home() {
             {spotifyPlaylists.length > 0 && (
                 <div className="content-box">
                     <p>Playlists do Spotify:</p>
-                    <div className="scroll-container home-app__contents">
+                    <div className="home-app__contents scroll-container">
                         {spotifyPlaylists.map(playlist => (
                             <div
                                 key={playlist.id}
-                                className="sound__card scroll-item"
+                                className="sound__card"
                                 onClick={() => handleOpenContent(playlist)}
                             >
                                 {/* Para áudios, o caminhoMiniatura pode ser a capa da playlist/álbum */}
