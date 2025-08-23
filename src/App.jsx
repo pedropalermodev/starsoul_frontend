@@ -20,22 +20,19 @@ import SignUp from './views/guest/pages/SignUp';
 import ResetPassword from './views/guest/pages/ResetPassword';
 
 function App() {
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const authToken = params.get("authToken");
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get("authToken");
 
-        if (authToken) {
-            localStorage.setItem("authToken", authToken);
+    if (urlToken) {
+        localStorage.setItem("authToken", urlToken);
 
-            // remove da URL para não expor
-            const newUrl = window.location.pathname + window.location.hash;
-            window.history.replaceState({}, "", newUrl);
-        }
-    }, []);
+        const newUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, "", newUrl);
+    }
     return (
         <BrowserRouter>
             <ScrollToTop />
-            <AuthProvider>
+            <AuthProvider initialToken={urlToken}>
                 <ContentProvider>
                     <AppRoutes />
                     <ToastContainer className="toast-container-custom" position="top-center" />

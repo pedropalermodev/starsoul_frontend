@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-import { buscarUsuarioLogado , loginUsuario, atualizarUsuario  } from '../../api/login.api';
+import { buscarUsuarioLogado, loginUsuario, atualizarUsuario } from '../../api/login.api';
 
 
 export const AuthContext = createContext({
@@ -11,47 +11,48 @@ export const AuthContext = createContext({
     token: null,
     userData: null,
     globalLoading: true,
-    login: (email, password) => {},
-    logout: () => {},
-    updateUser: (userData) => {},
+    login: (email, password) => { },
+    logout: () => { },
+    updateUser: (userData) => { },
 });
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, initialToken }) => {
+    const [token, setToken] = useState(initialToken || localStorage.getItem('authToken') || null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userData, setUserData] = useState(null);
     const [userRole, setUserRole] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('authToken') || null); // Tenta pegar o token do localStorage
+    const [userData, setUserData] = useState(null);
     const [globalLoading, setGlobalLoading] = useState(true);
+
     const [updateLoading, setUpdateLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkAuthStatus = () => {
-            if (token) {
-                try {
-                    const decodedToken = jwtDecode(token);
-                    if (decodedToken.exp * 1000 < Date.now()) {
-                        logout();
-                    } else {
-                        setUserRole(decodedToken.role);
-                        setIsAuthenticated(true);
-                    }
-                } catch (error) {
-                    console.error("Erro ao decodificar o token:", error);
-                    localStorage.removeItem('authToken');
-                    setToken(null);
-                    setIsAuthenticated(false);
-                    setUserRole(null);
-                    logout();
-                }
+        const checkAuthStatus = async () => {
+            if (!token) {
+                setGlobalLoading(false);
+                return;
             }
-            setGlobalLoading(false);
-        };
+            try {
+                const decodedToken = jwtDecode(token);
+                if (decodedToken.exp * 1000 < Date.now()) {
+                    logout();
+                } else {
+                    setUserRole(decodedToken.role);
+                    setIsAuthenticated(true);
 
+                    const user = await buscarUsuarioLogado(token);
+                    setUserData(user);
+                }
+            } catch (error) {
+                console.error("Erro ao decodificar o token:", error);
+                logout();
+            }
+        }
+        setGlobalLoading(false);
         checkAuthStatus();
     }, [token]);
 
-    
+
     useEffect(() => {
         let interval;
         if (token) {
@@ -82,7 +83,7 @@ export const AuthProvider = ({ children }) => {
                 if (token) {
                     const user = await buscarUsuarioLogado(token);
                     const decodedToken = jwtDecode(token);
-                    
+
                     setUserData(user);
                     setUserRole(decodedToken.role || user.tipoConta);
                     setIsAuthenticated(true);
@@ -103,14 +104,14 @@ export const AuthProvider = ({ children }) => {
                 setGlobalLoading(false);
             }
         };
-    
+
         if (token && isAuthenticated) {
             fetchUserData();
         } else {
             setGlobalLoading(false);
         }
     }, [token, isAuthenticated]);
-    
+
 
     const login = async (email, password) => {
         try {
