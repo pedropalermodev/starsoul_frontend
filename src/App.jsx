@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './shared/contexts/AuthContext';
 import { ContentProvider } from './shared/contexts/ContentContext';
@@ -20,6 +20,18 @@ import SignUp from './views/guest/pages/SignUp';
 import ResetPassword from './views/guest/pages/ResetPassword';
 
 function App() {
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const authToken = params.get("authToken");
+
+        if (authToken) {
+            localStorage.setItem("authToken", authToken);
+
+            // remove da URL para não expor
+            const newUrl = window.location.pathname + window.location.hash;
+            window.history.replaceState({}, "", newUrl);
+        }
+    }, []);
     return (
         <BrowserRouter>
             <ScrollToTop />
