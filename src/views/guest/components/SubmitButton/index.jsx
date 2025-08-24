@@ -9,12 +9,11 @@ function SubmitButton({ children, isValid, loading }) {
             disabled={!isValid || loading}
         >
             {loading ? (
-                <DotLottieReact
-                src="https://lottie.host/bd66456c-aceb-45a3-9d1c-21470934ccbc/6PaBsnmXVr.lottie"
-                height={22}
-                loop
-                autoplay
-                />
+                <div className="dot-container">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                </div>
             ) : (
                 children
             )}

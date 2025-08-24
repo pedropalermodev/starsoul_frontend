@@ -1,6 +1,7 @@
 .privacy-policies-and-terms-of-use {
     padding: 30px 0;
     color: #fff;
+    background-color: #4A3E95;
 
     .container-ppatou {
         padding: 0px 35px;
@@ -25,18 +26,18 @@
 
             & p {
                 font-size: 18px !important;
-                color: rgb(255, 255, 255);
+                color: rgb(20, 12, 68);
                 font-weight: 500;
             }
         }
 
         .line {
-            border: 1px solid rgb(20, 67, 155);
+            border: 1px solid rgba(14, 35, 73, 0.384);
             width: 100px;
         }
 
         .line2 {
-            border: 1px solid rgba(211, 192, 255, 0.486);
+            border: 1px solid rgba(255, 255, 255, 0.11);
             width: 100%;
         }
 
@@ -53,12 +54,12 @@
         }
 
         & h2 {
-            color: #5a63b5;
+            color: #2f1d79;
             font-size: 16px;
         }
 
         .important {
-            color: #947bd0;
+            color: #afaef3;
         }
     }
 

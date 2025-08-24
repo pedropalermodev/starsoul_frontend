@@ -85,18 +85,22 @@ function Explore() {
         }
     }, [currentFraseIndex, frasesMotivacionais]);
 
-    const meditacaoManha = contents.filter(content =>
-        content.categorias?.includes('Meditação para manhã') && content.formato !== 'Audio'
-    );
-
-    const destaque = contents.filter(content =>
-        content.tags?.includes('Destaque') && content.formato !== 'Audio'
-    );
 
     const meditacaoAliviarStress = contents.filter(content =>
         content.categorias?.includes('Meditação para aliviar extresse') && content.formato !== 'Audio'
     );
-    const spotifyPlaylists = contents.filter(content => content.formato === 'Audio');
+
+    const priLeiteIniciantes = contents.filter(content =>
+        content.tags?.includes('Pri Leite para Iniciantes') && content.formato !== 'Audio'
+    );
+
+    const meditacaoAutocompaixãoAutoestima = contents.filter(content =>
+        content.categorias?.includes('Meditação para autocompaixão / autoestima') && content.formato !== 'Audio'
+    );
+
+    const meditacaoGestantes = contents.filter(content =>
+        content.categorias?.includes('Meditação para gestantes') && content.formato !== 'Audio'
+    );
 
     if (globalLoading || loading || !userData) {
         return <LoadingPage />;
@@ -146,29 +150,6 @@ function Explore() {
                 </div>
 
                 <div className='content-box'>
-                    <p>Em destaque: </p>
-                    <div className='explore-app__contents-box'>
-                        {destaque.map(content => (
-                            <div
-                                key={content.id}
-                                className="content__card"
-                                onClick={() => handleOpenContent(content)}
-                            >
-                                <img
-                                    src={getYouTubeThumbnail(content.url)}
-                                    alt={`Capa de ${content.titulo}`}
-                                    className="content__thumbnail"
-                                    draggable={false}
-                                />
-                                <div className="content__info">
-                                    <p>{content.titulo}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className='content-box'>
                     <p>Meditações para aliviar o stress do dia-a-dia: </p>
                     <div className='explore-app__contents-box'>
                         {meditacaoAliviarStress.map(content => (
@@ -192,6 +173,75 @@ function Explore() {
                 </div>
 
                 <div className='content-box'>
+                    <p>Comece sua jornada no Yoga com Pri Leite – do primeiro passo à evolução: </p>
+                    <div className='explore-app__contents-box'>
+                        {priLeiteIniciantes.map(content => (
+                            <div
+                                key={content.id}
+                                className="content__card"
+                                onClick={() => handleOpenContent(content)}
+                            >
+                                <img
+                                    src={getYouTubeThumbnail(content.url)}
+                                    alt={`Capa de ${content.titulo}`}
+                                    className="content__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{content.titulo}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className='content-box'>
+                    <p>Reconecte-se consigo mesmo: meditação guiada: </p>
+                    <div className='explore-app__contents-box'>
+                        {meditacaoAutocompaixãoAutoestima.map(content => (
+                            <div
+                                key={content.id}
+                                className="content__card"
+                                onClick={() => handleOpenContent(content)}
+                            >
+                                <img
+                                    src={getYouTubeThumbnail(content.url)}
+                                    alt={`Capa de ${content.titulo}`}
+                                    className="content__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{content.titulo}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className='content-box'>
+                    <p>Momento de calma para futuras mamães: </p>
+                    <div className='explore-app__contents-box'>
+                        {meditacaoGestantes.map(content => (
+                            <div
+                                key={content.id}
+                                className="content__card"
+                                onClick={() => handleOpenContent(content)}
+                            >
+                                <img
+                                    src={getYouTubeThumbnail(content.url)}
+                                    alt={`Capa de ${content.titulo}`}
+                                    className="content__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{content.titulo}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* <div className='content-box'>
                     <p>Meditações e playlists relaxantes: </p>
                     <div className='explore-app__contents-box'>
                         {spotifyPlaylists.map(playlist => (
@@ -212,7 +262,7 @@ function Explore() {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
 
             </div>
 

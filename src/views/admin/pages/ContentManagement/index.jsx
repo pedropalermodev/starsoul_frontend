@@ -113,8 +113,9 @@ const getcontentFormFields = (categorias, tags) => [
         name: 'categoriaIds',
         label: 'Categoria',
         type: 'select',
-        required: true,
         multiple: true,
+        required: false,
+        visuallyRequired: true,
         options: categorias.map(cat => ({
             value: cat.id,
             label: cat.nome
@@ -124,8 +125,9 @@ const getcontentFormFields = (categorias, tags) => [
         name: 'tagIds',
         label: 'Tag',
         type: 'select',
-        required: true,
         multiple: true,
+        required: false,
+        visuallyRequired: true,
         options: tags.map(cat => ({
             value: cat.id,
             label: cat.nome

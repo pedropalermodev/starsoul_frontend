@@ -25,7 +25,7 @@ function Home() {
     const [categoriaDoDia, setCategoriaDoDia] = useState('');
 
     const navigate = useNavigate();
-    
+
 
     const handleOpenContent = useCallback((content) => {
         if (content.formato === 'Audio') {
@@ -48,19 +48,19 @@ function Home() {
     }, [contents]);
 
     useEffect(() => {
-    const horaAtual = new Date().getHours();
-    let categoria = '';
+        const horaAtual = new Date().getHours();
+        let categoria = '';
 
-    if (horaAtual >= 6 && horaAtual < 12) {
-        categoria = 'Meditação para Manhã';
-    } else if (horaAtual >= 12 && horaAtual < 18) {
-        categoria = 'Meditação para Tarde';
-    } else {
-        categoria = 'Meditação para Noite';
-    }
+        if (horaAtual >= 6 && horaAtual < 12) {
+            categoria = 'Meditação para Manhã';
+        } else if (horaAtual >= 12 && horaAtual < 18) {
+            categoria = 'Meditação para Tarde';
+        } else {
+            categoria = 'Meditação para Noite';
+        }
 
-    setCategoriaDoDia(categoria);
-}, []);
+        setCategoriaDoDia(categoria);
+    }, []);
 
     const conteudosFiltrados = useMemo(() => {
         return contents.filter(content =>
@@ -108,6 +108,9 @@ function Home() {
         }
     }, [currentFraseIndex, frasesMotivacionais]);
 
+    const destaque = contents.filter(content =>
+        content.tags?.includes('Destaque') && content.formato !== 'Audio'
+    );
 
     const primeiroNome = useMemo(() => {
         return userData?.nome ? userData.nome.split(' ')[0] : 'Usuário';
@@ -154,6 +157,29 @@ function Home() {
                 )}
             </div>
 
+            <div className='content-box'>
+                <p>Em destaque: </p>
+                <div className='home-app__contents scroll-container'>
+                    {destaque.map(content => (
+                        <div
+                            key={content.id}
+                            className="content__card"
+                            onClick={() => handleOpenContent(content)}
+                        >
+                            <img
+                                src={getYouTubeThumbnail(content.url)}
+                                alt={`Capa de ${content.titulo}`}
+                                className="content__thumbnail"
+                                draggable={false}
+                            />
+                            <div className="content__info">
+                                <p>{content.titulo}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="content-box">
                 <p>{categoriaDoDia}: </p>
                 <div className="home-app__contents scroll-container">
@@ -177,7 +203,7 @@ function Home() {
                 </div>
             </div>
 
-            {spotifyPlaylists.length > 0 && (
+            {/* {spotifyPlaylists.length > 0 && (
                 <div className="content-box">
                     <p>Playlists do Spotify:</p>
                     <div className="home-app__contents scroll-container">
@@ -187,7 +213,6 @@ function Home() {
                                 className="sound__card"
                                 onClick={() => handleOpenContent(playlist)}
                             >
-                                {/* Para áudios, o caminhoMiniatura pode ser a capa da playlist/álbum */}
                                 <img
                                     src={"https://blog.trocafone.com/wp-content/uploads/2019/12/spotify.blog_-1200x640.jpg"} // Usando favicon do Spotify como placeholder
                                     alt={`Playlist do Spotify: ${playlist.titulo}`}
@@ -201,7 +226,7 @@ function Home() {
                         ))}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* <div className="home-app__details">
                 <div className="home-app__details-box">

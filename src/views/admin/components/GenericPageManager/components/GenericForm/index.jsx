@@ -13,15 +13,17 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
         const initialValues = {};
         fields.forEach(field => {
             if (field.name === 'codStatus') {
-                initialValues[field.name] = initialData ? initialData[field.name] : 'Ativo';
+                initialValues[field.name] = initialData?.[field.name] ?? 'Ativo';
             } else if (field.multiple) {
-                initialValues[field.name] = initialData ? initialData[field.name] || field.defaultValue || [] : field.defaultValue || [];
+                initialValues[field.name] = initialData?.[field.name] ?? field.defaultValue ?? [];
             } else {
-                initialValues[field.name] = initialData ? initialData[field.name] || field.defaultValue || '' : field.defaultValue || '';
+                initialValues[field.name] = initialData?.[field.name] ?? field.defaultValue ?? '';
             }
         });
+
         setFormData(initialValues);
-    }, [fields, initialData]);
+    }, []);
+
 
     const handleChange = (event) => {
         const { name, value, type, checked, multiple } = event.target;
@@ -67,9 +69,12 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
         });
 
         fields.forEach(field => {
-            if (field.required && !formData[field.name]) {
-                validationErrors[field.name] = `${field.label} é obrigatório.`;
-                isValid = false;
+            if (field.required) {
+                if (!formData[field.name] || (Array.isArray(formData[field.name]) && formData[field.name].length === 0)) {
+                    validationErrors[field.name] = `${field.label} é obrigatório.`;
+                    isValid = false;
+                    toast.error(`${field.label} o valor é inválido.`);
+                }
             }
 
             if (field.validation) {
@@ -184,8 +189,9 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
                 <form onSubmit={handleSubmit} className="generic-form">
                     {(() => {
                         const filteredFields = fields.filter(field =>
-                            currentSection === 'required' ? field.required : !field.required
+                            currentSection === 'required' ? (field.required || field.visuallyRequired) : !field.required && !field.visuallyRequired
                         );
+
 
                         if (filteredFields.length === 0) {
                             return (
