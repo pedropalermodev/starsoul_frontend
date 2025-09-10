@@ -245,7 +245,7 @@ function Home() {
                 </div>
 
                 <div className="home-app__details-box">
-                    <p className='home-app__details-box--text'>Receba conteúdos novos e exclusivos com notificações instantâneas. Baixe agora e transforme sua experiência!</p>
+                    <p className='home-app__details-box--text'>Acesse gratuitamente nosso aplicativo StarSoul com mais funcionalidades. Baixe agora e transforme sua experiência!</p>
                     <div>
                         <img src={downloadOnAppStore} alt="" />
                         <img src={downloadOnPlayStore} alt="" />
