@@ -33,8 +33,8 @@ function Home() {
                     <div className="home__content-hero-description">
                         <p className='home__content-hero-description--text'>
                             Seu bem-estar, agora com acompanhamento inteligente! 
-                            Acesse nosso site com meditações e sons relaxantes e 
-                            use o app para histórico, inspiração diária e seu diário 
+                            Acesse nosso site com meditações e 
+                            use o app para histórico e sons relaxantes, inspiração diária e seu diário 
                             pessoal. Sua jornada de autocuidado facilitada. Comece hoje!
                         </p>
                         <h2 className='home__content-hero-description--h2 fill'>StarSoul</h2>
@@ -99,13 +99,13 @@ function Home() {
 
                         <div className="home__container-feature-triple-child">
                             <div className='home__container-feature-triple-child-text'>
-                                <h1 className='home__container-feature-triple-child-text--title'>Explore nossa biblioteca de vídeos e podcasts</h1>
+                                <h1 className='home__container-feature-triple-child-text--title'>Explore nossa biblioteca de vídeos</h1>
                                 <p className='home__container-feature-triple-child-text--description'>Acesse uma curadoria especial de vídeos do YouTube, selecionados para ajudá-lo a encontrar paz, inspiração e conhecimento. Aprenda com especialistas e pratique no seu próprio ritmo.</p>
                             </div>
                             <img src={ImageSection3} alt="" /> 
                             <div className='home__container-feature-triple-child-text'>
                                 <h1 className='home__container-feature-triple-child-text--title'>Recursos gratuitos para você</h1>
-                                <p className='home__container-feature-triple-child-text--description'>Acesse uma variedade de recursos gratuitos, incluindo meditações guiadas, playlists relaxantes e guias práticos, para ajudá-lo a começar ou aprofundar sua prática de meditação.</p>
+                                <p className='home__container-feature-triple-child-text--description'>Acesse uma variedade de recursos gratuitos, incluindo meditações guiadas, playlists relaxantes e dicas práticas, para ajudá-lo a começar ou aprofundar sua prática de meditação.</p>
                             </div>  
                         </div>
                     </div>
@@ -116,7 +116,7 @@ function Home() {
                     <div className="home__container-starsoulapp-content"><img src={starsoulPhoneApp} alt="" /></div>
                     <div className="home__container-starsoulapp-content">
                         <h1 className="home__container-starsoulapp-content-h1">Acalme-se com a StarSoul</h1>
-                        <p className="home__container-starsoulapp-content-p">Descubra o poder da tranquilidade com a StarSoul, o aplicativo de meditação que te ajuda a encontrar paz e equilíbrio no seu dia a dia. Com uma variedade de sessões guiadas, sons relaxantes e técnicas de respiração, a StarSoul é seu companheiro perfeito para reduzir o estresse e melhorar seu bem-estar.</p>
+                        <p className="home__container-starsoulapp-content-p">Descubra o poder da tranquilidade com a StarSoul, o aplicativo de meditação que te ajuda a encontrar paz e equilíbrio no seu dia a dia. Com uma variedade de sessões guiadas, sons relaxantes e técnicas de respiração, a StarSoul é sua companheira perfeita para reduzir o estresse e melhorar seu bem-estar.</p>
                         <p className="home__container-starsoulapp-content-p">Baixe o aplicativo da StarSoul e comece sua jornada para uma mente mais calma e focada hoje mesmo!</p>
                         <div className="home__container-starsoulapp-content-link">
                             <a href=""><img src={downloadAppleStore} alt="" /></a>

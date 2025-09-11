@@ -11,7 +11,7 @@ function AboutUs() {
                 <div className="hero-box content-about-us">
                     <div className="hero-box__text">
                         <p className='fill'>Olá, somos a StarSoul</p>
-                        <p className='fill'>
+                        <p className='hero-box__text-subtitle'>
                             Nossa missão é despertar o equilíbrio e a presença
                             através da meditação. Criamos experiências acolhedoras
                             e acessíveis que ajudam você a se reconectar com seu
