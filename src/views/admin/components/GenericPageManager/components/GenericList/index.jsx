@@ -6,6 +6,7 @@ import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
 import { Pagination, Typography } from '@mui/material';
 import { CircularProgress, Box as MuiBox } from '@mui/material';
+import { LuRefreshCw } from "react-icons/lu";
 
 function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView, tableName, extra }) {
     const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
     const [filteredData, setFilteredData] = useState([]);
     const [itemToDeleteId, setItemToDeleteId] = useState(null);
     const [itemToDeleteHighlightId, setItemToDeleteHighlightId] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -82,14 +84,22 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
     };
 
     const confirmDeleteItem = async () => {
-        if (itemToDeleteId && onDelete) {
+        if (!itemToDeleteId || !onDelete) return;
+
+        setIsDeleting(true); // começa o loading
+        try {
             await onDelete(itemToDeleteId);
             setIsDeleteModalVisible(false);
             setItemToDeleteId(null);
             setItemToDeleteHighlightId(null);
-            loadData();
+            await loadData();
+        } catch (error) {
+            console.error('Erro ao deletar item:', error);
+        } finally {
+            setIsDeleting(false);
         }
     };
+
 
     const cancelDeleteItem = () => {
         setIsDeleteModalVisible(false);
@@ -211,6 +221,18 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                         {page.iconClass && <i className={page.iconClass}></i>}
                     </button>
                 ))}
+
+                <button
+                    className="reload-button"
+                    onClick={async () => {
+                        setLoading(true);
+                        await loadData();
+                        setLoading(false);
+                    }}
+                    disabled={loading}
+                >
+                    <LuRefreshCw  size={18}/>
+                </button>
             </div>
 
             <Box className='generic__content'>
@@ -286,8 +308,12 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                         <h3>Confirmar Exclusão</h3>
                         <p>Tem certeza absoluta que deseja deletar este item com ID: {itemToDeleteId}?</p>
                         <div className="modal-actions">
-                            <button onClick={confirmDeleteItem}>Sim, Deletar</button>
-                            <button onClick={cancelDeleteItem}>Cancelar</button>
+                            <button onClick={confirmDeleteItem} disabled={isDeleting}>
+                                {isDeleting ? 'Deletando...' : 'Sim, Deletar'}
+                            </button>
+                            <button onClick={cancelDeleteItem} disabled={isDeleting}>
+                                Cancelar
+                            </button>
                         </div>
                     </div>
                 </div>
