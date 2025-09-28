@@ -32,6 +32,10 @@ const FeedbackForm = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        if (subject.length < 5) {
+            toast.error('o assunto deve ter pelo menos 5 caracteres.');
+            return;
+        }
         if (message.length < 10) {
             toast.error('A mensagem deve ter pelo menos 10 caracteres.');
             return;
