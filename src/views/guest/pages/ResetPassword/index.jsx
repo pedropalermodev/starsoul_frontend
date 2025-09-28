@@ -8,6 +8,7 @@ import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-bl
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import SubmitButton from '../../components/SubmitButton';
+import { toast } from 'sonner';
 
 function ResetPassword() {
     const navigate = useNavigate();
@@ -45,46 +46,52 @@ function ResetPassword() {
         setLoading(true);
 
         try {
-            await solicitarResetSenha(email);
-            showMessage('Um email com instruções foi enviado!', 'success')
-            setStep(2);
-        } catch (err) {
-            // console.error(err);
-            const status = err.response?.status || 0;
-            if (status === 404) {
-                showMessage('Email não encontrado. Verifique e tente novamente.', 'error');
-            } else {
-                showMessage('Erro interno. Por favor, tente novamente mais tarde.', 'error');
-            }
+            const promise = solicitarResetSenha(email); // promise real
+            toast.promise(promise, {
+                loading: 'Enviando email de recuperação...',
+                success: () => {
+                    setStep(2);
+                    return 'Um email com instruções foi enviado!';
+                },
+                error: (err) => {
+                    const status = err.response?.status || 0;
+                    if (status === 404) return 'Email não encontrado. Verifique e tente novamente.';
+                    return 'Erro interno. Por favor, tente novamente mais tarde.';
+                },
+            });
+            await promise;
         } finally {
             setLoading(false);
         }
     };
 
+
     const handleResetSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
 
         if (newPassword !== newConfirmPassword) {
-            showMessage('As senhas não correspondem.', 'error')
-
+            toast.error('As senhas não correspondem.');
             return;
         }
 
         if (!Object.values(passwordRequirements).every(req => req)) {
-            showMessage('A nova senha não atende a todos os requisitos.', 'error')
+            toast.error('A nova senha não atende a todos os requisitos.');
             return;
         }
 
+        setLoading(true);
         try {
-            await redefinirSenha(email, token, newPassword);
-            showMessage('Senha redefinida com sucesso!', 'success')
-            await delay(1500);
-            navigate('/sign-in');
-        } catch (err) {
-            console.error(err);
-            showMessage('Erro ao redefinir senha.', 'error')
-
+            const promise = redefinirSenha(email, token, newPassword);
+            toast.promise(promise, {
+                    loading: 'Redefinindo sua senha...',
+                    success: () => {
+                        setTimeout(() => navigate('/sign-in'), 500);
+                        return 'Senha redefinida com sucesso!';
+                    },
+                    error: 'Erro ao redefinir a senha. Verifique se o token de redefinição corresponde ao enviado.',
+                }
+            );
+            await promise;
         } finally {
             setLoading(false);
         }
