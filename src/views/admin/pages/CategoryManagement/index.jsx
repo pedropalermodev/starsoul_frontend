@@ -6,7 +6,7 @@ import GenericPageManager from '../../components/GenericPageManager';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const categoriesColumns = [
     { key: 'id', label: 'ID' },
@@ -16,7 +16,32 @@ const categoriesColumns = [
         key: 'codStatus',
         label: 'Status',
         cellStyle: { padding: '10px' },
-        render: (category) => <span className='badge-container'><p className={`badge  ${category.codStatus === 'Ativo' ? 'status-ativo' : (category.codStatus === 'Inativo' ? 'status-inativo' : (category.codStatus === 'Suspenso' ? 'status-suspenso' : undefined))}`}>{category.codStatus}</p></span>,
+        render: (category, onEdit, onDelete, extra) => {
+            const handleChangeStatus = async (category, newStatus) => {
+                try {
+                    // Faz a atualização no backend
+                    await atualizarCategoria(category.id, { ...category, codStatus: newStatus }, extra?.token);
+                    toast.success(`Status da categoria atualizado para ${newStatus}`);
+                    // Recarrega os dados da instância do GenericList
+                    if (extra?.refreshList) await extra.refreshList();
+                } catch (err) {
+                    console.error('Erro ao atualizar status da categoria:', err);
+                    toast.error('Não foi possível atualizar o status da categoria.');
+                }
+            };
+
+            return (
+                <select
+                    value={category.codStatus}
+                    onChange={(e) => handleChangeStatus(category, e.target.value)}
+                    className={`badge-select ${category.codStatus === 'Ativo' ? 'status-ativo' : 'status-inativo'}`}
+                    style={{ padding: '4px 5px', borderRadius: '999px', border: '1px solid #ccc', cursor: 'pointer', textAlign: 'center', fontSize: '11px' }}
+                >
+                    <option value="Ativo" style={{fontSize: '11px'}}>Ativo</option>
+                    <option value="Inativo" style={{fontSize: '11px'}}>Inativo</option>
+                </select>
+            );
+        },
     },
     {
         key: 'actions',
@@ -118,20 +143,28 @@ function CategoryManagement() {
             return;
         }
 
-        try {
-            await cadastrarCategoria(newCategory, token);
-            setCurrentView('list');
-            toast.success('Informações salvas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao cadastrar categoria: ', err)
-            if (err.response && err.response.status === 409) {
-                toast.error('Essa categoria já existe.');
-            } else {
-                toast.error('Erro ao cadastrar conteúdo.');
+        setLoading(true);
+
+        toast.promise(
+            cadastrarCategoria(newCategory, token),
+            {
+                loading: 'Cadastrando categoria...',
+                success: () => {
+                    setCurrentView('list');
+                    return 'Categoria cadastrada com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao cadastrar categoria:', err);
+
+                    if (err?.response?.status === 409) {
+                        return 'Essa categoria já existe.';
+                    }
+                    return 'Erro ao cadastrar categoria.';
+                }
             }
-        } finally {
+        ).finally(() => {
             setLoading(false);
-        }
+        });
     }
 
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
@@ -150,17 +183,25 @@ function CategoryManagement() {
             return;
         }
 
-        try {
-            await atualizarCategoria(itemToEdit.id, updateCategoryData, token);
-            setCurrentView('list');
-            setItemToEdit(null);
-            toast.success('Informações atualizadas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao atualizar categoria: ', err);
-            toast.error('Erro ao atualizar categoria.');
-        } finally {
+        setLoading(true);
+
+        toast.promise(
+            atualizarCategoria(itemToEdit.id, updateCategoryData, token),
+            {
+                loading: 'Atualizando informações...',
+                success: () => {
+                    setCurrentView('list');
+                    setItemToEdit(null);
+                    return 'Informações atualizadas com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao atualizar categoria:', err);
+                    return 'Erro ao atualizar categoria.';
+                }
+            }
+        ).finally(() => {
             setLoading(false);
-        }
+        });
     }
 
     // BOTÃO DE EDITAR NO LIST
@@ -205,6 +246,7 @@ function CategoryManagement() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}
                         setCurrentView={setCurrentView}
+                        extra={{ token, refreshList: fetchData }}
                     />
                 );
             case 'add':

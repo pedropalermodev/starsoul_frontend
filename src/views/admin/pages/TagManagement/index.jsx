@@ -6,7 +6,7 @@ import GenericPageManager from '../../components/GenericPageManager';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const tagsColumns = [
     { key: 'id', label: 'ID' },
@@ -18,7 +18,7 @@ const tagsColumns = [
             <GenericActionButtons
                 item={tag}
                 onEdit={() => onEdit(tag)}
-                onDelete={() => {onDelete(tag.id);}}
+                onDelete={() => { onDelete(tag.id); }}
             />
         )
     }
@@ -88,34 +88,50 @@ function TagManagement() {
     // BOTÃO DE SALVAR CRIAÇÃO NO FORM
     const handleCreateSubmit = async (newTag) => {
         setLoading(true);
-        try {
-            await cadastrarTag(newTag, token);
-            setCurrentView('list');
-            toast.success('Informações salvas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao cadastrar tag: ', err);
-            if (err.response && err.response.status === 409) {
-                toast.error('Essa tag já existe.');
-            } else {
-                toast.error('Erro ao cadastrar tag.');
+
+        toast.promise(
+            cadastrarTag(newTag, token),
+            {
+                loading: 'Cadastrando tag...',
+                success: () => {
+                    setCurrentView('list');
+                    return 'Tag cadastrada com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao cadastrar tag:', err);
+
+                    if (err?.response?.status === 409) {
+                        return 'Essa tag já existe.';
+                    }
+                    return 'Erro ao cadastrar tag.';
+                }
             }
-        } finally {
+        ).finally(() => {
             setLoading(false);
-        }
+        });
     }
 
     // BOTÃO DE SALVAR EDIÇÃO NO FORM
     const handleEditSubmit = async (updateTagData) => {
         setLoading(true);
-        try {
-            await atualizarTag(itemToEdit.id, updateTagData, token);
-            setCurrentView('list');
-            setItemToEdit(null);
-            toast.success('Informações atualizadas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao atualizar tag: ', err);
-            toast.error('Erro ao atualizar tag.');
-        } finally { }
+
+        toast.promise(
+            atualizarTag(itemToEdit.id, updateTagData, token),
+            {
+                loading: 'Atualizando informações...',
+                success: () => {
+                    setCurrentView('list');
+                    setItemToEdit(null);
+                    return 'Informações atualizadas com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao atualizar tag:', err);
+                    return 'Erro ao atualizar tag.';
+                }
+            }
+        ).finally(() => {
+            setLoading(false);
+        });
     }
 
     // BOTÃO DE EDITAR NO LIST

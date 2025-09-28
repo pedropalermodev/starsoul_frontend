@@ -11,38 +11,38 @@ body {
     height: 100vh;
 }
 
-.toast-container-custom {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 20px;
-    width: max-content;
-    z-index: 9999;
+// .toast-container-custom {
+//     position: fixed;
+//     left: 50%;
+//     transform: translateX(-50%);
+//     top: 20px;
+//     width: max-content;
+//     z-index: 9999;
 
-    .Toastify__toast-container {
-        display: flex;
-        justify-content: center;
-        /* Centraliza horizontalmente */
-        align-items: center;
-    }
+//     .Toastify__toast-container {
+//         display: flex;
+//         justify-content: center;
+//         /* Centraliza horizontalmente */
+//         align-items: center;
+//     }
 
-    .Toastify__toast {
-        background-color: rgb(228, 115, 115);
-        color: white;
-        font-family: 'Outfit';
-        border-radius: 10px;
-    }
+//     .Toastify__toast {
+//         background-color: rgb(228, 115, 115);
+//         color: white;
+//         font-family: 'Outfit';
+//         border-radius: 10px;
+//     }
 
-    .Toastify__toast-body {
-        font-size: 1rem;
-    }
+//     .Toastify__toast-body {
+//         font-size: 1rem;
+//     }
 
-    .Toastify__progress-bar {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+//     .Toastify__progress-bar {
+//         background-color: rgba(0, 0, 0, 0.1);
+//     }
 
-    .Toastify__toast--success {
-        background-color: #77b67a !important;
-        color: white !important;
-    }
-}
+//     .Toastify__toast--success {
+//         background-color: #77b67a !important;
+//         color: white !important;
+//     }
+// }

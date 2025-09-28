@@ -2,7 +2,6 @@ import './styles.scss';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { solicitarResetSenha, redefinirSenha } from '../../../../api/redefinirSenha.api';
-import { toast } from 'react-toastify';
 
 // Images
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { enviarFeedback } from '../../../../api/feedback.api';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const FeedbackForm = () => {
     const [name, setName] = useState('');
@@ -43,17 +43,27 @@ const FeedbackForm = () => {
             mensagem: message,
         };
 
-        try {
-            await enviarFeedback(newFeedback);
-            toast.success('Mensagem enviada com sucesso!')
-            setName('');
-            setEmail('');
-            setSubject('');
-            setMessage('');
-        } catch (error) {
-            console.error('Erro no envio:', error);
-            setSubmissionStatus('Erro ao enviar a mensagem. Tente novamente.');
-        }
+        setSubmissionStatus('Enviando...');
+
+        toast.promise(
+            enviarFeedback(newFeedback),
+            {
+                loading: 'Enviando feedback...',
+                success: () => {
+                    setName('');
+                    setEmail('');
+                    setSubject('');
+                    setMessage('');
+                    setSubmissionStatus(null);
+                    return 'Mensagem enviada com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro no envio:', err);
+                    setSubmissionStatus('Erro ao enviar a mensagem. Tente novamente mais tarde.');
+                    return 'Erro ao enviar a mensagem.';
+                },
+            }
+        );
     };
 
     return (

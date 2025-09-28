@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { Pagination, Typography } from '@mui/material';
 import { CircularProgress, Box as MuiBox } from '@mui/material';
 
-function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView, tableName }) {
+function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrentView, tableName, extra }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -158,6 +158,14 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
         doc.save(`${tableName?.toLowerCase().replace(/\s+/g, '_') || 'relatorio'}.pdf`);
     };
 
+    const extraForRows = {
+        ...extra,
+        refreshList: async () => {
+            // força recarregar os dados desta instância do GenericList
+            await loadData();
+        }
+    };
+
     // Paginação
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -218,7 +226,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                     ))}
                                 </tr>
                             </thead>
-                            
+
                             <tbody className='gerenic__tbody'>
                                 {/* {console.log('filteredData:', filteredData)} */}
                                 {Array.isArray(currentItems) && currentItems.length > 0 ? (
@@ -233,7 +241,7 @@ function GenericList({ columns, dataFetcher, onEdit, onDelete, pages, setCurrent
                                                     className='generic__tbody-tr--td'
                                                     style={column.cellStyle}
                                                 >
-                                                    {column.render ? column.render(item, onEdit, showDeleteConfirmationModal) : item[column.key]}
+                                                    {column.render ? column.render(item, onEdit, showDeleteConfirmationModal, extraForRows) : item[column.key]}
                                                 </td>
                                             ))}
                                         </tr>

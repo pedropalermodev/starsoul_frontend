@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 
 import Header from '../components/Header';
 import Aside from '../components/Aside';
-import { ToastContainer } from 'react-toastify';
 
 import './styles.scss';
 
@@ -53,7 +52,6 @@ function AdminLayout() {
                 <Header />
                 <Outlet />
             </main>
-            <ToastContainer className="toast-container-custom" position="top-center" />
         </div>
     );
 }

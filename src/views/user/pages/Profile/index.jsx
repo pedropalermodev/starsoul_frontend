@@ -2,9 +2,9 @@ import './styles.scss';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { atualizarUsuario } from '../../../../api/login.api';
-import { toast } from 'react-toastify';
 
 import profilePicture from '../../assets/header/profilePicture.png'
+import { toast } from 'sonner';
 
 
 function Profile() {
@@ -58,7 +58,7 @@ function Profile() {
         setLoading(true);
         setError(null);
 
-        const updatedUserData = { ...editableUserData }; 
+        const updatedUserData = { ...editableUserData };
 
         let dataNascimentoBRT = null;
         const dataNascimentoInput = updatedUserData.dataNascimento;
@@ -84,7 +84,7 @@ function Profile() {
             }
             dataNascimentoBRT = `${dataNascimentoInput}T00:00:00-03:00`;
         }
-        
+
         if (updatedUserData.nome) {
             if (updatedUserData.nome.length < 2) {
                 toast.error('O nome do usuário deve ter pelo menos 2 caracteres.');
@@ -112,31 +112,37 @@ function Profile() {
 
         const emailChanged = userData.email !== updatedUserData.email;
 
-        try {
-            const response = await atualizarUsuario(token, updatedUserData);
+        setLoading(true);
 
-            if (emailChanged) {
-                alert('Seu e-mail foi alterado. Por favor, faça login novamente.')
-                setTimeout(() => {
-                    logout();
-                }, 1000);
-            } else {
-                updateUser(response);
+        toast.promise(
+            atualizarUsuario(token, updatedUserData),
+            {
+                loading: 'Atualizando informações...',
+                success: (response) => {
+                    if (emailChanged) {
+                        alert('Seu e-mail foi alterado. Por favor, faça login novamente.');
+                        setTimeout(() => {
+                            logout();
+                        }, 1000);
+                    } else {
+                        updateUser(response);
+                    }
+
+                    setIsEditing(false);
+                    return 'Informações atualizadas com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao atualizar usuário:', err);
+                    if (err?.response?.status === 409) {
+                        return 'Este e-mail já está cadastrado.';
+                    }
+                    return 'Erro ao atualizar usuário.';
+                },
             }
-
-            setIsEditing(false);
-
-        } catch (err) {
-            console.error('Erro ao atualizar usuário:', err);
-            if (err.response && err.response.status === 409) {
-                toast.error('Este e-mail já está cadastrado.');
-            } else {
-                setError(err.message || 'Erro ao atualizar usuário.');
-                toast.error('Erro ao atualizar usuário.');
-            }
-        } finally {
+        ).finally(() => {
             setLoading(false);
-        }
+        });
+
     };
 
     if (globalLoading) return <p>Loading...</p>;
@@ -184,9 +190,9 @@ function Profile() {
                         </label>
 
                         <div className='line'>
-                            <span/>
+                            <span />
                             <p>Opcionais</p>
-                            <span/>
+                            <span />
                         </div>
 
                         <label htmlFor="apelido">
@@ -209,6 +215,7 @@ function Profile() {
                                 value={isEditing ? editableUserData.dataNascimento : userData.dataNascimento}
                                 disabled={!isEditing}
                                 onChange={handleChange}
+                                max={new Date().toISOString().split("T")[0]}
                             />
                         </label>
                         <label htmlFor="genero">

@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify';
 import { buscarUsuarioLogado, loginUsuario, atualizarUsuario } from '../../api/login.api';
+import { toast } from 'sonner';
 
 
 export const AuthContext = createContext({

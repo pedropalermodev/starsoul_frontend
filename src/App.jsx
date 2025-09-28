@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext, AuthProvider } from './shared/contexts/AuthContext';
 import { ContentProvider } from './shared/contexts/ContentContext';
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 import './styles/globalStyles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -18,6 +18,7 @@ import ScrollToTop from './shared/components/ScrollToTop';
 import SignIn from './views/guest/pages/SignIn';
 import SignUp from './views/guest/pages/SignUp';
 import ResetPassword from './views/guest/pages/ResetPassword';
+import { Toaster } from "sonner"
 
 function App() {
     const params = new URLSearchParams(window.location.search);
@@ -35,7 +36,8 @@ function App() {
             <AuthProvider initialToken={urlToken}>
                 <ContentProvider>
                     <AppRoutes />
-                    <ToastContainer className="toast-container-custom" position="top-center" />
+                    <Toaster expand={false} position="bottom-right" richColors/>
+                    {/* <ToastContainer className="toast-container-custom" position="top-center" /> */}
                 </ ContentProvider>
             </AuthProvider>
         </BrowserRouter>

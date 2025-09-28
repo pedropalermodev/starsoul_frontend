@@ -1,13 +1,13 @@
 import './styles.scss'
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { cadastrarUsuario, atualizarUsuario, listarTodosUsuarios, buscarUsuarioPorId, excluirUsuario } from '../../../../api/usuario.api'
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import GenericPageManager from '../../components/GenericPageManager';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { toast } from 'react-toastify';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 const accessColumns = [
     { key: 'id', label: 'ID' },
@@ -23,7 +23,38 @@ const accessColumns = [
         key: 'codStatus',
         label: 'Status',
         cellStyle: { padding: '10px' },
-        render: (user) => <span className='badge-container'><p className={`badge  ${user.codStatus === 'Ativo' ? 'status-ativo' : (user.codStatus === 'Inativo' ? 'status-inativo' : (user.codStatus === 'Suspenso' ? 'status-suspenso' : undefined))}`}>{user.codStatus}</p></span>,
+        render: (user, onEdit, onDelete, extra) => {
+            const { token, refreshList: fetchData } = extra;
+
+            const handleChangeStatus = async (user, newStatus) => {
+                try {
+                    await atualizarUsuario(user.id, {
+                        ...user,
+                        codStatus: newStatus
+                    }, token);
+
+                    toast.success(`Status do usuário atualizado para ${newStatus}`);
+
+                    await extra.refreshList();
+                } catch (err) {
+                    console.error('Erro ao atualizar status:', err);
+                    toast.error('Não foi possível atualizar o status do usuário.');
+                }
+            };
+
+            return (
+                <select
+                    value={user.codStatus}
+                    onChange={(e) => handleChangeStatus(user, e.target.value)}
+                    className={`badge-select ${user.codStatus === 'Ativo' ? 'status-ativo' : (user.codStatus === 'Inativo' ? 'status-inativo' : 'status-suspenso')}`}
+                    style={{ padding: '4px 0px', borderRadius: '999px', border: '1px solid #ccc', cursor: 'pointer', textAlign: 'center', fontSize: '11px' }}
+                >
+                    <option value="Ativo" style={{fontSize: '11px'}}>Ativo</option>
+                    <option value="Inativo" style={{fontSize: '11px'}}>Inativo</option>
+                    <option value="Suspenso" style={{fontSize: '11px'}}>Suspenso</option>
+                </select>
+            );
+        }
     },
     {
         key: 'dataCadastro',
@@ -87,7 +118,14 @@ const accessFormFields = [
         ]
     },
     { name: 'apelido', label: 'Apelido', type: 'text', required: false },
-    { name: 'dataNascimento', label: 'Data de Nascimento', type: 'date', required: false },
+    {
+        name: 'dataNascimento',
+        label: 'Data de Nascimento',
+        type: 'date',
+        required: false,
+        min: '1911-10-06',
+        max: new Date().toISOString().split("T")[0],
+    },
     {
         name: 'genero',
         label: 'Gênero',
@@ -207,20 +245,29 @@ function AccessManagement() {
         }
 
 
-        try {
-            await cadastrarUsuario(newUser, token);
-            setCurrentView('list');
-            toast.success('Informações salvas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao cadastrar usuário:', err);
-            if (err.response && err.response.status === 409) {
-                toast.error('Este email já está cadastrado.');
-            } else {
-                toast.error('Erro ao cadastrar usuário.');
+        setLoading(true);
+
+        toast.promise(
+            cadastrarUsuario(newUser, token),
+            {
+                loading: 'Cadastrando usuário...',
+                success: () => {
+                    setCurrentView('list');
+                    return 'Usuário cadastrado com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao cadastrar usuário:', err);
+
+                    if (err?.response?.status === 409) {
+                        return 'Este email já está cadastrado.';
+                    }
+                    return 'Erro ao cadastrar usuário.';
+                }
             }
-        } finally {
+        ).finally(() => {
             setLoading(false);
-        }
+        });
+
     };
 
     // useEffect(() => {
@@ -297,18 +344,26 @@ function AccessManagement() {
             updatedUserData.dataNascimento = dataNascimentoBRT;
         }
 
-        try {
-            // console.log('Objeto a enviar na atualização:', updatedUserData);
-            await atualizarUsuario(itemToEdit.id, updatedUserData, token);
-            setCurrentView('list');
-            setItemToEdit(null);
-            toast.success('Informações atualizadas com sucesso!');
-        } catch (err) {
-            console.error('Erro ao atualizar usuário:', err);
-            toast.error('Erro ao atualizar usuário.');
-        } finally {
+        setLoading(true);
+
+        toast.promise(
+            atualizarUsuario(itemToEdit.id, updatedUserData, token), // sua promise
+            {
+                loading: 'Atualizando informações...', // mensagem enquanto aguarda
+                success: () => {
+                    setCurrentView('list');
+                    setItemToEdit(null);
+                    return 'Informações atualizadas com sucesso!'; // mensagem de sucesso
+                },
+                error: (err) => {
+                    console.error('Erro ao atualizar usuário:', err);
+                    return 'Erro ao atualizar usuário.'; // mensagem de erro
+                }
+            }
+        ).finally(() => {
             setLoading(false);
-        }
+        });
+
     };
 
     // BOTÃO DE EDITAR NO LIST
@@ -340,6 +395,8 @@ function AccessManagement() {
         }
     };
 
+    const listRef = useRef();
+
     const renderView = () => {
         switch (currentView) {
             case 'list':
@@ -352,6 +409,7 @@ function AccessManagement() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}
                         setCurrentView={setCurrentView}
+                        extra={{ token, refreshList: fetchData }}
                     />
                 );
 

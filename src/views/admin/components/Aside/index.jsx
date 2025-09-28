@@ -48,6 +48,8 @@ function Aside({ isAsideOpen, toggleAside }) {
                             >
                                 <i className={`bi ${icon}`}></i>
                                 <p>{label}</p>
+
+                                <span className="aside-tooltip">{label}</span>
                             </Link>
                         ))}
                     </div>

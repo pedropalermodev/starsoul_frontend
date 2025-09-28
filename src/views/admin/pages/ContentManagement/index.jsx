@@ -8,8 +8,8 @@ import GenericPageManager from '../../components/GenericPageManager';
 import GenericList from '../../components/GenericPageManager/components/GenericList';
 import GenericForm from '../../components/GenericPageManager/components/GenericForm';
 import GenericActionButtons from '../../components/GenericPageManager/components/GenericActionButtons';
-import { toast } from 'react-toastify';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 const contentColumns = [
     { key: 'id', label: 'ID' },
@@ -29,7 +29,33 @@ const contentColumns = [
         key: 'codStatus',
         label: 'Status',
         cellStyle: { padding: '10px' },
-        render: (content) => <span className='badge-container'><p className={`badge ${content.codStatus === 'Ativo' ? 'status-ativo' : (content.codStatus === 'Inativo' ? 'status-inativo' : (content.codStatus === 'Suspenso' ? 'status-suspenso' : undefined))}`}>{content.codStatus}</p></span>,
+        render: (content, onEdit, onDelete, extra) => {
+            const handleChangeStatus = async (contentItem, newStatus) => {
+                try {
+                    // atualiza no backend
+                    await atualizarConteudo(contentItem.id, { ...contentItem, codStatus: newStatus }, extra?.token);
+                    toast.success(`Status do conteúdo atualizado para ${newStatus}`);
+                    // recarrega a instância do GenericList
+                    if (extra?.refreshList) await extra.refreshList();
+                } catch (err) {
+                    console.error('Erro ao atualizar status do conteúdo:', err);
+                    toast.error('Não foi possível atualizar o status do conteúdo.');
+                }
+            };
+
+            return (
+                <select
+                    value={content.codStatus}
+                    onChange={(e) => handleChangeStatus(content, e.target.value)}
+                    className={`badge-select ${content.codStatus === 'Ativo' ? 'status-ativo' : (content.codStatus === 'Inativo' ? 'status-inativo' : 'status-suspenso')}`}
+                    style={{ padding: '4px 0px', borderRadius: '999px', border: '1px solid #ccc', cursor: 'pointer', textAlign: 'center', fontSize: '11px' }}
+                >
+                    <option value="Ativo" style={{fontSize: '11px'}}>Ativo</option>
+                    <option value="Suspenso" style={{fontSize: '11px'}}>Suspenso</option>
+                    <option value="Inativo" style={{fontSize: '11px'}}>Inativo</option>
+                </select>
+            );
+        },
     },
     {
         key: 'dataPublicacao',
@@ -214,21 +240,28 @@ function ContentManagement() {
             return;
         }
 
-        try {
-            await cadastrarConteudo(newContent, token);
-            setCurrentView('list');
-            toast.success('Informações salvas com sucesso!');
-        } catch (err) {
-            console.error('Error ao criar conteúdo:', err);
-            if (err.response && err.response.status === 409) {
-                toast.error('Esse conteúdo já existe.');
-            } else {
-                toast.error('Erro ao criar conteúdo.');
-            }
-        } finally {
-            setLoading(false);
-        }
+        setLoading(true);
 
+        toast.promise(
+            cadastrarConteudo(newContent, token),
+            {
+                loading: 'Cadastrando conteúdo...',
+                success: () => {
+                    setCurrentView('list');
+                    return 'Conteúdo cadastrado com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao cadastrar conteúdo:', err);
+
+                    if (err?.response?.status === 409) {
+                        return 'Essa conteúdo já existe.';
+                    }
+                    return 'Erro ao cadastrar conteúdo.';
+                }
+            }
+        ).finally(() => {
+            setLoading(false);
+        });
     }
     const handleUpdateSubmit = async (updatedContentData) => {
         setLoading(true);
@@ -241,32 +274,38 @@ function ContentManagement() {
 
         console.log('Dados recebidos para atualização:', updatedContentData);
 
-        try {
 
-            const categoriasInativas = categorias.filter(cat =>
-                updatedContentData.categoriaIds.map(Number).includes(cat.id) &&
-                cat.codStatus?.toLowerCase() === 'inativo'
-            );
+        const categoriasInativas = categorias.filter(cat =>
+            updatedContentData.categoriaIds.map(Number).includes(cat.id) &&
+            cat.codStatus?.toLowerCase() === 'inativo'
+        );
 
-            console.log("Categorias inativas encontradas:", categoriasInativas);
+        console.log("Categorias inativas encontradas:", categoriasInativas);
 
-            if (updatedContentData.codStatus?.trim().toLowerCase() === 'ativo' && categoriasInativas.length > 0) {
-                toast.warn('Atenção: Este conteúdo está sendo ativado mesmo com uma ou mais categorias inativas.', {
-                    toastId: 'categoriaInativaAviso'
-                });
-            }
-
-
-            await atualizarConteudo(itemToEdit.id, updatedContentData, token);
-            setCurrentView('list');
-            setItemToEdit(null);
-            toast.success('Informações atualizadas com sucesso!');
-        } catch (err) {
-            console.error('Error ao atualizar conteúdo:', err);
-            toast.error('Erro ao atualizar categoria.');
-        } finally {
-            setLoading(false);
+        if (updatedContentData.codStatus?.trim().toLowerCase() === 'ativo' && categoriasInativas.length > 0) {
+            toast.warn('Atenção: Este conteúdo está sendo ativado mesmo com uma ou mais categorias inativas.', {
+                toastId: 'categoriaInativaAviso'
+            });
         }
+
+        setLoading(true);
+        toast.promise(
+            atualizarConteudo(itemToEdit.id, updatedContentData, token),
+            {
+                loading: 'Atualizando informações...',
+                success: () => {
+                    setCurrentView('list');
+                    setItemToEdit(null);
+                    return 'Informações atualizadas com sucesso!';
+                },
+                error: (err) => {
+                    console.error('Erro ao atualizar conteúdo:', err);
+                    return 'Erro ao atualizar conteúdo.';
+                }
+            }
+        ).finally(() => {
+            setLoading(false);
+        });
     }
 
     const handleEditClick = async (content) => {
@@ -327,6 +366,7 @@ function ContentManagement() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}
                         setCurrentView={setCurrentView}
+                        extra={{ token, refreshList: fetchData }}
                     />
                 );
             case 'add':

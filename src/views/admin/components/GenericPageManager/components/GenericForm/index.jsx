@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Box from '../../../Box';
 import './styles.scss';
-import { toast } from 'react-toastify';
 import StyledMultiSelect from '../../../StyledMultiSelect';
+import { toast } from 'sonner';
 
 function GenericForm({ fields, onSubmit, initialData, onBack }) {
     const [formData, setFormData] = useState({});
@@ -158,6 +158,8 @@ function GenericForm({ fields, onSubmit, initialData, onBack }) {
                         onChange={handleChange}
                         className="generic-form__input"
                         required={field.required}
+                        min={field.min}
+                        max={field.max}
                     />
                 )}
             </div>
