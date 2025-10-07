@@ -100,6 +100,13 @@ function Explore() {
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
+     const meditacaoAliviarAnsiedade = contents
+        .filter(content =>
+            content.categorias?.includes('Meditação para ansiedade') &&
+            content.formato !== 'Audio'
+        )
+        .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+
     const meditacaoAutocompaixãoAutoestima = contents
         .filter(content =>
             content.categorias?.includes('Meditação para autocompaixão / autoestima') &&
@@ -189,6 +196,29 @@ function Explore() {
                     <p>Comece sua jornada no Yoga com Pri Leite – do primeiro passo à evolução: </p>
                     <div className='explore-app__contents-box'>
                         {priLeiteIniciantes.map(content => (
+                            <div
+                                key={content.id}
+                                className="content__card"
+                                onClick={() => handleOpenContent(content)}
+                            >
+                                <img
+                                    src={getYouTubeThumbnail(content.url)}
+                                    alt={`Capa de ${content.titulo}`}
+                                    className="content__thumbnail"
+                                    draggable={false}
+                                />
+                                <div className="content__info">
+                                    <p>{content.titulo}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className='content-box'>
+                    <p>Meditações para o alivio da ansiedade: </p>
+                    <div className='explore-app__contents-box'>
+                        {meditacaoAliviarAnsiedade.map(content => (
                             <div
                                 key={content.id}
                                 className="content__card"
