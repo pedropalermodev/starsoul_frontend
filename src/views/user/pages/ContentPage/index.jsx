@@ -98,11 +98,17 @@ function ContentPage() {
 
 
     const meditacoesRelacionadas = contents.filter(otherContent =>
-        otherContent.id !== content.id &&
+    otherContent.id !== content.id &&
+    (
         otherContent.categorias?.some(categoria =>
             content.categorias?.includes(categoria)
+        ) ||
+        otherContent.tags?.some(tag =>
+            content.tags?.includes(tag)
         )
-    );
+    )
+);
+
 
     const toggleFavorito = async () => {
         try {
