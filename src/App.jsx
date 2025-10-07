@@ -58,6 +58,8 @@ function AppRoutes() {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/reset-password" element={<ResetPassword />} />
 
+            <Route path="/*" element={<GuestApp />} />
+
             <Route
                 path="/*"
                 element={

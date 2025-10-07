@@ -9,6 +9,7 @@ import Favorites from "./pages/Favorites";
 import ContentPage from "./pages/ContentPage";
 import Explore from "./pages/Explore";
 import PrivacyPoliciesAndTermsOfUse from "./pages/PrivacyPoliciesAndTermsOfUse";
+import NotFoundPage from "../../shared/components/Error404";
 // import Songs from "./pages/Songs";
 // import SoundPage from "./pages/SoundPage";
 
@@ -27,8 +28,8 @@ function UserApp() {
                 <Route path="privacy-policy-and-terms-of-use" element={<PrivacyPoliciesAndTermsOfUse />} />
                 {/* <Route path="songs" element={<Songs />} /> */}
                 {/* <Route path="sound/:id" element={<SoundPage />} /> */}
-
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
     )
 }

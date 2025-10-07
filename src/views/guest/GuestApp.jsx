@@ -13,6 +13,7 @@ import PrivacyPoliciesAndTermsOfUse from "./pages/PrivacyPoliciesAndTermsOfUse"
 
 import SignIn from "./pages/SignIn"
 import SignUp from "./pages/SignUp"
+import NotFoundPage from "../../shared/components/Error404";
 
 function GuestApp() {
     return (
@@ -25,6 +26,7 @@ function GuestApp() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/privacy-policy-and-terms-of-use" element={<PrivacyPoliciesAndTermsOfUse />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
     )
 }

@@ -10,6 +10,7 @@ import ContentManagement from "./pages/ContentManagement"
 import CategoryManagement from "./pages/CategoryManagement";
 import TagManagement from "./pages/TagManagement";
 import FeedbackManagement from "./pages/FeedbackManagement";
+import NotFoundPage from "../../shared/components/Error404";
 
 
 function AdminApp() {
@@ -24,6 +25,7 @@ function AdminApp() {
                 <Route path="tag-management" element={<TagManagement />} />
                 <Route path="feedback-management" element={<FeedbackManagement />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
     )
 }

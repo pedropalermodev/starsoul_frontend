@@ -63,9 +63,11 @@ function Home() {
     }, []);
 
     const conteudosFiltrados = useMemo(() => {
-        return contents.filter(content =>
-            content.categorias?.includes(categoriaDoDia) && content.formato !== 'Audio'
-        );
+        return contents
+            .filter(content =>
+                content.categorias?.includes(categoriaDoDia) && content.formato !== 'Audio'
+            )
+            .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao)); // mais novos primeiro
     }, [contents, categoriaDoDia]);
 
 
@@ -108,9 +110,13 @@ function Home() {
         }
     }, [currentFraseIndex, frasesMotivacionais]);
 
-    const destaque = contents.filter(content =>
-        content.tags?.includes('Destaque') && content.formato !== 'Audio'
-    );
+    const destaque = useMemo(() => {
+        return contents
+            .filter(content =>
+                content.tags?.includes('Destaque') && content.formato !== 'Audio'
+            )
+            .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+    }, [contents]);
 
     const primeiroNome = useMemo(() => {
         return userData?.nome ? userData.nome.split(' ')[0] : 'Usuário';

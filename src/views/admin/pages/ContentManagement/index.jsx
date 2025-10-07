@@ -32,10 +32,70 @@ const contentColumns = [
         render: (content, onEdit, onDelete, extra) => {
             const handleChangeStatus = async (contentItem, newStatus) => {
                 try {
-                    // atualiza no backend
-                    await atualizarConteudo(contentItem.id, { ...contentItem, codStatus: newStatus }, extra?.token);
+                    const token = extra?.token;
+
+                    // Busca o conteúdo completo
+                    const fullContent = await buscarConteudoPorId(contentItem.id, token);
+
+                    // resolve categoriaIds
+                    const resolveCategoriaIds = async () => {
+                        if (Array.isArray(fullContent.categoriaIds) && fullContent.categoriaIds.length) {
+                            return fullContent.categoriaIds.map(Number);
+                        }
+                        if (Array.isArray(fullContent.categorias) && fullContent.categorias.length) {
+                            // tenta usar categorias vindas no extra (mais rápido)
+                            const categoriasFonte = Array.isArray(extra?.categorias) && extra.categorias.length
+                                ? extra.categorias
+                                : await listarTodasCategorias(token);
+
+                            return fullContent.categorias
+                                .map(nomeCat => {
+                                    const found = categoriasFonte.find(c => String(c.nome) === String(nomeCat) || String(c.id) === String(nomeCat));
+                                    return found ? Number(found.id) : null;
+                                })
+                                .filter(id => id != null);
+                        }
+                        return [];
+                    };
+
+                    // resolve tagIds (mesma lógica)
+                    const resolveTagIds = async () => {
+                        if (Array.isArray(fullContent.tagIds) && fullContent.tagIds.length) {
+                            return fullContent.tagIds.map(Number);
+                        }
+                        if (Array.isArray(fullContent.tags) && fullContent.tags.length) {
+                            const tagsFonte = Array.isArray(extra?.tags) && extra.tags.length
+                                ? extra.tags
+                                : await listarTodasTags(token);
+
+                            return fullContent.tags
+                                .map(nomeTag => {
+                                    const found = tagsFonte.find(t => String(t.nome) === String(nomeTag) || String(t.id) === String(nomeTag));
+                                    return found ? Number(found.id) : null;
+                                })
+                                .filter(id => id != null);
+                        }
+                        return [];
+                    };
+
+                    const [categoriaIds, tagIds] = await Promise.all([resolveCategoriaIds(), resolveTagIds()]);
+
+                    // monta o corpo que o backend espera — remove arrays de nomes para evitar sobrescrita
+                    const contentToUpdate = {
+                        ...fullContent,
+                        codStatus: newStatus,
+                        categoriaIds,
+                        tagIds,
+                    };
+
+                    // remove possíveis campos de nomes (evita que o backend sobrescreva as relações)
+                    delete contentToUpdate.categorias;
+                    delete contentToUpdate.tags;
+
+                    await atualizarConteudo(contentItem.id, contentToUpdate, token);
+
                     toast.success(`Status do conteúdo atualizado para ${newStatus}`);
-                    // recarrega a instância do GenericList
+
                     if (extra?.refreshList) await extra.refreshList();
                 } catch (err) {
                     console.error('Erro ao atualizar status do conteúdo:', err);
@@ -50,13 +110,14 @@ const contentColumns = [
                     className={`badge-select ${content.codStatus === 'Ativo' ? 'status-ativo' : (content.codStatus === 'Inativo' ? 'status-inativo' : 'status-suspenso')}`}
                     style={{ padding: '4px 0px', borderRadius: '999px', border: '1px solid #ccc', cursor: 'pointer', textAlign: 'center', fontSize: '11px' }}
                 >
-                    <option value="Ativo" style={{fontSize: '11px'}}>Ativo</option>
-                    <option value="Suspenso" style={{fontSize: '11px'}}>Suspenso</option>
-                    <option value="Inativo" style={{fontSize: '11px'}}>Inativo</option>
+                    <option value="Ativo" style={{ fontSize: '11px' }}>Ativo</option>
+                    <option value="Suspenso" style={{ fontSize: '11px' }}>Suspenso</option>
+                    <option value="Inativo" style={{ fontSize: '11px' }}>Inativo</option>
                 </select>
             );
         },
     },
+
     {
         key: 'dataPublicacao',
         label: 'Publicado em:',
@@ -137,7 +198,7 @@ const getcontentFormFields = (categorias, tags) => [
     },
     {
         name: 'categoriaIds',
-        label: 'Categoria',
+        label: 'Categoria (Opcional)',
         type: 'select',
         multiple: true,
         required: false,
@@ -149,7 +210,7 @@ const getcontentFormFields = (categorias, tags) => [
     },
     {
         name: 'tagIds',
-        label: 'Tag',
+        label: 'Tag (Opcional)',
         type: 'select',
         multiple: true,
         required: false,
@@ -170,7 +231,7 @@ const getcontentFormFields = (categorias, tags) => [
             { value: 'Inativo', label: 'Inativo' }
         ],
     },
-    { name: 'url', label: 'Adicione a URL para o conteúdo', type: 'text', required: true },
+    { name: 'url', label: 'Adicione a URL para o conteúdo (Opcional)', type: 'text', required: false, visuallyRequired: true, },
     { name: 'descricao', label: 'Descricao', type: 'text', required: false },
 ];
 
@@ -366,7 +427,7 @@ function ContentManagement() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteClick}
                         setCurrentView={setCurrentView}
-                        extra={{ token, refreshList: fetchData }}
+                        extra={{ token, refreshList: fetchData, categorias, tags }}
                     />
                 );
             case 'add':

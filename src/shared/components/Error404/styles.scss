@@ -1,0 +1,106 @@
+/* === Estilo da Página 404 Estilo StarSoul === */
+
+.minimal-404-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    background: #4A3E95;
+}
+
+
+.minimal-404-content {
+    z-index: 2;
+    padding: 40px 20px;
+    max-width: 420px;
+}
+
+/* Código do erro com ícone */
+.error-code-icon-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.error-number {
+    color: #fff;
+    font-size: 3rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Título principal */
+.error-title-minimal {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+    color: #fff;
+}
+
+/* Mensagem */
+.error-message-minimal {
+    font-size: 1rem;
+    color: #d9d9ff;
+    margin-bottom: 35px;
+    line-height: 1.5;
+}
+
+/* Grupo de botões */
+.cta-group-minimal {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Botão principal (Home) */
+.home-button-minimal {
+    display: inline-block;
+    background: #0f022a;
+    color: #ffffff;
+    padding: 8px 30px;
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: 0 0 10px #0f022a;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #2b1664;
+        box-shadow: 0 0 20px #2b1664;
+    }
+}
+
+/* Botão secundário (Contato) */
+.contact-button-minimal {
+    display: inline-block;
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 8px 30px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #ffffff;
+        color: #3d1e9c;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 450px) {
+    .cta-group-minimal {
+        flex-direction: column;
+
+        .home-button-minimal,
+        .contact-button-minimal {
+            width: 100%;
+        }
+    }
+}

@@ -86,21 +86,34 @@ function Explore() {
     }, [currentFraseIndex, frasesMotivacionais]);
 
 
-    const meditacaoAliviarStress = contents.filter(content =>
-        content.categorias?.includes('Meditação para aliviar extresse') && content.formato !== 'Audio'
-    );
+    const meditacaoAliviarStress = contents
+        .filter(content =>
+            content.categorias?.includes('Meditação para aliviar extresse') &&
+            content.formato !== 'Audio'
+        )
+        .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
-    const priLeiteIniciantes = contents.filter(content =>
-        content.tags?.includes('Pri Leite para Iniciantes') && content.formato !== 'Audio'
-    );
+    const priLeiteIniciantes = contents
+        .filter(content =>
+            content.tags?.includes('Pri Leite para Iniciantes') &&
+            content.formato !== 'Audio'
+        )
+        .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
-    const meditacaoAutocompaixãoAutoestima = contents.filter(content =>
-        content.categorias?.includes('Meditação para autocompaixão / autoestima') && content.formato !== 'Audio'
-    );
+    const meditacaoAutocompaixãoAutoestima = contents
+        .filter(content =>
+            content.categorias?.includes('Meditação para autocompaixão / autoestima') &&
+            content.formato !== 'Audio'
+        )
+        .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
-    const meditacaoGestantes = contents.filter(content =>
-        content.categorias?.includes('Meditação para gestantes') && content.formato !== 'Audio'
-    );
+    const meditacaoGestantes = contents
+        .filter(content =>
+            content.categorias?.includes('Meditação para gestantes') &&
+            content.formato !== 'Audio'
+        )
+        .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+
 
     if (globalLoading || loading || !userData) {
         return <LoadingPage />;

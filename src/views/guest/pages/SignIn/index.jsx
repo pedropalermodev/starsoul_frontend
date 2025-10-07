@@ -1,26 +1,48 @@
 import './styles.scss';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../../../shared/contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import './styles.scss'
 
 // Images
 import starsoulBrandmark from '../../../../assets/branding/starsoul-brandmark-blue.png'
 import starsoulLettermark from '../../../../assets/branding/starsoul-lettermark-blue.png'
 import SubmitButton from '../../components/SubmitButton';
-
+import LoadingPage from '../../../../shared/components/LoadingPage';
 
 function SignIn() {
-    const { login } = useContext(AuthContext);
+    const { login, userRole } = useContext(AuthContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const isFormValid = email.trim() !== '' && password.trim() !== '';
     const [showPassword, setShowPassword] = useState(false);
+    const isFormValid = email.trim() !== '' && password.trim() !== '';
+    const [globalLoading, setGlobalLoading] = useState(true);
 
+    // 🔒 Verifica se já existe um token ao montar
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+
+        if (token) {
+            // Mostra tela de carregamento durante o redirecionamento
+            setGlobalLoading(true);
+
+            const timer = setTimeout(() => {
+                if (userRole === 'Administrador') {
+                    navigate('/console', { replace: true });
+                } else {
+                    navigate('/app', { replace: true });
+                }
+            }, 800); // tempo curto para animação de loading
+
+            return () => clearTimeout(timer);
+        } else {
+            // Se não tiver token, remove o loading inicial
+            setGlobalLoading(false);
+        }
+    }, [userRole, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,21 +50,24 @@ function SignIn() {
         try {
             await login(email, password);
         } catch (err) {
-            // console.error('Erro de login:', err);
             setError('Email ou senha inválidos');
         } finally {
             setLoading(false);
         }
     };
 
+    if (globalLoading) {
+        return <LoadingPage />;
+    }
+
     return (
         <main className="sign__container">
             <div className='sign__box'>
                 <div className='sign__header-img'>
-                    <img src={starsoulBrandmark} />
-                    <img src={starsoulLettermark} />
+                    <img src={starsoulBrandmark} alt="StarSoul logo" />
+                    <img src={starsoulLettermark} alt="StarSoul" />
                 </div>
-                {/* <h1 className='sign__box-h1'>Sign in</h1> */}
+
                 <form onSubmit={handleSubmit} className='sign__form'>
                     <div className='sign__form-content'>
                         <label className='sign__form-content-label'>Email</label>
@@ -57,7 +82,6 @@ function SignIn() {
                             required
                         />
                         {error && <p className="sign__form-error">{error}</p>}
-
                     </div>
 
                     <div>
@@ -90,8 +114,13 @@ function SignIn() {
                         Entrar
                     </SubmitButton>
                 </form>
+
                 <div className='sign__link'>
-                    <div className='divider'><span className='line' />Novo na nossa comunidade <span className='line' /></div>
+                    <div className='divider'>
+                        <span className='line' />
+                        Novo na nossa comunidade
+                        <span className='line' />
+                    </div>
                     <Link to='/sign-up' className='sign__link-button-sign'>Não possui uma conta? Cadastre-se</Link>
                     <Link to='/' className='sign__link-button-back'>Volte para página inicial</Link>
                 </div>
