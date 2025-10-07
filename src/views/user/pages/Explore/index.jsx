@@ -89,35 +89,35 @@ function Explore() {
     const meditacaoAliviarStress = contents
         .filter(content =>
             content.categorias?.includes('Meditação para aliviar extresse') &&
-            content.formato === 'Vídeo'
+            content.formato === 'Video'
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
     const priLeiteIniciantes = contents
         .filter(content =>
             content.tags?.includes('Pri Leite para Iniciantes') &&
-            content.formato === 'Vídeo'
+            content.formato === 'Video'
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
      const meditacaoAliviarAnsiedade = contents
         .filter(content =>
             content.categorias?.includes('Meditação para ansiedade') &&
-            content.formato === 'Vídeo'
+            content.formato === 'Video'
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
     const meditacaoAutocompaixãoAutoestima = contents
         .filter(content =>
             content.categorias?.includes('Meditação para autocompaixão / autoestima') &&
-            content.formato === 'Vídeo'
+            content.formato === 'Video'
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
     const meditacaoGestantes = contents
         .filter(content =>
             content.categorias?.includes('Meditação para gestantes') &&
-            content.formato === 'Vídeo'
+            content.formato === 'Video'
         )
         .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
 
