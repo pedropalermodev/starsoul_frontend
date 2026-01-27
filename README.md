@@ -18,10 +18,15 @@ Aplicação com foco em desenvolvimento web e experiência do usuário, envolven
 - Aplicativo mobile em Flutter
 
 ## Observações importantes
-Este é um projeto acadêmico.
-Os repositórios refletem o aprendizado durante o curso técnico.
+Este é um projeto acadêmico, e os repositórios refletem o aprendizado durante o curso técnico.
 Algumas funcionalidades podem não estar ativas ou completas.
 
+Este repositório refere-se exclusivamente à camada de frontend da aplicação.
+O arquivo SQL está presente neste repositório apenas para fins acadêmicos e de documentação.
+
 ## Demonstração visual
-O frontend está disponível apenas para demonstração visual:
+O frontend está disponível para demonstração visual da interface:
 https://starsoul.netlify.app
+
+A versão publicada não contempla a integração ativa com backend e banco de dados.
+
