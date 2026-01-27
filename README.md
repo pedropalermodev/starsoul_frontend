@@ -1,12 +1,27 @@
-# React + Vite
+# Starsoul – Projeto de Conclusão de Curso (TCC)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Contexto do Projeto
+A StarSoul é uma plataforma digital desenvolvida como Trabalho de Conclusão de Curso (TCC),
+com foco em saúde mental e bem-estar.
 
-Currently, two official plugins are available:
+O objetivo do projeto é centralizar, em um único ambiente, práticas de autocuidado que
+normalmente estão distribuídas em diferentes plataformas, como meditações guiadas,
+músicas relaxantes e registro pessoal de emoções.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A versão web atua como principal canal de acesso aos conteúdos e também como
+divulgação da plataforma, priorizando uma experiência intuitiva e agradável ao usuário.
 
-## Expanding the ESLint configuration
+## Visão geral
+Aplicação com foco em desenvolvimento web e experiência do usuário, envolvendo:
+- Frontend em ReactJS
+- Backend em Java (Spring Boot)
+- Aplicativo mobile em Flutter
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Observações importantes
+Este é um projeto acadêmico.
+Os repositórios refletem o aprendizado durante o curso técnico.
+Algumas funcionalidades podem não estar ativas ou completas.
+
+## Demonstração visual
+O frontend está disponível apenas para demonstração visual:
+https://starsoul.netlify.app
